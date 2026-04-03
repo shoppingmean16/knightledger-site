@@ -153,26 +153,6 @@ function FadeIn(props) {
   );
 }
 
-function ContactForm() {
-  var _s = useState({ email: "", message: "" });
-  var form = _s[0]; var setForm = _s[1];
-  var _s2 = useState(false);
-  var sent = _s2[0]; var setSent = _s2[1];
-  var inputStyle = { width: "100%", padding: "12px 16px", background: "#111", border: "1px solid #1a1a1a", borderRadius: 8, color: "#e0e0e0", fontSize: 14, fontFamily: "'DM Sans',sans-serif", outline: "none" };
-  if (sent) return (
-    <div style={{ padding: "32px 24px", textAlign: "center" }}>
-      <div style={{ fontSize: 18, color: "#00e5a0", fontWeight: 600, marginBottom: 8 }}>Received.</div>
-      <div style={{ fontSize: 14, color: "#888" }}>We will respond within 24 hours with a specific proposal.</div>
-    </div>
-  );
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <input style={inputStyle} placeholder="Email address" value={form.email} onChange={function(e) { setForm({ email: e.target.value, message: form.message }); }} />
-      <textarea style={Object.assign({}, inputStyle, { minHeight: 80, resize: "vertical" })} placeholder="What would you automate first?" value={form.message} onChange={function(e) { setForm({ email: form.email, message: e.target.value }); }} />
-      <button onClick={function() { if (form.email) setSent(true); }} style={{ background: "#00e5a0", color: "#08090b", fontWeight: 600, padding: "14px 32px", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 15, fontFamily: "'DM Sans',sans-serif" }}>Send</button>
-    </div>
-  );
-}
 
 export default function KnightLedger() {
   var _cat = useState("All"); var activeCat = _cat[0]; var setActiveCat = _cat[1];
@@ -182,7 +162,7 @@ export default function KnightLedger() {
   var grouped = {};
   filtered.forEach(function(a) { if (!grouped[a.cat]) grouped[a.cat] = []; grouped[a.cat].push(a); });
   var scrollTo = function(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth" }); setMobileMenu(false); };
-  var navItems = [["Thesis", "thesis"], ["Process", "process"], ["Pricing", "pricing"], ["Automations", "automations"], ["Founder", "founder"]];
+  var navItems = [["Thesis", "thesis"], ["Process", "process"], ["Pricing", "pricing"], ["Individuals", "individuals"], ["Automations", "automations"]];
   return (
     <div style={{ fontFamily: "'DM Sans','Helvetica Neue',sans-serif", background: "#08090b", color: "#e0e0e0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -298,6 +278,30 @@ export default function KnightLedger() {
         </div>
         <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>All fees scoped per engagement. No recurring charges, no hourly billing.</p></FadeIn>
       </section>
+        {/* INDIVIDUALS */}
+        <section id="individuals" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
+          <FadeIn>
+            <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>NOT A DEPARTMENT. JUST YOU.</div>
+            <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 12, maxWidth: 700 }}>One person closing the books gets the same AI as a 50-person team.</h2>
+            <p style={{ fontSize: 16, color: "#888", marginBottom: 48, maxWidth: 620, lineHeight: 1.6 }}>Controllers running a lean team. Sole proprietors handling their own financials. CFOs who are also the entire finance department. The same systems we deploy for organizations work at your scale and in your environment.</p>
+          </FadeIn>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+            <FadeIn delay={0.08}>
+              <div className="card" style={{ padding: 32, display: "flex", flexDirection: "column", height: "100%" }}>
+                <div className="mono accent" style={{ fontSize: 22, fontWeight: 600, marginBottom: 4 }}>$1K - $5K</div>
+                <h3 style={{ fontSize: 17, fontWeight: 600, color: "#fff", marginBottom: 10 }}>We Set It Up</h3>
+                <p style={{ fontSize: 14, color: "#777", lineHeight: 1.6, flex: 1 }}>We build AI automations around your specific role, systems, and recurring tasks. Your reconciliations, your close cadence, your reporting. Runs in your environment on your schedule. You review output instead of preparing it.</p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.16}>
+              <div className="card" style={{ padding: 32, display: "flex", flexDirection: "column", height: "100%" }}>
+                <div className="mono accent" style={{ fontSize: 22, fontWeight: 600, marginBottom: 4 }}>$200 - $1K</div>
+                <h3 style={{ fontSize: 17, fontWeight: 600, color: "#fff", marginBottom: 10 }}>DIY Kit</h3>
+                <p style={{ fontSize: 14, color: "#777", lineHeight: 1.6, flex: 1 }}>Prompt libraries, workflow blueprints, and step-by-step guides built for your role. Set up at your own pace with full documentation. No prior technical experience needed.</p>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
       {/* SECURITY */}
       <section id="security" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>DATA PRIVACY & SECURITY</div><h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 32, maxWidth: 700 }}>Your data stays yours.</h2></FadeIn>
@@ -380,21 +384,19 @@ export default function KnightLedger() {
           })}
         </div>
       </section>
-      {/* FOUNDER */}
-      <section id="founder" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
-        <FadeIn>
-          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>BUILT BY</div>
-          <div style={{ maxWidth: 700 }}>
-            <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester, CPA</h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
-              {["EY (Audit)", "Comcast NBCUniversal (Internal Audit)", "CFGI (Advisory)"].map(function(c) {
-                return <span key={c} className="mono" style={{ fontSize: 12, padding: "6px 14px", background: "#131416", borderRadius: 6, color: "#999", border: "1px solid #1a1c1e" }}>{c}</span>;
-              })}
+        {/* ABOUT */}
+        <section id="founder" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
+          <FadeIn>
+            <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>ABOUT</div>
+            <div style={{ maxWidth: 700 }}>
+              <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester, CPA</h2>
+              <div style={{ fontSize: 14, color: "#00e5a0", marginBottom: 24, fontWeight: 500 }}>Implementation & Design</div>
+              <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 20 }}>CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and advisory consulting at the senior manager level. Since the emergence of generative AI, focused exclusively on deploying it across accounting and finance — close optimization, automated workpaper and evidence generation, controls testing, analytics, ERP implementations, and workflow design.</p>
+              <a href="https://www.linkedin.com/in/jasonforrester1/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: "#00e5a0", textDecoration: "none", borderBottom: "1px solid rgba(0,229,160,0.3)", paddingBottom: 2 }}>LinkedIn</a>
             </div>
-            <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 14 }}>Senior Manager with 10+ years across Big 4 external audit (EY), Fortune 50 internal audit (Comcast NBCUniversal), and accounting advisory (CFGI). Specializing in AI automation for accounting — close optimization, documentation engines, controls testing, analytics, ERP implementations, and workflow design. Experience spans gaming, defense, media, pharma, manufacturing, fintech, healthcare, and distribution across every major ERP and close platform.</p>
-          </div>
-        </FadeIn>
-      </section>
+          </FadeIn>
+        </section>
+
       {/* CTA */}
       <section id="contact" style={{ borderTop: "1px solid #1a1c1e" }}>
         <div className="section">
@@ -406,7 +408,7 @@ export default function KnightLedger() {
           </FadeIn>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20, marginBottom: 40 }}>
             <FadeIn delay={0.05}>
-              <a href="https://tally.so/r/PdYBp1" target="_blank" rel="noopener noreferrer" className="cm">
+              <a href="https://tally.so/r/PdYBp1" target="_blank" rel="noopener noreferrer" className="cm" style={{ padding: 28, display: "block" }}>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>START HERE</div>
                 <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Tell us what you'd automate</div>
                 <div style={{ fontSize: 13, color: "#666" }}>Quick assessment — email is the only required field</div>
@@ -414,7 +416,7 @@ export default function KnightLedger() {
             </FadeIn>
             <FadeIn delay={0.15}>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <a href="https://calendly.com/jason-knightledger/30min" target="_blank" rel="noopener noreferrer" className="cm">
+                <a href="https://calendly.com/jason-knightledger/ai-automation-intro-discussion" target="_blank" rel="noopener noreferrer" className="cm">
                   <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>SCHEDULE A CALL</div>
                   <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Book an intake call</div>
                   <div style={{ fontSize: 13, color: "#666" }}>Pick a time that works</div>
