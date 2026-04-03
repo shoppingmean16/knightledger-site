@@ -240,7 +240,7 @@ export default function KnightLedger() {
         </FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 24 }}>
           {[
-            { t: "The capability exists", d: "Current AI handles lease accounting, revenue recognition, consolidation, acquisition integration, audit evidence assembly — and virtually every other accounting and finance process. Not pattern matching. Judgment, assumptions, technical conclusions." },
+            { t: "The capability exists", d: "Current AI handles the full range of accounting and finance processes — including those that require interpretation, judgment, and technical conclusions. Not just data entry and pattern matching. The complex work." },
             { t: "Companies aren’t seeing results", d: "Most report no meaningful productivity gains from AI. Not because the technology is lacking — because they’re bolting AI onto processes designed for humans." },
             { t: "Advisory firms aren’t pushing it", d: "Traditional consulting firms should be driving AI implementation for their clients. Most aren’t. AI implementation directly impacts the hourly billing model that funds their operations." }
           ].map(function(c, i) {
@@ -296,7 +296,7 @@ export default function KnightLedger() {
             );
           })}
         </div>
-        <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>All fees scoped per engagement. No recurring charges, no hourly billing. Engagements scoped per significant class of transactions (SCOT) — Revenue, AP, Fixed Assets, Debt, Inventory, and beyond.</p></FadeIn>
+        <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>All fees scoped per engagement. No recurring charges, no hourly billing.</p></FadeIn>
       </section>
       {/* SECURITY */}
       <section id="security" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
@@ -383,16 +383,15 @@ export default function KnightLedger() {
       {/* FOUNDER */}
       <section id="founder" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
-          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>FOUNDED BY</div>
+          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>BUILT BY</div>
           <div style={{ maxWidth: 700 }}>
             <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester, CPA</h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
-              {["Big 4 Audit", "Fortune 50 Internal Audit", "Accounting Advisory"].map(function(c) {
+              {["EY (Audit)", "Comcast NBCUniversal (Internal Audit)", "CFGI (Advisory)"].map(function(c) {
                 return <span key={c} className="mono" style={{ fontSize: 12, padding: "6px 14px", background: "#131416", borderRadius: 6, color: "#999", border: "1px solid #1a1c1e" }}>{c}</span>;
               })}
             </div>
-            <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 14 }}>Big 4 audit across gaming, defense, media, pharma, and manufacturing. SOX redesign at a Fortune 50 media company. Senior Manager leading ASC 842, ASC 606, acquisition accounting, IPO readiness, and restatement engagements. Every major ERP, close platform, and payment system.</p>
-            <p style={{ fontSize: 15, color: "#ccc", lineHeight: 1.7 }}>Built the AI engineering layer on top of that accounting foundation. Advisory firms have been slow to implement AI for their clients — whether for lack of technical capability or because automation cuts into billable hours. KnightLedger exists to close that gap.</p>
+            <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 14 }}>Senior Manager with 10+ years across Big 4 external audit (EY), Fortune 50 internal audit (Comcast NBCUniversal), and accounting advisory (CFGI). Specializing in AI automation for accounting — close optimization, documentation engines, controls testing, analytics, ERP implementations, and workflow design. Experience spans gaming, defense, media, pharma, manufacturing, fintech, healthcare, and distribution across every major ERP and close platform.</p>
           </div>
         </FadeIn>
       </section>
@@ -407,14 +406,15 @@ export default function KnightLedger() {
           </FadeIn>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20, marginBottom: 40 }}>
             <FadeIn delay={0.05}>
-              <div className="card" style={{ padding: 28 }}>
-                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 16 }}>SEND A MESSAGE</div>
-                <ContactForm />
-              </div>
+              <a href="https://tally.so/r/PdYBp1" target="_blank" rel="noopener noreferrer" className="cm">
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>START HERE</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Tell us what you'd automate</div>
+                <div style={{ fontSize: 13, color: "#666" }}>Quick assessment — email is the only required field</div>
+              </a>
             </FadeIn>
             <FadeIn delay={0.15}>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <a href="https://calendly.com/knightledger" target="_blank" rel="noopener noreferrer" className="cm">
+                <a href="https://calendly.com/jason-knightledger/30min" target="_blank" rel="noopener noreferrer" className="cm">
                   <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>SCHEDULE A CALL</div>
                   <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Book an intake call</div>
                   <div style={{ fontSize: 13, color: "#666" }}>Pick a time that works</div>
@@ -430,13 +430,6 @@ export default function KnightLedger() {
               </div>
             </FadeIn>
           </div>
-          <FadeIn delay={0.25}>
-            <div style={{ display: "flex", gap: 32, justifyContent: "center", flexWrap: "wrap" }}>
-              {["Any ERP", "Any industry", "Any process"].map(function(t) {
-                return <span key={t} className="mono" style={{ fontSize: 13, color: "#444" }}>{t}</span>;
-              })}
-            </div>
-          </FadeIn>
         </div>
       </section>
       {/* FOOTER */}
