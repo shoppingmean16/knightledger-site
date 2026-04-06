@@ -198,7 +198,7 @@ export default function KnightLedger() {
         <div className="gridbg" />
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px", position: "relative", zIndex: 1 }}>
           <FadeIn><div className="mono" style={{ fontSize: 13, color: "#00e5a0", marginBottom: 24, letterSpacing: "0.5px", opacity: 0.8 }}>AI IMPLEMENTATION FOR ACCOUNTING & FINANCE</div></FadeIn>
-          <FadeIn delay={0.1}><h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px", color: "#fff", marginBottom: 28, maxWidth: 800 }}>The gap between what AI can do in accounting and what’s actually deployed has never been wider. <span style={{ color: "#555" }}>We close it.</span></h1></FadeIn>
+          <FadeIn delay={0.1}><h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px", color: "#fff", marginBottom: 28, maxWidth: 800 }}>AI can now run most of your accounting function. <span style={{ color: "#555" }}>Most companies haven’t let it.</span></h1></FadeIn>
           <FadeIn delay={0.2}><p style={{ fontSize: "clamp(16px,2.2vw,20px)", color: "#888", lineHeight: 1.65, maxWidth: 620, marginBottom: 16 }}>We redesign accounting and finance processes around AI — not wrapped around processes built for humans.</p></FadeIn>
           <FadeIn delay={0.3}>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
@@ -208,8 +208,8 @@ export default function KnightLedger() {
           </FadeIn>
         <FadeIn delay={0.35}>
           <a href="/close-process" style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 32, padding: "16px 24px", background: "rgba(0,229,160,0.04)", border: "1px solid rgba(0,229,160,0.25)", borderRadius: 10, textDecoration: "none", transition: "all .25s" }}>
-            <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, opacity: 0.7 }}>ILLUSTRATIVE ↗</div>
-            <div style={{ fontSize: 14, color: "#e0e0e0", fontWeight: 500 }}>Monthly close process — before and after KnightLedger implementation</div>
+            <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, opacity: 0.7 }}>EXPLORE ↗</div>
+            <div style={{ fontSize: 14, color: "#e0e0e0", fontWeight: 500 }}>An illustrative monthly close process flow, redesigned around AI</div>
           </a>
         </FadeIn>
           <FadeIn delay={0.45}>
@@ -245,7 +245,7 @@ export default function KnightLedger() {
         </div>
         <FadeIn delay={0.3}>
           <div style={{ marginTop: 40, padding: "28px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.13)", background: "rgba(0,229,160,0.02)" }}>
-            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, }}><strong style={{ color: "#00e5a0" }}>Our position:</strong> Any accounting or finance function can and should be fully run by AI at the preparer level. Humans become the review layer — designing, maintaining, and continuously improving the system. One controller overseeing automated systems, at any company size, any industry, any complexity level.</p>
+            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, }}><strong style={{ color: "#00e5a0" }}>Where we come in:</strong> We take the manual, repetitive layer off accounting’s plate — reconciliations, evidence packaging, commentary, the work that drains teams and teaches them nothing. We’re aggressive about implementation because the technology is ready and waiting isn’t a strategy.</p>
           </div>
         </FadeIn>
       </section>
