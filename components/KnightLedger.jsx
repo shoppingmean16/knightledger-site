@@ -165,7 +165,7 @@ export default function KnightLedger() {
   var grouped = {};
   filtered.forEach(function(a) { if (!grouped[a.cat]) grouped[a.cat] = []; grouped[a.cat].push(a); });
   var scrollTo = function(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth" }); setMobileMenu(false); };
-  var navItems = [["Thesis", "thesis"], ["Process", "process"], ["Pricing", "pricing"], ["Individuals", "individuals"], ["Automations", "automations"]];
+  var navItems = [["Thesis", "thesis"], ["Process", "process"], ["Pricing", "pricing"], ["Automations", "automations"]];
   return (
     <div style={{ fontFamily: "'DM Sans','Helvetica Neue',sans-serif", background: "#08090b", color: "#e0e0e0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -289,30 +289,6 @@ export default function KnightLedger() {
         </div>
         <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>All fees scoped per engagement. No recurring charges, no hourly billing.</p></FadeIn>
       </section>
-        {/* INDIVIDUALS */}
-        <section id="individuals" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
-          <FadeIn>
-            <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>NOT A DEPARTMENT. JUST YOU.</div>
-            <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 12, maxWidth: 700 }}>One person closing the books gets the same AI as a 50-person team.</h2>
-            <p style={{ fontSize: 16, color: "#888", marginBottom: 48, maxWidth: 620, lineHeight: 1.6 }}>Controllers running a lean team. Sole proprietors handling their own financials. CFOs who are also the entire finance department. The same systems we deploy for organizations work at your scale and in your environment.</p>
-          </FadeIn>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
-            <FadeIn delay={0.08}>
-              <div className="card" style={{ padding: 32, display: "flex", flexDirection: "column", height: "100%" }}>
-                <div className="mono accent" style={{ fontSize: 22, fontWeight: 600, marginBottom: 4 }}>$1K - $5K</div>
-                <h3 style={{ fontSize: 17, fontWeight: 600, color: "#fff", marginBottom: 10 }}>We Set It Up</h3>
-                <p style={{ fontSize: 14, color: "#777", lineHeight: 1.6, flex: 1 }}>We build AI automations around your specific role, systems, and recurring tasks. Your reconciliations, your close cadence, your reporting. Runs in your environment on your schedule. You review output instead of preparing it.</p>
-              </div>
-            </FadeIn>
-            <FadeIn delay={0.16}>
-              <div className="card" style={{ padding: 32, display: "flex", flexDirection: "column", height: "100%" }}>
-                <div className="mono accent" style={{ fontSize: 22, fontWeight: 600, marginBottom: 4 }}>$200 - $1K</div>
-                <h3 style={{ fontSize: 17, fontWeight: 600, color: "#fff", marginBottom: 10 }}>DIY Kit</h3>
-                <p style={{ fontSize: 14, color: "#777", lineHeight: 1.6, flex: 1 }}>Prompt libraries, workflow blueprints, and step-by-step guides built for your role. Set up at your own pace with full documentation. No prior technical experience needed.</p>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
       {/* SECURITY */}
       <section id="security" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>DATA PRIVACY & SECURITY</div><h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 32, maxWidth: 700 }}>Your data stays yours.</h2></FadeIn>
