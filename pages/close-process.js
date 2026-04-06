@@ -99,15 +99,15 @@ var AFTER_NODES = [
   { id: "a_close",   label: "Close Mgmt\nPlatform",    shape: "cylinder", lane: -1, x: 870,  y: 20, w: 150, h: 70, badge: "API", desc: "Your existing close management platform.", auto: "Output written into the tool your team already uses." },
 
   // ── AI ENGINE LANE (lane 0) — 5 engines + decision gate ──
-  { id: "a1", label: "Data Integration", shape: "hex", lane: 0, x: 60,  y: 145, w: 290, h: 90, time: "continuous", badge: "AI", desc: "Pulls and validates data from every connected source. Normalizes formats, runs data quality checks, and prepares clean datasets for downstream engines.", auto: "Runs throughout the period, not only at close." },
+  { id: "a1", label: "Data Integration", shape: "hex", lane: 0, x: 60,  y: 145, w: 290, h: 90, time: "continuous", badge: "AI", desc: "Continuously pulls trial balances, bank feeds, AP/AR agings, payroll registers, and sub-ledger data from every connected source. Normalizes formats across systems, validates completeness, runs data quality checks, and flags anomalies before close begins.", auto: "Runs throughout the period \u2014 data is clean and ready on day one." },
 
-  { id: "a2", label: "Reconciliation Engine", shape: "hex", lane: 0, x: 380, y: 145, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Reconciles balance sheet accounts \u2014 cash, AR, AP, sub-ledgers, accruals, prepaids. Matches transactions across systems, categorizes timing differences, and surfaces exceptions with proposed resolutions.", auto: "In-scope accounts reconciled in parallel." },
+  { id: "a2", label: "Reconciliation Engine", shape: "hex", lane: 0, x: 380, y: 145, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Reconciles every balance sheet account in parallel \u2014 cash across all bank accounts, AR and AP sub-ledgers to GL, fixed assets, prepaids, accruals, and intercompany. Matches transactions across systems, categorizes timing differences, resolves known patterns automatically, and surfaces true exceptions with proposed entries.", auto: "Full balance sheet reconciled simultaneously." },
 
-  { id: "a3", label: "Adjustment Engine", shape: "hex", lane: 0, x: 700, y: 145, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Drafts journal entries \u2014 accruals, deferrals, reclasses, standard adjustments \u2014 using source data and historical context. Each entry includes calculation logic, supporting evidence, and a full audit trail.", auto: "Routed to the appropriate approver by entry type." },
+  { id: "a3", label: "Adjustment Engine", shape: "hex", lane: 0, x: 700, y: 145, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Drafts every journal entry the close requires \u2014 accruals from open POs and contracts, prepaid amortization, revenue deferrals, reclassifications, and standard month-end adjustments. Each entry calculated from source data with full supporting documentation, audit trail, and historical comparison.", auto: "Entries queued for approval with calculation logic and evidence attached." },
 
-  { id: "a4", label: "Consolidation & Close", shape: "hex", lane: 0, x: 60,  y: 275, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Matches intercompany balances across entities, generates elimination entries, applies FX translation, and completes consolidation with full supporting documentation.", auto: "Mismatches surfaced in advance of close." },
+  { id: "a4", label: "Consolidation & Close", shape: "hex", lane: 0, x: 60,  y: 275, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Matches intercompany balances across all entities, generates elimination entries, applies currency translation, runs consolidation, and validates tie-outs. Surfaces IC mismatches and cutoff differences before close so nothing blocks the final package.", auto: "Consolidation runs automatically once sub-entities close." },
 
-  { id: "a5", label: "Reporting & Evidence", shape: "hex", lane: 0, x: 380, y: 275, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Generates variance commentary, financial statements, management reporting, and audit-ready evidence. Every figure traced to source. Outputs are data-linked and update together.", auto: "Financials, commentary, and audit support produced together." },
+  { id: "a5", label: "Reporting & Evidence", shape: "hex", lane: 0, x: 380, y: 275, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Generates complete financial statements, flux and variance commentary, management reporting packages, board decks, and audit-ready workpapers. Every figure traced to source data. All outputs are data-linked \u2014 one late adjustment updates everything simultaneously.", auto: "Financials, commentary, and audit evidence produced together." },
 
   { id: "a6", label: "Exceptions for\nreview?", shape: "diamond", lane: 0, x: 735, y: 275, w: 220, h: 95, badge: "AI", desc: "Isolates items that call for human judgment \u2014 unusual transactions, materiality edge cases, policy exceptions, and flagged anomalies.", auto: "Routed by materiality and confidence." },
 
@@ -605,7 +605,7 @@ export default function MonthlyCloseFlowchart() {
           }, label);
         })
       )
-    ),    // STATS — 3 badges: Days to Close, Process Steps (with mini bars), Controller Focus (with visual)
+    ),    // STATS — 3 badges: Days to Close, AI Handles, Controller Focus
     React.createElement("div", {
       style: {
         maxWidth: 900, margin: "0 auto 32px",
@@ -648,7 +648,7 @@ export default function MonthlyCloseFlowchart() {
         )
       ),
 
-      // BADGE 2: PROCESS STEPS (with mini bar visualization)
+      // BADGE 2: AI AUTOMATION
       React.createElement("div", {
         className: "kl-badge-card",
         style: {
@@ -661,52 +661,21 @@ export default function MonthlyCloseFlowchart() {
             fontSize: 10, color: "#666", fontWeight: 700,
             textTransform: "uppercase", letterSpacing: ".12em", marginBottom: 14
           }
-        }, "Process Steps"),
+        }, "AI Handles"),
         React.createElement("div", {
-          style: { display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }
+          style: { display: "flex", alignItems: "baseline", justifyContent: "center", gap: 8 }
         },
-          // before bar
-          React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, width: "100%", maxWidth: 220 } },
-            React.createElement("div", {
-              style: {
-                height: 8, width: "100%",
-                background: "linear-gradient(90deg, #ff8c00 0%, #ff8c00 100%, transparent 100%)",
-                borderRadius: 4, opacity: 0.7
-              }
-            }),
-            React.createElement("span", {
-              style: {
-                fontSize: 12, fontFamily: "'JetBrains Mono',monospace",
-                color: "#ff8c0099", minWidth: 22, textAlign: "right"
-              }
-            }, "30")
-          ),
-          // after bar (scaled — 16/30 \u2248 53%)
-          React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, width: "100%", maxWidth: 220 } },
-            React.createElement("div", {
-              style: {
-                height: 8, width: "100%", position: "relative",
-                background: "#1a1a22", borderRadius: 4
-              }
-            },
-              React.createElement("div", {
-                style: {
-                  position: "absolute", top: 0, left: 0, height: "100%",
-                  width: "53%", background: "#00e5a0", borderRadius: 4,
-                  boxShadow: "0 0 8px rgba(0,229,160,.4)"
-                }
-              })
-            ),
-            React.createElement("span", {
-              style: {
-                fontSize: 14, fontFamily: "'JetBrains Mono',monospace",
-                color: "#00e5a0", fontWeight: 700, minWidth: 22, textAlign: "right"
-              }
-            }, "16")
-          )
-        )
+          React.createElement("span", {
+            style: { fontSize: 22, fontFamily: "'JetBrains Mono',monospace", color: "#00e5a0", fontWeight: 700 }
+          }, "100%"),
+          React.createElement("span", {
+            style: { fontSize: 11, color: "#888", fontFamily: "'DM Sans',sans-serif" }
+          }, "of preparation")
+        ),
+        React.createElement("div", {
+          style: { fontSize: 10, color: "#555", marginTop: 8 }
+        }, "Reconciliation \u00b7 Adjustments \u00b7 Reporting")
       ),
-
       // BADGE 3: CONTROLLER FOCUS (visual stacked bars showing shift)
       React.createElement("div", {
         className: "kl-badge-card",
