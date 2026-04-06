@@ -240,8 +240,7 @@ export default function KnightLedger() {
         </div>
         <FadeIn delay={0.3}>
           <div style={{ marginTop: 40, padding: "28px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.13)", background: "rgba(0,229,160,0.02)" }}>
-            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, marginBottom: 16 }}><strong style={{ color: "#00e5a0" }}>Our position:</strong> Any accounting or finance function can and should be fully run by AI at the preparer level. Humans become the review layer — designing, maintaining, and continuously improving the system. One controller overseeing automated systems, at any company size, any industry, any complexity level.</p>
-            <a href="/close-process" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: "#00e5a0", textDecoration: "none", letterSpacing: ".05em", padding: "8px 0", borderBottom: "1px solid rgba(0,229,160,.3)" }}>SEE THE CLOSE REDESIGNED →</a>
+            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, }}><strong style={{ color: "#00e5a0" }}>Our position:</strong> Any accounting or finance function can and should be fully run by AI at the preparer level. Humans become the review layer — designing, maintaining, and continuously improving the system. One controller overseeing automated systems, at any company size, any industry, any complexity level.</p>
           </div>
         </FadeIn>
       </section>
@@ -253,7 +252,7 @@ export default function KnightLedger() {
               <div>
                 <div className="mono accent" style={{ fontSize: 12, letterSpacing: 1, marginBottom: 12 }}>THE MONTHLY CLOSE</div>
                 <h2 style={{ fontSize: "clamp(20px,3vw,28px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 8 }}>See the close redesigned end to end.</h2>
-                <p style={{ fontSize: 15, color: "#888", lineHeight: 1.6, maxWidth: 520 }}>Interactive before-and-after: 30 manual steps compressed to 9. Click any node for detail.</p>
+                <p style={{ fontSize: 15, color: "#888", lineHeight: 1.6, maxWidth: 520 }}>Interactive before-and-after showing how AI handles the full close. Click any node for detail.</p>
               </div>
               <div className="mono" style={{ fontSize: 13, color: "#00e5a0", letterSpacing: ".05em", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>VIEW FLOWCHART <span style={{ fontSize: 18 }}>→</span></div>
             </div>
@@ -410,28 +409,30 @@ export default function KnightLedger() {
           </FadeIn>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20, marginBottom: 40 }}>
             <FadeIn delay={0.05}>
-              <a href="https://tally.so/r/PdYBp1" target="_blank" rel="noopener noreferrer" className="cm" style={{ padding: 28, display: "block" }}>
+              <a href="https://tally.so/r/PdYBp1" target="_blank" rel="noopener noreferrer" className="cm" style={{ padding: 28, display: "block", height: "100%" }}>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>START HERE</div>
                 <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Tell us what you'd automate</div>
                 <div style={{ fontSize: 13, color: "#666" }}>Quick assessment — email is the only required field</div>
               </a>
             </FadeIn>
+            <FadeIn delay={0.1}>
+              <a href="https://calendly.com/jason-knightledger/ai-automation-intro-discussion" target="_blank" rel="noopener noreferrer" className="cm" style={{ height: "100%" }}>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>SCHEDULE A CALL</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Book an intake call</div>
+                <div style={{ fontSize: 13, color: "#666" }}>Pick a time that works</div>
+              </a>
+            </FadeIn>
             <FadeIn delay={0.15}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <a href="https://calendly.com/jason-knightledger/ai-automation-intro-discussion" target="_blank" rel="noopener noreferrer" className="cm">
-                  <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>SCHEDULE A CALL</div>
-                  <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Book an intake call</div>
-                  <div style={{ fontSize: 13, color: "#666" }}>Pick a time that works</div>
-                </a>
-                <a href="mailto:jason@knightledger.com" className="cm">
-                  <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>EMAIL</div>
-                  <div style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>jason@knightledger.com</div>
-                </a>
-                <a href="tel:+17322676522" className="cm">
-                  <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>CALL OR TEXT</div>
-                  <div style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>(732) 267-6522</div>
-                </a>
-              </div>
+              <a href="mailto:jason@knightledger.com" className="cm" style={{ height: "100%" }}>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>EMAIL</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>jason@knightledger.com</div>
+              </a>
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <a href="tel:+17322676522" className="cm" style={{ height: "100%" }}>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>CALL OR TEXT</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>(732) 267-6522</div>
+              </a>
             </FadeIn>
           </div>
         </div>
