@@ -157,6 +157,9 @@ function FadeIn(props) {
 export default function KnightLedger() {
   var _cat = useState("All"); var activeCat = _cat[0]; var setActiveCat = _cat[1];
   var _exp = useState(null); var expandedAuto = _exp[0]; var setExpandedAuto = _exp[1];
+    var _step = useState(null);
+    var expandedStep = _step[0];
+    var setExpandedStep = _step[1];
   var _menu = useState(false); var mobileMenu = _menu[0]; var setMobileMenu = _menu[1];
   var filtered = activeCat === "All" ? AUTOS : AUTOS.filter(function(a) { return a.cat === activeCat; });
   var grouped = {};
@@ -237,7 +240,8 @@ export default function KnightLedger() {
         </div>
         <FadeIn delay={0.3}>
           <div style={{ marginTop: 40, padding: "28px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.13)", background: "rgba(0,229,160,0.02)" }}>
-            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7 }}><strong style={{ color: "#00e5a0" }}>Our position:</strong> Any accounting or finance function can and should be fully run by AI at the preparer level. Humans become the review layer — designing, maintaining, and continuously improving the system. One controller overseeing automated systems, at any company size, any industry, any complexity level.</p>
+            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, marginBottom: 16 }}><strong style={{ color: "#00e5a0" }}>Our position:</strong> Any accounting or finance function can and should be fully run by AI at the preparer level. Humans become the review layer — designing, maintaining, and continuously improving the system. One controller overseeing automated systems, at any company size, any industry, any complexity level.</p>
+            <a href="/close-process" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: "#00e5a0", textDecoration: "none", letterSpacing: ".05em", padding: "8px 0", borderBottom: "1px solid rgba(0,229,160,.3)" }}>SEE THE CLOSE REDESIGNED →</a>
           </div>
         </FadeIn>
       </section>
@@ -245,11 +249,18 @@ export default function KnightLedger() {
       <section id="process" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>HOW IT WORKS</div><h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 48 }}>Four phases.</h2></FadeIn>
         {STEPS.map(function(s, i) {
+          var isOpen = expandedStep === s.n;
           return (
             <FadeIn key={i} delay={i * 0.08}>
-              <div style={{ display: "grid", gridTemplateColumns: "64px 1fr", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "32px 0" }}>
+              <div className="arow" style={{ display: "grid", gridTemplateColumns: "64px 1fr", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "24px 0", cursor: "pointer" }} onClick={function() { setExpandedStep(isOpen ? null : s.n); }}>
                 <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: "#00e5a0", opacity: 0.5 }}>{s.n}</div>
-                <div><h3 style={{ fontSize: 20, fontWeight: 600, color: "#fff", marginBottom: 8 }}>{s.t}</h3><p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, maxWidth: 640 }}>{s.d}</p></div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <h3 style={{ fontSize: 20, fontWeight: 600, color: "#fff", margin: 0 }}>{s.t}</h3>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform .25s" }}><path d="M4 6l4 4 4-4" stroke="#555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </div>
+                  {isOpen && <p style={{ marginTop: 12, fontSize: 15, color: "#888", lineHeight: 1.7, maxWidth: 640 }}>{s.d}</p>}
+                </div>
               </div>
             </FadeIn>
           );
