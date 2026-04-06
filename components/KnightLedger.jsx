@@ -8,10 +8,9 @@ var STEPS = [
 ];
 
 var SCOPES = [
-  { name: "Per Process", price: "$2K – $12K", desc: "Any single workflow — a reconciliation, AP coding, flux analysis, lease analysis, any individual process.", icon: "\u25C7" },
-  { name: "Full Close Cycle", price: "$8K – $25K", desc: "End-to-end: reconciliations, commentary, reporting, IC eliminations, close orchestration.", icon: "\u25C6" },
-  { name: "Full Department", price: "$25K – $75K+", desc: "Accounting and finance redesigned around AI from the ground up.", icon: "\u2B21" },
-  { name: "DIY Kits", price: "$500 – $10K", desc: "Prompt libraries, blueprints, and guides your team uses to implement independently.", icon: "\u25B3" }
+  { name: "Per Process", price: "$5K – $15K", desc: "Any single workflow — a reconciliation, AP coding, flux analysis, lease analysis, any individual process.", icon: "\u25C7" },
+  { name: "Full Close Cycle", price: "$25K – $60K", desc: "End-to-end: reconciliations, commentary, reporting, IC eliminations, close orchestration.", icon: "\u25C6" },
+  { name: "Full Department", price: "$75K – $200K", desc: "Accounting and finance redesigned around AI from the ground up.", icon: "\u2B21" }
 ];
 
 var AUTOS = [
@@ -301,7 +300,7 @@ export default function KnightLedger() {
             );
           })}
         </div>
-        <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>All fees scoped per engagement. No recurring charges, no hourly billing.</p></FadeIn>
+        <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>Estimated ranges only. Final fee varies significantly based on engagement complexity, data quality, and systems environment. Scoped per engagement. No recurring charges, no hourly billing.</p></FadeIn>
       </section>
       {/* SECURITY */}
       <section id="security" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
@@ -391,7 +390,7 @@ export default function KnightLedger() {
             <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>ABOUT</div>
             <div style={{ maxWidth: 700 }}>
               <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester, CPA</h2>
-              <div style={{ fontSize: 14, color: "#00e5a0", marginBottom: 24, fontWeight: 500 }}>Implementation & Design</div>
+              <div className="mono" style={{ fontSize: 13, color: "#00e5a0", marginBottom: 20, letterSpacing: "0.5px" }}>Implementation & Design Lead</div>
               <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 20 }}>CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and advisory consulting at the senior manager level. Since the emergence of generative AI, focused exclusively on deploying it across accounting and finance — close optimization, automated workpaper and evidence generation, controls testing, analytics, ERP implementations, and workflow design.</p>
               <a href="https://www.linkedin.com/in/jasonforrester1/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: "#00e5a0", textDecoration: "none", borderBottom: "1px solid rgba(0,229,160,0.3)", paddingBottom: 2 }}>LinkedIn</a>
             </div>
