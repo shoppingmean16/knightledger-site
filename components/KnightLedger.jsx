@@ -245,6 +245,21 @@ export default function KnightLedger() {
           </div>
         </FadeIn>
       </section>
+      {/* CLOSE PROCESS */}
+      <section className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
+        <FadeIn>
+          <a href="/close-process" style={{ display: "block", textDecoration: "none", padding: "40px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.2)", background: "linear-gradient(135deg, rgba(0,229,160,0.04) 0%, rgba(0,229,160,0.01) 100%)", transition: "all .3s", cursor: "pointer" }} onMouseEnter={function(e) { e.currentTarget.style.borderColor = "rgba(0,229,160,0.5)"; e.currentTarget.style.boxShadow = "0 0 40px rgba(0,229,160,.08)"; }} onMouseLeave={function(e) { e.currentTarget.style.borderColor = "rgba(0,229,160,0.2)"; e.currentTarget.style.boxShadow = "none"; }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+              <div>
+                <div className="mono accent" style={{ fontSize: 12, letterSpacing: 1, marginBottom: 12 }}>THE MONTHLY CLOSE</div>
+                <h2 style={{ fontSize: "clamp(20px,3vw,28px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 8 }}>See the close redesigned end to end.</h2>
+                <p style={{ fontSize: 15, color: "#888", lineHeight: 1.6, maxWidth: 520 }}>Interactive before-and-after: 30 manual steps compressed to 9. Click any node for detail.</p>
+              </div>
+              <div className="mono" style={{ fontSize: 13, color: "#00e5a0", letterSpacing: ".05em", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>VIEW FLOWCHART <span style={{ fontSize: 18 }}>→</span></div>
+            </div>
+          </a>
+        </FadeIn>
+      </section>
       {/* PROCESS */}
       <section id="process" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>HOW IT WORKS</div><h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 48 }}>Four phases.</h2></FadeIn>
