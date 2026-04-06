@@ -198,14 +198,20 @@ export default function KnightLedger() {
         <div className="gridbg" />
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px", position: "relative", zIndex: 1 }}>
           <FadeIn><div className="mono" style={{ fontSize: 13, color: "#00e5a0", marginBottom: 24, letterSpacing: "0.5px", opacity: 0.8 }}>AI IMPLEMENTATION FOR ACCOUNTING & FINANCE</div></FadeIn>
-          <FadeIn delay={0.1}><h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px", color: "#fff", marginBottom: 28, maxWidth: 800 }}>AI can now run your entire accounting function. <span style={{ color: "#555" }}>Most companies haven’t let it.</span></h1></FadeIn>
-          <FadeIn delay={0.2}><p style={{ fontSize: "clamp(16px,2.2vw,20px)", color: "#888", lineHeight: 1.65, maxWidth: 620, marginBottom: 16 }}>We redesign accounting and finance processes around AI — not bolt it onto what you already have.</p></FadeIn>
+          <FadeIn delay={0.1}><h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px", color: "#fff", marginBottom: 28, maxWidth: 800 }}>The gap between what AI can do in accounting and what’s actually deployed has never been wider. <span style={{ color: "#555" }}>We close it.</span></h1></FadeIn>
+          <FadeIn delay={0.2}><p style={{ fontSize: "clamp(16px,2.2vw,20px)", color: "#888", lineHeight: 1.65, maxWidth: 620, marginBottom: 16 }}>We redesign accounting and finance processes around AI — not wrapped around processes built for humans.</p></FadeIn>
           <FadeIn delay={0.3}>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <button className="bp" onClick={function() { scrollTo("contact"); }}>Talk to Us</button>
               <button className="bgh" onClick={function() { scrollTo("automations"); }}>See What We Build</button>
             </div>
           </FadeIn>
+        <FadeIn delay={0.35}>
+          <a href="/close-process" style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 32, padding: "16px 24px", background: "rgba(0,229,160,0.04)", border: "1px solid rgba(0,229,160,0.25)", borderRadius: 10, textDecoration: "none", transition: "all .25s" }}>
+            <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, opacity: 0.7 }}>ILLUSTRATIVE ↗</div>
+            <div style={{ fontSize: 14, color: "#e0e0e0", fontWeight: 500 }}>Monthly close process — before and after KnightLedger implementation</div>
+          </a>
+        </FadeIn>
           <FadeIn delay={0.45}>
             <div style={{ marginTop: 72, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 1, background: "#1a1c1e", borderRadius: 12, overflow: "hidden" }}>
               <div style={{ background: "#0f1012", padding: "28px 24px", textAlign: "center" }}><div className="sn"><Counter end={70} suffix="%+" /></div><div style={{ fontSize: 13, color: "#666", marginTop: 8 }}>Cost reduction vs. traditional advisory</div></div>
@@ -218,7 +224,7 @@ export default function KnightLedger() {
       <section id="thesis" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>THE DISCONNECT</div>
-          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 32, maxWidth: 700 }}>AI handles every accounting task now — including the ones that require judgment. So why hasn’t anything changed?</h2>
+          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 32, maxWidth: 700 }}>The technology is ready. The profession hasn’t moved.</h2>
         </FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 24 }}>
           {[
@@ -241,21 +247,6 @@ export default function KnightLedger() {
           <div style={{ marginTop: 40, padding: "28px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.13)", background: "rgba(0,229,160,0.02)" }}>
             <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, }}><strong style={{ color: "#00e5a0" }}>Our position:</strong> Any accounting or finance function can and should be fully run by AI at the preparer level. Humans become the review layer — designing, maintaining, and continuously improving the system. One controller overseeing automated systems, at any company size, any industry, any complexity level.</p>
           </div>
-        </FadeIn>
-      </section>
-      {/* CLOSE PROCESS */}
-      <section className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
-        <FadeIn>
-          <a href="/close-process" style={{ display: "block", textDecoration: "none", padding: "40px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.2)", background: "linear-gradient(135deg, rgba(0,229,160,0.04) 0%, rgba(0,229,160,0.01) 100%)", transition: "all .3s", cursor: "pointer" }} onMouseEnter={function(e) { e.currentTarget.style.borderColor = "rgba(0,229,160,0.5)"; e.currentTarget.style.boxShadow = "0 0 40px rgba(0,229,160,.08)"; }} onMouseLeave={function(e) { e.currentTarget.style.borderColor = "rgba(0,229,160,0.2)"; e.currentTarget.style.boxShadow = "none"; }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
-              <div>
-                <div className="mono accent" style={{ fontSize: 12, letterSpacing: 1, marginBottom: 12 }}>THE MONTHLY CLOSE</div>
-                <h2 style={{ fontSize: "clamp(20px,3vw,28px)", fontWeight: 700, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 8 }}>See the close redesigned end to end.</h2>
-                <p style={{ fontSize: 15, color: "#888", lineHeight: 1.6, maxWidth: 520 }}>Interactive before-and-after showing how AI handles the full close. Click any node for detail.</p>
-              </div>
-              <div className="mono" style={{ fontSize: 13, color: "#00e5a0", letterSpacing: ".05em", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>VIEW FLOWCHART <span style={{ fontSize: 18 }}>→</span></div>
-            </div>
-          </a>
         </FadeIn>
       </section>
       {/* PROCESS */}
