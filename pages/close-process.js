@@ -112,9 +112,9 @@ var AFTER_NODES = [
   { id: "a6", label: "Exceptions for\nreview?", shape: "diamond", lane: 0, x: 735, y: 275, w: 220, h: 95, badge: "AI", desc: "Isolates items that call for human judgment \u2014 unusual transactions, materiality edge cases, policy exceptions, and flagged anomalies.", auto: "Routed by materiality and confidence." },
 
   // ── CONTROLLER LANE (lane 1) — review and approve ──
-  { id: "a7", label: "Review & approve\nAI output", shape: "rectangle", lane: 1, x: 100, y: 460, w: 300, h: 80, time: "hours", badge: "HUMAN", desc: "Controller reviews AI-generated reconciliations, journal entries, and commentary. Preparation is complete \u2014 the focus is on exceptions, judgment calls, and refinement.", auto: "Review instead of prepare." },
+  { id: "a7", label: "Review exceptions\nin close dashboard", shape: "rectangle", lane: 1, x: 100, y: 460, w: 300, h: 80, time: "hours", badge: "HUMAN", desc: "Close dashboard surfaces reconciliations, journal entries, and commentary for review. Exceptions and judgment calls are flagged \u2014 everything else is prepared and documented." },
 
-  { id: "a8", label: "Final sign-off", shape: "rectangle", lane: 1, x: 460, y: 460, w: 260, h: 80, time: "hours", badge: "HUMAN", desc: "Controller signs off on the close package \u2014 financial statements, reporting, and supporting workpapers.", auto: "Focused review. No last-minute surprises." },
+  { id: "a8", label: "Sign off\nin close dashboard", shape: "rectangle", lane: 1, x: 460, y: 460, w: 260, h: 80, time: "hours", badge: "HUMAN", desc: "Controller signs off on the complete close package directly in the dashboard \u2014 financial statements, reporting, and supporting workpapers in one view." },
 
   { id: "a9", label: "CLOSE\nCOMPLETE", shape: "pill", lane: 1, x: 760, y: 470, w: 180, h: 60, time: "Day 2-3", desc: "Close is complete, reviewed, and documented." }
 ];
