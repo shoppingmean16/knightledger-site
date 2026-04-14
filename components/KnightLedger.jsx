@@ -24,33 +24,33 @@ var AUTOS = [
   { cat: "Close & Reporting", name: "Fixed Assets & Depreciation", desc: "Asset tracking, depreciation schedules, disposal processing, impairment testing, CIP monitoring — maintained continuously." },
   { cat: "Close & Reporting", name: "Accrual Identification", desc: "AI identifies missing accruals from historical patterns, open POs, and contract terms. Entries generated with supporting documentation." },
   { cat: "Close & Reporting", name: "Journal Entry Testing", desc: "Continuous analysis of all JEs for anomalies, SOD violations, unusual patterns, and policy exceptions." },
-  { cat: "AP & Procurement", name: "AP Intake & GL Coding", desc: "Reads invoices in any format — PDF, image, email — extracts line items, matches vendors, assigns GL codes, three-way match, approval routing. Exceptions only." },
-  { cat: "AP & Procurement", name: "Expense Report Review", desc: "Reviews submissions against policy, flags violations, verifies receipts, checks duplicates, routes compliant reports for payment." },
-  { cat: "AP & Procurement", name: "Vendor & Supply Chain Risk", desc: "Continuous monitoring of vendor financial health, delivery performance, concentration risk, geopolitical exposure." },
-  { cat: "AP & Procurement", name: "Purchase Order Management", desc: "PO creation, approval routing, budget checking, goods receipt matching, accrual generation — end to end." },
-  { cat: "Revenue", name: "Multi-Channel Revenue Reconciliation", desc: "Matching across payment processors, marketplaces, wholesale channels. Settlement-to-GL. Exceptions only." },
-  { cat: "Revenue", name: "Deferred Revenue & ASC 606", desc: "Revenue waterfalls, churn handling, recognition scheduling, contract modification tracking, performance obligation analysis at scale." },
-  { cat: "Revenue", name: "Contract Parsing & Analysis", desc: "AI reads contracts, extracts economic terms, identifies performance obligations, flags non-standard clauses. Thousands processed in hours." },
-  { cat: "Revenue", name: "AR Aging & Collections", desc: "Aging analysis, payment pattern recognition, collection priority scoring, dunning letter generation." },
-  { cat: "Revenue", name: "Billing Reconciliation", desc: "Billing system to GL, unbilled revenue identification, sub-ledger to GL reconciliation automated." },
-  { cat: "Compliance & Audit", name: "SOX & Continuous Controls", desc: "Continuous control testing replacing quarterly sampling. Evidence packaged, walkthrough docs generated, exceptions flagged in real time." },
-  { cat: "Compliance & Audit", name: "Audit Evidence & PBC Assembly", desc: "Continuous documentation organization, completeness tracking, binder assembly by audit area. PBC built before auditors arrive." },
-  { cat: "Compliance & Audit", name: "ASC 842 Lease Analysis", desc: "Embedded lease identification, completeness analysis, new lease setup, initial recognition, modification tracking, ongoing amortization. Full population management." },
-  { cat: "Compliance & Audit", name: "Covenant Monitoring", desc: "Continuous monitoring of all debt covenants — leverage ratios, interest coverage, fixed charge coverage, liquidity minimums, capex limits. AI ingests loan agreements, extracts every covenant definition, monitors financials against each threshold in real time. Breach probability scoring triggers escalation before violation. Critical for AI infrastructure debt, GPU-collateralized facilities, and SPV structures." },
-  { cat: "Compliance & Audit", name: "ESG & Sustainability Reporting", desc: "Data aggregation for sustainability disclosures, regulatory tracking, gap analysis. SEC climate rules and EU CSRD making this mandatory." },
-  { cat: "Compliance & Audit", name: "Multi-Jurisdiction Compliance", desc: "Filing deadline tracking, automated alerts, status monitoring, compliance documentation across all jurisdictions." },
-  { cat: "Compliance & Audit", name: "Policy Compliance Scanning", desc: "Transactions, expenses, and JEs reviewed against internal policies. Violations flagged before they become audit findings." },
+  { cat: "Procure to Pay", name: "AP Intake & GL Coding", desc: "Reads invoices in any format — PDF, image, email — extracts line items, matches vendors, assigns GL codes, three-way match, approval routing. Exceptions only." },
+  { cat: "Procure to Pay", name: "Expense Report Review", desc: "Reviews submissions against policy, flags violations, verifies receipts, checks duplicates, routes compliant reports for payment." },
+  { cat: "Procure to Pay", name: "Vendor & Supply Chain Risk", desc: "Continuous monitoring of vendor financial health, delivery performance, concentration risk, geopolitical exposure." },
+  { cat: "Procure to Pay", name: "Purchase Order Management", desc: "PO creation, approval routing, budget checking, goods receipt matching, accrual generation — end to end." },
+  { cat: "Order to Cash", name: "Multi-Channel Revenue Reconciliation", desc: "Matching across payment processors, marketplaces, wholesale channels. Settlement-to-GL. Exceptions only." },
+  { cat: "Order to Cash", name: "Deferred Revenue & ASC 606", desc: "Revenue waterfalls, churn handling, recognition scheduling, contract modification tracking, performance obligation analysis at scale." },
+  { cat: "Order to Cash", name: "Contract Parsing & Analysis", desc: "AI reads contracts, extracts economic terms, identifies performance obligations, flags non-standard clauses. Thousands processed in hours." },
+  { cat: "Order to Cash", name: "AR Aging & Collections", desc: "Aging analysis, payment pattern recognition, collection priority scoring, dunning letter generation." },
+  { cat: "Order to Cash", name: "Billing Reconciliation", desc: "Billing system to GL, unbilled revenue identification, sub-ledger to GL reconciliation automated." },
+  { cat: "Audit, Risk & Compliance", name: "SOX & Continuous Controls", desc: "Continuous control testing replacing quarterly sampling. Evidence packaged, walkthrough docs generated, exceptions flagged in real time." },
+  { cat: "Audit, Risk & Compliance", name: "Audit Evidence & PBC Assembly", desc: "Continuous documentation organization, completeness tracking, binder assembly by audit area. PBC built before auditors arrive." },
+  { cat: "Audit, Risk & Compliance", name: "ASC 842 Lease Analysis", desc: "Embedded lease identification, completeness analysis, new lease setup, initial recognition, modification tracking, ongoing amortization. Full population management." },
+  { cat: "Audit, Risk & Compliance", name: "Covenant Monitoring", desc: "Continuous monitoring of all debt covenants — leverage ratios, interest coverage, fixed charge coverage, liquidity minimums, capex limits. AI ingests loan agreements, extracts every covenant definition, monitors financials against each threshold in real time. Breach probability scoring triggers escalation before violation. Critical for AI infrastructure debt, GPU-collateralized facilities, and SPV structures." },
+  { cat: "Audit, Risk & Compliance", name: "ESG & Sustainability Reporting", desc: "Data aggregation for sustainability disclosures, regulatory tracking, gap analysis. SEC climate rules and EU CSRD making this mandatory." },
+  { cat: "Audit, Risk & Compliance", name: "Multi-Jurisdiction Compliance", desc: "Filing deadline tracking, automated alerts, status monitoring, compliance documentation across all jurisdictions." },
+  { cat: "Audit, Risk & Compliance", name: "Policy Compliance Scanning", desc: "Transactions, expenses, and JEs reviewed against internal policies. Violations flagged before they become audit findings." },
   { cat: "FP&A & Treasury", name: "Variance & Flux Analysis", desc: "First-pass narratives for every material variance — B/A, PY, forecast. Review and edit instead of writing from scratch." },
   { cat: "FP&A & Treasury", name: "Cash Forecasting", desc: "Rolling forecasts that learn your business cycles. Daily cash positioning, bank reconciliation, liquidity analysis." },
   { cat: "FP&A & Treasury", name: "Real-Time Dashboards", desc: "Live ERP data in CFO-ready dashboards — cash, revenue, expense anomalies, KPIs — updated continuously." },
   { cat: "FP&A & Treasury", name: "Budget vs. Actual Reporting", desc: "Automated comparison, department drill-downs, trend analysis, narrative generation for material variances." },
   { cat: "FP&A & Treasury", name: "Debt & Equity Accounting", desc: "Issuance accounting, amortization schedules, covenant tracking, fair value adjustments, disclosure preparation." },
   { cat: "FP&A & Treasury", name: "Scenario Modeling", desc: "Multiple scenarios from variable inputs — rates, revenue, costs — with automated output comparison." },
-  { cat: "Tax", name: "Tax Provision & Compliance", desc: "Data gathering, schedule preparation, return assembly, provision calculations at speed." },
-  { cat: "Tax", name: "Transfer Pricing", desc: "IC transaction monitoring, arm’s-length benchmarking, exposure flagging, documentation generation." },
-  { cat: "Tax", name: "1099 & Information Returns", desc: "Vendor data validation, threshold monitoring, form generation, filing preparation across jurisdictions." },
-  { cat: "Tax", name: "Tariff & Trade Compliance", desc: "HTS classification, duty exposure calculation, trade policy monitoring, supply chain cost modeling." },
-  { cat: "Tax", name: "Sales Tax Nexus", desc: "Nexus determination, rate application, return preparation, GL reconciliation across jurisdictions." },
+  { cat: "Tax & Regulatory", name: "Tax Provision & Compliance", desc: "Data gathering, schedule preparation, return assembly, provision calculations at speed." },
+  { cat: "Tax & Regulatory", name: "Transfer Pricing", desc: "IC transaction monitoring, arm’s-length benchmarking, exposure flagging, documentation generation." },
+  { cat: "Tax & Regulatory", name: "1099 & Information Returns", desc: "Vendor data validation, threshold monitoring, form generation, filing preparation across jurisdictions." },
+  { cat: "Tax & Regulatory", name: "Tariff & Trade Compliance", desc: "HTS classification, duty exposure calculation, trade policy monitoring, supply chain cost modeling." },
+  { cat: "Tax & Regulatory", name: "Sales Tax Nexus", desc: "Nexus determination, rate application, return preparation, GL reconciliation across jurisdictions." },
   { cat: "M&A", name: "Acquisition Integration", desc: "COA mapping with confidence scoring, TB conversion, IC setup, compliance gap analysis, audit evidence packaging. Each deal trains the system." },
   { cat: "M&A", name: "Purchase Price Allocation", desc: "Data assembly for PPA, intangible identification, useful life estimation, disclosure preparation." },
   { cat: "M&A", name: "Goodwill Impairment Testing", desc: "Triggering event monitoring, data assembly, reporting unit allocation, disclosure preparation." },
@@ -60,32 +60,32 @@ var AUTOS = [
   { cat: "Operations", name: "Workers Comp & Benefits", desc: "Premium reconciliation, classification auditing, experience mod tracking, benefits enrollment validation." },
   { cat: "Operations", name: "Inventory & COGS", desc: "Perpetual inventory reconciliation, LCNRV testing, cost layer analysis, shrinkage identification." },
   { cat: "Operations", name: "Workflow Automation", desc: "Approval routing, status tracking, notification triggers, SLA monitoring across any process." },
-  { cat: "Government", name: "CAFR / ACFR Preparation", desc: "Automated Comprehensive Annual Financial Reports. Government-wide and fund-level statements, notes, RSI, statistical section from ERP data." },
-  { cat: "Government", name: "Single Audit (2 CFR 200)", desc: "Continuous federal award monitoring against Uniform Guidance. SEFA prepared automatically. Major program determination and compliance documentation." },
-  { cat: "Government", name: "Fund Accounting", desc: "Reconciliation across governmental, proprietary, fiduciary funds. Interfund matching, elimination for government-wide conversion." },
-  { cat: "Government", name: "Grant Management", desc: "Award to closeout: budget tracking, drawdown scheduling, cost allocation, match requirements, deadline alerts, compliance docs." },
-  { cat: "Government", name: "GASB Implementation", desc: "New standard adoption: lease inventories (GASB 87), subscription IT (GASB 96), compensated absences (GASB 101). Schedules, JEs, disclosures." },
-  { cat: "Government", name: "DoD Audit Readiness", desc: "DoD has failed its audit every year since 2018. Evidence assembly, universe of transactions documentation, JV preparation, control monitoring." },
-  { cat: "Government", name: "DCAA Compliance", desc: "Incurred cost submissions, indirect rate calculations, timekeeping compliance, CAS-compliant cost accounting with full documentation." },
-  { cat: "Industry", name: "Healthcare — Claims & Denials", desc: "Analysis by payer, code, clinician, state. Denial pattern recognition, appeal tracking, recovery monitoring." },
-  { cat: "Industry", name: "Gaming — Multi-Property", desc: "Property-level P&L, gaming tax, promotional allowance tracking, regulatory compliance across jurisdictions." },
-  { cat: "Industry", name: "SaaS — ARR/MRR & Cohorts", desc: "Subscription metrics, cohort retention, usage-based billing reconciliation, investor dashboards." },
-  { cat: "Industry", name: "PE — Portfolio Standardization", desc: "COA normalization, standardized reporting, fund consolidation, carried interest calculations." },
-  { cat: "Industry", name: "Insurance — Reserving", desc: "Loss reserve analysis, IBNR estimation, claims processing, policy administration reconciliation." },
-  { cat: "Industry", name: "Manufacturing — Costing & WIP", desc: "BOM reconciliation, WIP analysis, standard cost variance reporting, production efficiency." },
-  { cat: "Industry", name: "Real Estate — Leases", desc: "Rent roll reconciliation, CAM charges, percentage rent, tenant improvements, lease abstraction." },
-  { cat: "Industry", name: "Defense — Contract Costs", desc: "DCAA-compliant tracking, incurred cost submissions, indirect rates, contract revenue recognition." },
-  { cat: "Industry", name: "Pharma — R&D Capitalization", desc: "Clinical trial cost tracking, milestone-based capitalization, collaboration arrangement accounting." },
-  { cat: "Industry", name: "Crypto — Digital Assets", desc: "Wallet tracking, on-chain to GL mapping, fair value under new FASB standard, tax lot reporting." },
-  { cat: "Industry", name: "Banking — AI Debt Monitoring", desc: "Portfolio monitoring of AI/datacenter lending — GPU facilities, SPV structures, hyperscaler credit, utilization covenants. $250B–$300B projected 2026 issuance." },
-  { cat: "Industry", name: "Construction — % Completion", desc: "Project cost tracking, ASC 606 revenue recognition, change orders, retainage tracking." },
-  { cat: "Industry", name: "Hospitality — Revenue Mgmt", desc: "Room revenue reconciliation, F&B cost analysis, loyalty liability, franchise fee calculations." },
-  { cat: "Industry", name: "Media — Licensing & Royalties", desc: "Content amortization, royalty calculations, minimum guarantees, participation accounting, rights management." },
-  { cat: "Industry", name: "Retail — POS & Shrinkage", desc: "POS reconciliation, shrinkage analysis, loyalty accounting, gift card breakage estimation." },
-  { cat: "Industry", name: "Nonprofit — Grants & Funds", desc: "Grant tracking, donor restriction monitoring, fund-level reporting, federal award compliance." }
+  { cat: "Government & Public Sector", name: "CAFR / ACFR Preparation", desc: "Automated Comprehensive Annual Financial Reports. Government-wide and fund-level statements, notes, RSI, statistical section from ERP data." },
+  { cat: "Government & Public Sector", name: "Single Audit (2 CFR 200)", desc: "Continuous federal award monitoring against Uniform Guidance. SEFA prepared automatically. Major program determination and compliance documentation." },
+  { cat: "Government & Public Sector", name: "Fund Accounting", desc: "Reconciliation across governmental, proprietary, fiduciary funds. Interfund matching, elimination for government-wide conversion." },
+  { cat: "Government & Public Sector", name: "Grant Management", desc: "Award to closeout: budget tracking, drawdown scheduling, cost allocation, match requirements, deadline alerts, compliance docs." },
+  { cat: "Government & Public Sector", name: "GASB Implementation", desc: "New standard adoption: lease inventories (GASB 87), subscription IT (GASB 96), compensated absences (GASB 101). Schedules, JEs, disclosures." },
+  { cat: "Government & Public Sector", name: "DoD Audit Readiness", desc: "DoD has failed its audit every year since 2018. Evidence assembly, universe of transactions documentation, JV preparation, control monitoring." },
+  { cat: "Government & Public Sector", name: "DCAA Compliance", desc: "Incurred cost submissions, indirect rate calculations, timekeeping compliance, CAS-compliant cost accounting with full documentation." },
+  { cat: "Industry-Specific", name: "Healthcare — Claims & Denials", desc: "Analysis by payer, code, clinician, state. Denial pattern recognition, appeal tracking, recovery monitoring." },
+  { cat: "Industry-Specific", name: "Gaming — Multi-Property", desc: "Property-level P&L, gaming tax, promotional allowance tracking, regulatory compliance across jurisdictions." },
+  { cat: "Industry-Specific", name: "SaaS — ARR/MRR & Cohorts", desc: "Subscription metrics, cohort retention, usage-based billing reconciliation, investor dashboards." },
+  { cat: "Industry-Specific", name: "PE — Portfolio Standardization", desc: "COA normalization, standardized reporting, fund consolidation, carried interest calculations." },
+  { cat: "Industry-Specific", name: "Insurance — Reserving", desc: "Loss reserve analysis, IBNR estimation, claims processing, policy administration reconciliation." },
+  { cat: "Industry-Specific", name: "Manufacturing — Costing & WIP", desc: "BOM reconciliation, WIP analysis, standard cost variance reporting, production efficiency." },
+  { cat: "Industry-Specific", name: "Real Estate — Leases", desc: "Rent roll reconciliation, CAM charges, percentage rent, tenant improvements, lease abstraction." },
+  { cat: "Industry-Specific", name: "Defense — Contract Costs", desc: "DCAA-compliant tracking, incurred cost submissions, indirect rates, contract revenue recognition." },
+  { cat: "Industry-Specific", name: "Pharma — R&D Capitalization", desc: "Clinical trial cost tracking, milestone-based capitalization, collaboration arrangement accounting." },
+  { cat: "Industry-Specific", name: "Crypto — Digital Assets", desc: "Wallet tracking, on-chain to GL mapping, fair value under new FASB standard, tax lot reporting." },
+  { cat: "Industry-Specific", name: "Banking — AI Debt Monitoring", desc: "Portfolio monitoring of AI/datacenter lending — GPU facilities, SPV structures, hyperscaler credit, utilization covenants. $250B–$300B projected 2026 issuance." },
+  { cat: "Industry-Specific", name: "Construction — % Completion", desc: "Project cost tracking, ASC 606 revenue recognition, change orders, retainage tracking." },
+  { cat: "Industry-Specific", name: "Hospitality — Revenue Mgmt", desc: "Room revenue reconciliation, F&B cost analysis, loyalty liability, franchise fee calculations." },
+  { cat: "Industry-Specific", name: "Media — Licensing & Royalties", desc: "Content amortization, royalty calculations, minimum guarantees, participation accounting, rights management." },
+  { cat: "Industry-Specific", name: "Retail — POS & Shrinkage", desc: "POS reconciliation, shrinkage analysis, loyalty accounting, gift card breakage estimation." },
+  { cat: "Industry-Specific", name: "Nonprofit — Grants & Funds", desc: "Grant tracking, donor restriction monitoring, fund-level reporting, federal award compliance." }
 ];
 
-var ALL_CATS = ["All", "Close & Reporting", "AP & Procurement", "Revenue", "Compliance & Audit", "FP&A & Treasury", "Tax", "M&A", "Operations", "Government", "Industry"];
+var ALL_CATS = ["Close & Reporting", "Procure to Pay", "Order to Cash", "Audit, Risk & Compliance", "FP&A & Treasury", "Tax & Regulatory", "M&A", "Operations", "Government & Public Sector", "Industry-Specific"];
 
 function cn() { var r = []; for (var i = 0; i < arguments.length; i++) { if (arguments[i]) r.push(arguments[i]); } return r.join(" "); }
 
@@ -154,17 +154,17 @@ function FadeIn(props) {
 
 
 export default function KnightLedger() {
-  var _cat = useState("All"); var activeCat = _cat[0]; var setActiveCat = _cat[1];
+  var _cat = useState(null); var activeCat = _cat[0]; var setActiveCat = _cat[1];
   var _exp = useState(null); var expandedAuto = _exp[0]; var setExpandedAuto = _exp[1];
     var _step = useState(null);
     var expandedStep = _step[0];
     var setExpandedStep = _step[1];
   var _menu = useState(false); var mobileMenu = _menu[0]; var setMobileMenu = _menu[1];
-  var filtered = activeCat === "All" ? AUTOS : AUTOS.filter(function(a) { return a.cat === activeCat; });
+  var filtered = activeCat ? AUTOS.filter(function(a) { return a.cat === activeCat; }) : [];
   var grouped = {};
   filtered.forEach(function(a) { if (!grouped[a.cat]) grouped[a.cat] = []; grouped[a.cat].push(a); });
   var scrollTo = function(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth" }); setMobileMenu(false); };
-  var navItems = [["Thesis", "thesis"], ["Process", "process"], ["Pricing", "pricing"], ["Automations", "automations"]];
+  var navItems = [["Thesis", "thesis"], ["In Practice", "practice"], ["Process", "process"], ["Pricing", "pricing"], ["Automations", "automations"]];
   return (
     <div style={{ fontFamily: "'DM Sans','Helvetica Neue',sans-serif", background: "#08090b", color: "#e0e0e0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -249,28 +249,69 @@ export default function KnightLedger() {
           </div>
         </FadeIn>
       </section>
-      {/* PROCESS */}
+      
+      {/* IN PRACTICE */}
+      <section id="practice" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
+        <FadeIn>
+          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IN PRACTICE</div>
+          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 16, maxWidth: 760 }}>What a KnightLedger implementation actually looks like.</h2>
+          <p style={{ fontSize: 16, color: "#888", marginBottom: 40, maxWidth: 640, lineHeight: 1.6 }}>The architecture that replaces the preparer layer. The controller's dashboard once it's running. And two engagements built against live operations.</p>
+        </FadeIn>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 }}>
+          <FadeIn delay={0.08}>
+            <a href="/close-process" style={{ display: "block", textDecoration: "none", height: "100%" }}>
+              <div className="card" style={{ padding: 28, height: "100%", cursor: "pointer", display: "flex", flexDirection: "column" }}>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 14 }}>01 / ARCHITECTURE</div>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>The Redesigned Close</h3>
+                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>Manual close versus the AI-redesigned version. Interactive walkthrough — click any step for detail.</p>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>VIEW →</div>
+              </div>
+            </a>
+          </FadeIn>
+          <FadeIn delay={0.14}>
+            <a href="/dashboard" style={{ display: "block", textDecoration: "none", height: "100%" }}>
+              <div className="card" style={{ padding: 28, height: "100%", cursor: "pointer", display: "flex", flexDirection: "column" }}>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 14 }}>02 / END STATE</div>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>The Controller Dashboard</h3>
+                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>Live mock of what the controller sees once the AI engines have run. Eight tabs of reconciliations, variances, exceptions, approvals.</p>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>OPEN →</div>
+              </div>
+            </a>
+          </FadeIn>
+          <FadeIn delay={0.20}>
+            <a href="/case-studies" style={{ display: "block", textDecoration: "none", height: "100%" }}>
+              <div className="card" style={{ padding: 28, height: "100%", cursor: "pointer", display: "flex", flexDirection: "column" }}>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 14 }}>03 / FIELD WORK</div>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>Two Close Redesigns</h3>
+                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>Multi-channel subscription revenue reconciliation. A thirteen-agent architecture for a multi-state healthcare platform. Both built against live operations.</p>
+                <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>READ →</div>
+              </div>
+            </a>
+          </FadeIn>
+        </div>
+      </section>
+{/* PROCESS */}
       <section id="process" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>HOW IT WORKS</div><h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 48 }}>Four phases.</h2></FadeIn>
         {STEPS.map(function(s, i) {
-          var isOpen = expandedStep === s.n;
+          var open = expandedProc === i;
           return (
             <FadeIn key={i} delay={i * 0.08}>
-              <div className="arow" style={{ display: "grid", gridTemplateColumns: "64px 1fr", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "24px 0", cursor: "pointer" }} onClick={function() { setExpandedStep(isOpen ? null : s.n); }}>
+              <div onClick={function() { setExpandedProc(open ? null : i); }} style={{ display: "grid", gridTemplateColumns: "64px 1fr 24px", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "28px 0", cursor: "pointer", alignItems: "center" }}>
                 <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: "#00e5a0", opacity: 0.5 }}>{s.n}</div>
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <h3 style={{ fontSize: 20, fontWeight: 600, color: "#fff", margin: 0 }}>{s.t}</h3>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform .25s" }}><path d="M4 6l4 4 4-4" stroke="#555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  </div>
-                  {isOpen && <p style={{ marginTop: 12, fontSize: 15, color: "#888", lineHeight: 1.7, maxWidth: 640 }}>{s.d}</p>}
+                  <h3 style={{ fontSize: 20, fontWeight: 600, color: "#fff", marginBottom: open ? 12 : 0, transition: "margin .25s" }}>{s.t}</h3>
+                  {open && <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, maxWidth: 640 }}>{s.d}</p>}
                 </div>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform .25s", justifySelf: "end" }}>
+                  <path d="M4 6l4 4 4-4" stroke="#555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
             </FadeIn>
           );
         })}
       </section>
-      {/* PRICING */}
+            {/* PRICING */}
       <section id="pricing" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>PRICING</div>
@@ -323,12 +364,20 @@ export default function KnightLedger() {
           <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 12 }}>Name the process.</h2>
           <p style={{ fontSize: 15, color: "#666", marginBottom: 32, maxWidth: 600 }}>This is a sample — not a comprehensive list. Every engagement is scoped to your specific systems, workflows, and pain points.</p>
         </FadeIn>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, alignItems: "center" }}>
           {ALL_CATS.map(function(c) {
-            var count = c === "All" ? AUTOS.length : AUTOS.filter(function(a) { return a.cat === c; }).length;
-            return <button key={c} className={cn("pill", activeCat === c && "active")} onClick={function() { setActiveCat(c); setExpandedAuto(null); }}>{c + " (" + count + ")"}</button>;
+            var count = AUTOS.filter(function(a) { return a.cat === c; }).length;
+            return <button key={c} className={cn("pill", activeCat === c && "active")} onClick={function() { setActiveCat(activeCat === c ? null : c); setExpandedAuto(null); }}>{c + " (" + count + ")"}</button>;
           })}
+          {activeCat && <button className="pill" onClick={function() { setActiveCat(null); setExpandedAuto(null); }} style={{ color: "#666" }}>Clear</button>}
         </div>
+        {!activeCat && (
+          <div style={{ padding: "56px 32px", textAlign: "center", border: "1px dashed #1a1c1e", borderRadius: 12, background: "rgba(255,255,255,.01)" }}>
+            <div className="mono" style={{ fontSize: 11, color: "#444", letterSpacing: ".1em", marginBottom: 10 }}>SELECT A CATEGORY ABOVE</div>
+            <div style={{ fontSize: 14, color: "#666", maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>Choose a functional area to view automations we've built for it. Every engagement is scoped to the client's specific systems and pain points.</div>
+          </div>
+        )}
+        {activeCat && (
         <div className="card" style={{ overflow: "hidden" }}>
           {Object.entries(grouped).map(function(entry) {
             var cat = entry[0]; var items = entry[1];
@@ -356,6 +405,7 @@ export default function KnightLedger() {
             );
           })}
         </div>
+        )}
       </section>
       {/* TECH */}
       <section className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
