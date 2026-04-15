@@ -59,18 +59,30 @@ var RECONS = [
 ];
 
 var VARIANCES_MOM = [
-  { acct: "5100", name: "Direct Labor",            cur: 8442000, prior: 7918000, conf: 94, kind: "clean",     commentary: "Direct labor up $524K (6.6%) vs Feb. Driven by merit increase cycle effective March 1 (+4.2%) and 1,840 incremental production hours at the Cincinnati plant tied to the Northrop order. Pattern matches historical March increases following annual review cycle." },
-  { acct: "5200", name: "Materials & Supplies",    cur: 14228000, prior: 14102000, conf: 92, kind: "clean",     commentary: "Materials up $126K (0.9%) vs Feb. Steel index +1.4% offset by improved scrap recovery at Cincinnati (-$58K). Within normal monthly fluctuation band." },
-  { acct: "6100", name: "Salaries & Benefits",     cur: 4884000, prior: 4612000, conf: 95, kind: "clean",     commentary: "S&B up $272K (5.9%) vs Feb. Same merit cycle driver as direct labor plus 4 net hires (3 engineering, 1 finance). All hires confirmed against approved March headcount plan." },
-  { acct: "6200", name: "Software — Capitalized",  cur: 1218000, prior: 482000, conf: 71, kind: "judgment",     commentary: "Software costs up $736K vs Feb. The Aurora ERP migration project hit a development milestone with $400K of contractor costs that may qualify for capitalization under ASC 350-40. Project has not yet reached the application development stage per current documentation. Recommend controller review of capitalization threshold before finalizing." },
-  { acct: "6300", name: "Legal & Professional",    cur: 1842000, prior: 614000, conf: 68, kind: "judgment",     commentary: "Legal expense up $1.23M vs Feb. New $284K accrual booked for the Henderson matter (vendor dispute, complaint filed Feb 26). External counsel estimates 60-70% probability of unfavorable outcome with $250-400K range. Requires controller judgment on whether ASC 450 probable threshold is met." },
-  { acct: "6400", name: "Repairs & Maintenance",   cur: 1024000, prior: 487000, conf: 52, kind: "outlier",     commentary: "R&M up $537K vs Feb. $180K spike concentrated at the Toledo plant with no corresponding work order documentation in the maintenance system. AI could not identify a driver. Recommend investigation before close." },
-  { acct: "6500", name: "Depreciation",            cur: 2188000, prior: 2042000, conf: 96, kind: "clean",     commentary: "Depreciation up $146K (7.2%) vs Feb. Q1 capex of $4.8M placed in service mid-March, primarily the Cincinnati CNC machine ($3.2M, 7-yr life). Calculation traces to fixed asset register." },
-  { acct: "4100", name: "Revenue — Industrial",    cur: 12420000, prior: 14102000, conf: 58, kind: "outlier",     commentary: "Industrial segment revenue down $1.68M (11.9%) vs Feb. AI identified 4 large orders shifted into April but cannot fully account for the gap. No corresponding pricing changes or returns. Recommend review with sales operations." },
-  { acct: "4200", name: "Revenue — Aerospace",     cur: 8842000, prior: 8104000, conf: 94, kind: "clean",     commentary: "Aerospace revenue up $738K (9.1%) vs Feb. Three milestone billings on the Northrop program recognized in March (totaling $720K). Matches contract billing schedule." },
-  { acct: "5500", name: "Freight & Logistics",     cur: 884000, prior: 812000, conf: 91, kind: "clean",     commentary: "Freight up $72K (8.9%) vs Feb. Higher shipment volume on aerospace deliveries plus 2.1% fuel surcharge increase. Within historical variability." },
-  { acct: "6800", name: "Insurance",               cur: 412000, prior: 398000, conf: 97, kind: "clean",     commentary: "Insurance up $14K (3.5%) vs Feb. Renewal premium catch-up for property policy renewed Mar 15. No coverage changes." },
-  { acct: "7100", name: "Interest Expense",        cur: 542000, prior: 538000, conf: 99, kind: "clean",     commentary: "Interest expense up $4K (0.7%) vs Feb. Standard amortization of $95M term loan at SOFR + 2.25%. No new borrowings." }
+  { acct: "5100", name: "Direct Labor",            cur: 8442000, prior: 7918000, conf: 94, kind: "clean",
+    commentary: "Direct labor up $524K (6.6%) vs Feb. Driven by merit increase cycle effective March 1 (+4.2%) and 1,840 incremental production hours at the Cincinnati plant tied to the Northrop order. Pattern matches historical March increases following annual review cycle." },
+  { acct: "5200", name: "Materials & Supplies",    cur: 14228000, prior: 14102000, conf: 92, kind: "clean",
+    commentary: "Materials up $126K (0.9%) vs Feb. Steel index +1.4% offset by improved scrap recovery at Cincinnati (-$58K). Within normal monthly fluctuation band." },
+  { acct: "6100", name: "Salaries & Benefits",     cur: 4884000, prior: 4612000, conf: 95, kind: "clean",
+    commentary: "S&B up $272K (5.9%) vs Feb. Same merit cycle driver as direct labor plus 4 net hires (3 engineering, 1 finance). All hires confirmed against approved March headcount plan." },
+  { acct: "6200", name: "Software — Capitalized",  cur: 1218000, prior: 482000, conf: 71, kind: "judgment",
+    commentary: "Software costs up $736K vs Feb. The Aurora ERP migration project hit a development milestone with $400K of contractor costs that may qualify for capitalization under ASC 350-40. Project has not yet reached the application development stage per current documentation. Recommend controller review of capitalization threshold before finalizing." },
+  { acct: "6300", name: "Legal & Professional",    cur: 1842000, prior: 614000, conf: 68, kind: "judgment",
+    commentary: "Legal expense up $1.23M vs Feb. New $284K accrual booked for the Henderson matter (vendor dispute, complaint filed Feb 26). External counsel estimates 60-70% probability of unfavorable outcome with $250-400K range. Requires controller judgment on whether ASC 450 probable threshold is met." },
+  { acct: "6400", name: "Repairs & Maintenance",   cur: 1024000, prior: 487000, conf: 52, kind: "outlier",
+    commentary: "R&M up $537K vs Feb. $180K spike concentrated at the Toledo plant with no corresponding work order documentation in the maintenance system. AI could not identify a driver. Recommend investigation before close." },
+  { acct: "6500", name: "Depreciation",            cur: 2188000, prior: 2042000, conf: 96, kind: "clean",
+    commentary: "Depreciation up $146K (7.2%) vs Feb. Q1 capex of $4.8M placed in service mid-March, primarily the Cincinnati CNC machine ($3.2M, 7-yr life). Calculation traces to fixed asset register." },
+  { acct: "4100", name: "Revenue — Industrial",    cur: 12420000, prior: 14102000, conf: 58, kind: "outlier",
+    commentary: "Industrial segment revenue down $1.68M (11.9%) vs Feb. AI identified 4 large orders shifted into April but cannot fully account for the gap. No corresponding pricing changes or returns. Recommend review with sales operations." },
+  { acct: "4200", name: "Revenue — Aerospace",     cur: 8842000, prior: 8104000, conf: 94, kind: "clean",
+    commentary: "Aerospace revenue up $738K (9.1%) vs Feb. Three milestone billings on the Northrop program recognized in March (totaling $720K). Matches contract billing schedule." },
+  { acct: "5500", name: "Freight & Logistics",     cur: 884000, prior: 812000, conf: 91, kind: "clean",
+    commentary: "Freight up $72K (8.9%) vs Feb. Higher shipment volume on aerospace deliveries plus 2.1% fuel surcharge increase. Within historical variability." },
+  { acct: "6800", name: "Insurance",               cur: 412000, prior: 398000, conf: 97, kind: "clean",
+    commentary: "Insurance up $14K (3.5%) vs Feb. Renewal premium catch-up for property policy renewed Mar 15. No coverage changes." },
+  { acct: "7100", name: "Interest Expense",        cur: 542000, prior: 538000, conf: 99, kind: "clean",
+    commentary: "Interest expense up $4K (0.7%) vs Feb. Standard amortization of $95M term loan at SOFR + 2.25%. No new borrowings." }
 ];
 
 var JES = [
@@ -751,7 +763,8 @@ export default function CloseDashboard() {
             })()
           )
         )
-      ),
+      )
+    ),
 
     // ─── SLIDE-OVER ───
     slide && React.createElement("div", null,
