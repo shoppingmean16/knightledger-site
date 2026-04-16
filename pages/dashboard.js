@@ -359,7 +359,7 @@ export default function CloseDashboard() {
         }
       }, "HOW THIS RUNS"),
       React.createElement("div", { style: { fontSize: 12, color: "#aaa", lineHeight: 1.6, maxWidth: 820 } },
-        "Built into the stack you already have. Any close management platform, or Google Sheets and Looker Studio, or Excel and Power BI, or a modern data layer you control. Configurable by your team. Live data, not static views."
+        "Two paths. Built into your existing close platform via API — BlackLine, FloQast, Numeric, Workiva, or similar. Or delivered as part of the engagement, deployed on your cloud and connected to your ERP."
       )
     ),
     // ─── TAB NAV ───
