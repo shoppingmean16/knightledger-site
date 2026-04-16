@@ -328,7 +328,7 @@ export default function CloseDashboard() {
         ),
         React.createElement("div", null,
           React.createElement("div", { className: "mono", style: { fontSize: 14, fontWeight: 600, color: "#fff", letterSpacing: "-.3px" } }, "KnightLedger"),
-          React.createElement("div", { style: { fontSize: 10, color: "#666", marginTop: 2, letterSpacing: ".05em" } }, "CONTROLLER DASHBOARD")
+          React.createElement("div", { style: { fontSize: 10, color: "#666", marginTop: 2, letterSpacing: ".05em" } }, "CLOSE OS")
         )
       ),
       React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 24 } },
@@ -342,6 +342,26 @@ export default function CloseDashboard() {
       )
     ),
 
+
+    React.createElement("div", {
+      style: {
+        background: "#0a0b0d", borderBottom: "1px solid #1a1c1e",
+        padding: "14px 28px", display: "flex", alignItems: "center",
+        gap: 18, flexWrap: "wrap"
+      }
+    },
+      React.createElement("div", {
+        style: {
+          fontFamily: "'JetBrains Mono',monospace", fontSize: 10,
+          color: "#00e5a0", letterSpacing: ".15em", fontWeight: 600,
+          padding: "4px 10px", border: "1px solid rgba(0,229,160,.3)", borderRadius: 100,
+          whiteSpace: "nowrap"
+        }
+      }, "HOW THIS RUNS"),
+      React.createElement("div", { style: { fontSize: 12, color: "#aaa", lineHeight: 1.6, maxWidth: 820 } },
+        "Built into the stack you already have. Any close management platform, or Google Sheets and Looker Studio, or Excel and Power BI, or a modern data layer you control. Configurable by your team. Live data, not static views."
+      )
+    ),
     // ─── TAB NAV ───
     React.createElement("div", { style: { borderBottom: "1px solid #1a1c1e", background: "#0a0b0d", padding: "0 20px", display: "flex", overflowX: "auto" } },
       TABS.map(function (t) {
