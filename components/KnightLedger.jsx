@@ -285,10 +285,10 @@ export default function KnightLedger() {
       <section id="process" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>HOW IT WORKS</div><h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 48 }}>Four phases.</h2></FadeIn>
         {STEPS.map(function(s, i) {
-          var open = expandedProc === i;
+          var open = expandedStep === i;
           return (
             <FadeIn key={i} delay={i * 0.08}>
-              <div onClick={function() { setExpandedProc(open ? null : i); }} style={{ display: "grid", gridTemplateColumns: "64px 1fr 24px", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "28px 0", cursor: "pointer", alignItems: "center" }}>
+              <div onClick={function() { setExpandedStep(open ? null : i); }} style={{ display: "grid", gridTemplateColumns: "64px 1fr 24px", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "28px 0", cursor: "pointer", alignItems: "center" }}>
                 <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: "#00e5a0", opacity: 0.5 }}>{s.n}</div>
                 <div>
                   <h3 style={{ fontSize: 20, fontWeight: 600, color: "#fff", marginBottom: open ? 12 : 0, transition: "margin .25s" }}>{s.t}</h3>
