@@ -263,8 +263,8 @@ export default function KnightLedger() {
             <a href="/dashboard" style={{ display: "block", textDecoration: "none", height: "100%" }}>
               <div className="card" style={{ padding: 28, height: "100%", cursor: "pointer", display: "flex", flexDirection: "column" }}>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 14 }}>02 / END STATE</div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>The Controller Dashboard</h3>
-                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>Live mock of what the controller sees once the AI engines have run. Eight tabs of reconciliations, variances, exceptions, approvals.</p>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>Close OS</h3>
+                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>The operational layer of the close — reconciliations, variances, exceptions, approvals — surfaced live in the platform your team already uses.</p>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>OPEN →</div>
               </div>
             </a>
