@@ -16,46 +16,46 @@ var BEFORE_NODES = [
   { id: "b_hr",      label: "HR / Ops\n(Email)",       shape: "cylinder", lane: -1, x: 1050, y: 20, w: 140, h: 75, desc: "Other departments providing context and backup.", pain: "Communication via email chains and Slack threads." },
 
   // ── STAFF ACCOUNTANT LANE (lane 0) — Day 1-3 data gathering ──
-  { id: "b1",  label: "Export trial\nbalance",        shape: "trapezoid",  lane: 0, x: 40,   y: 135, w: 150, h: 65, time: "45 min",  desc: "Run TB report from ERP, save as CSV.", pain: "Stale by the time export completes." },
-  { id: "b2",  label: "Download bank\nstatements",    shape: "trapezoid",  lane: 0, x: 210,  y: 135, w: 150, h: 65, time: "60 min",  desc: "Manually pull statements from each bank portal.", pain: "2FA, session timeouts, inconsistent formats." },
-  { id: "b3",  label: "Pull AP aging\n& AR aging",    shape: "trapezoid",  lane: 0, x: 380,  y: 135, w: 150, h: 65, time: "30 min",  desc: "Export payables and receivables agings.", pain: "Unapplied cash and disputes flagged inconsistently." },
-  { id: "b4",  label: "Pull payroll\n& benefits",     shape: "trapezoid",  lane: 0, x: 550,  y: 135, w: 150, h: 65, time: "25 min",  desc: "Payroll register, commissions, accruals.", pain: "Off-cycle pay runs create reconciliation gaps." },
-  { id: "b5",  label: "Pull FA, rev,\nlease sub-ldgs",shape: "trapezoid",  lane: 0, x: 720,  y: 135, w: 150, h: 65, time: "30 min",  desc: "Fixed asset roll-forward, revenue waterfall, lease amortization.", pain: "Multiple systems, multiple exports, multiple formats." },
-  { id: "b6",  label: "Gather open\nPO/accrual data", shape: "trapezoid",  lane: 0, x: 890,  y: 135, w: 150, h: 65, time: "25 min",  desc: "Open purchase orders for accrual calculation.", pain: "Requires email chains with procurement and ops." },
-  { id: "b7",  label: "Build recon\nworkpapers",      shape: "rectangle",  lane: 0, x: 1060, y: 135, w: 150, h: 65, time: "4-6 hrs", desc: "Build Excel workpapers for every account.", pain: "VLOOKUP chains break when source data shifts." },
+  { id: "b1",  label: "Export trial\nbalance",        shape: "trapezoid",  lane: 0, x: 40,   y: 135, w: 150, h: 65,  desc: "Run TB report from ERP, save as CSV.", pain: "Stale by the time export completes." },
+  { id: "b2",  label: "Download bank\nstatements",    shape: "trapezoid",  lane: 0, x: 210,  y: 135, w: 150, h: 65,  desc: "Manually pull statements from each bank portal.", pain: "2FA, session timeouts, inconsistent formats." },
+  { id: "b3",  label: "Pull AP aging\n& AR aging",    shape: "trapezoid",  lane: 0, x: 380,  y: 135, w: 150, h: 65,  desc: "Export payables and receivables agings.", pain: "Unapplied cash and disputes flagged inconsistently." },
+  { id: "b4",  label: "Pull payroll\n& benefits",     shape: "trapezoid",  lane: 0, x: 550,  y: 135, w: 150, h: 65,  desc: "Payroll register, commissions, accruals.", pain: "Off-cycle pay runs create reconciliation gaps." },
+  { id: "b5",  label: "Pull FA, rev,\nlease sub-ldgs",shape: "trapezoid",  lane: 0, x: 720,  y: 135, w: 150, h: 65,  desc: "Fixed asset roll-forward, revenue waterfall, lease amortization.", pain: "Multiple systems, multiple exports, multiple formats." },
+  { id: "b6",  label: "Gather open\nPO/accrual data", shape: "trapezoid",  lane: 0, x: 890,  y: 135, w: 150, h: 65,  desc: "Open purchase orders for accrual calculation.", pain: "Requires email chains with procurement and ops." },
+  { id: "b7",  label: "Build recon\nworkpapers",      shape: "rectangle",  lane: 0, x: 1060, y: 135, w: 150, h: 65, desc: "Build Excel workpapers for every account.", pain: "VLOOKUP chains break when source data shifts." },
 
   // ── STAFF ACCOUNTANT — Day 3-5 reconciliation ──
-  { id: "b8",  label: "Reconcile cash\n(all accounts)", shape: "rectangle", lane: 0, x: 40,  y: 240, w: 150, h: 65, time: "2-4 hrs", desc: "Match bank transactions to GL line by line.", pain: "Manual matching, outstanding items carried forward for months." },
-  { id: "b9",  label: "Reconcile AR\nsub-ldg to GL",   shape: "rectangle", lane: 0, x: 210, y: 240, w: 150, h: 65, time: "1-2 hrs", desc: "Tie AR aging to GL balance, research differences.", pain: "Unapplied cash and credit memos cause timing differences." },
-  { id: "b10", label: "Reconcile AP\nsub-ldg to GL",   shape: "rectangle", lane: 0, x: 380, y: 240, w: 150, h: 65, time: "1-2 hrs", desc: "Tie AP aging to GL balance.", pain: "Cutoff errors create phantom variances." },
-  { id: "b11", label: "Calc accruals\n& prepaids",     shape: "rectangle", lane: 0, x: 550, y: 240, w: 150, h: 65, time: "2-3 hrs", desc: "Estimate unbilled expenses, amortize prepaids.", pain: "Relies on tribal knowledge of vendor billing cycles." },
-  { id: "b12", label: "Tie sub-ledgers\nto GL",        shape: "rectangle", lane: 0, x: 720, y: 240, w: 150, h: 65, time: "2-3 hrs", desc: "Fixed asset, revenue, lease sub-ledger reconciliation.", pain: "One mismatch requires hours of transaction-level investigation." },
-  { id: "b13", label: "Identify\nvariances",           shape: "rectangle", lane: 0, x: 890, y: 240, w: 150, h: 65, time: "1-2 hrs", desc: "Flag variances above materiality threshold.", pain: "Thresholds inconsistent across accounts." },
+  { id: "b8",  label: "Reconcile cash\n(all accounts)", shape: "rectangle", lane: 0, x: 40,  y: 240, w: 150, h: 65, desc: "Match bank transactions to GL line by line.", pain: "Manual matching, outstanding items carried forward for months." },
+  { id: "b9",  label: "Reconcile AR\nsub-ldg to GL",   shape: "rectangle", lane: 0, x: 210, y: 240, w: 150, h: 65, desc: "Tie AR aging to GL balance, research differences.", pain: "Unapplied cash and credit memos cause timing differences." },
+  { id: "b10", label: "Reconcile AP\nsub-ldg to GL",   shape: "rectangle", lane: 0, x: 380, y: 240, w: 150, h: 65, desc: "Tie AP aging to GL balance.", pain: "Cutoff errors create phantom variances." },
+  { id: "b11", label: "Calc accruals\n& prepaids",     shape: "rectangle", lane: 0, x: 550, y: 240, w: 150, h: 65, desc: "Estimate unbilled expenses, amortize prepaids.", pain: "Relies on tribal knowledge of vendor billing cycles." },
+  { id: "b12", label: "Tie sub-ledgers\nto GL",        shape: "rectangle", lane: 0, x: 720, y: 240, w: 150, h: 65, desc: "Fixed asset, revenue, lease sub-ledger reconciliation.", pain: "One mismatch requires hours of transaction-level investigation." },
+  { id: "b13", label: "Identify\nvariances",           shape: "rectangle", lane: 0, x: 890, y: 240, w: 150, h: 65, desc: "Flag variances above materiality threshold.", pain: "Thresholds inconsistent across accounts." },
 
   // ── DECISION: variances need research? (lane 0) ──
   { id: "b14", label: "Variances\nrequire research?", shape: "diamond", lane: 0, x: 890, y: 345, w: 180, h: 95, desc: "Decide which variances need further investigation." },
 
   // ── HR / OPS lane (lane 1) — blocking waits ──
-  { id: "b15", label: "Request backup\nfrom ops/HR",   shape: "trapezoid", lane: 1, x: 890, y: 475, w: 180, h: 65, time: "1-3 day wait", desc: "Email AP, ops, sales, HR for context on flagged items.", pain: "Multiple follow-ups common. A frequent source of close delays." },
+  { id: "b15", label: "Request backup\nfrom ops/HR",   shape: "trapezoid", lane: 1, x: 890, y: 475, w: 180, h: 65, desc: "Email AP, ops, sales, HR for context on flagged items.", pain: "Multiple follow-ups common. A frequent source of close delays." },
   { id: "b16", label: "Wait for\nresponses",           shape: "rectangle", lane: 1, x: 890, y: 560, w: 180, h: 55, desc: "Work is blocked pending responses from other departments.", pain: "Blocks downstream work for 1-3 days." },
 
   // ── SENIOR ACCOUNTANT lane (lane 2) — Day 5-8 analysis ──
-  { id: "b17", label: "Research\nvariances",           shape: "rectangle", lane: 2, x: 40,  y: 640, w: 150, h: 65, time: "3-5 hrs", desc: "Investigate root cause of material variances.", pain: "Requires cross-referencing multiple systems and periods." },
-  { id: "b18", label: "Write flux\ncommentary",        shape: "rectangle", lane: 2, x: 210, y: 640, w: 150, h: 65, time: "4-6 hrs", desc: "Draft B/A, PY, forecast variance narratives.", pain: "Writing the same explanations every month with small variations." },
-  { id: "b19", label: "Prepare JEs\n(accruals, reclass)", shape: "rectangle", lane: 2, x: 380, y: 640, w: 150, h: 65, time: "2-3 hrs", desc: "Draft journal entries in Excel template.", pain: "Manual calculations, prone to errors." },
-  { id: "b20", label: "Route JEs for\napproval (email)", shape: "trapezoid", lane: 2, x: 550, y: 640, w: 150, h: 65, time: "1 day", desc: "Send entries via email for review.", pain: "Approvals stall in inboxes." },
-  { id: "b21", label: "Upload JEs\nto ERP",            shape: "trapezoid", lane: 2, x: 720, y: 640, w: 150, h: 65, time: "1-2 hrs", desc: "Manually enter approved JEs into ERP one at a time.", pain: "Upload format errors require rework." },
-  { id: "b22", label: "IC elim &\nconsolidation",      shape: "rectangle", lane: 2, x: 890, y: 640, w: 150, h: 65, time: "2-4 hrs", desc: "Match IC balances, draft eliminations, run consolidation.", pain: "FX translation and cutoff differences break consolidation." },
-  { id: "b23", label: "Assemble close\nbinder",        shape: "document",  lane: 2, x: 1060, y: 640, w: 150, h: 65, time: "2-3 hrs", desc: "Organize workpapers, schedules, approvals, sign-offs.", pain: "Version control chaos if late entries post." },
+  { id: "b17", label: "Research\nvariances",           shape: "rectangle", lane: 2, x: 40,  y: 640, w: 150, h: 65, desc: "Investigate root cause of material variances.", pain: "Requires cross-referencing multiple systems and periods." },
+  { id: "b18", label: "Write flux\ncommentary",        shape: "rectangle", lane: 2, x: 210, y: 640, w: 150, h: 65, desc: "Draft B/A, PY, forecast variance narratives.", pain: "Writing the same explanations every month with small variations." },
+  { id: "b19", label: "Prepare JEs\n(accruals, reclass)", shape: "rectangle", lane: 2, x: 380, y: 640, w: 150, h: 65, desc: "Draft journal entries in Excel template.", pain: "Manual calculations, prone to errors." },
+  { id: "b20", label: "Route JEs for\napproval (email)", shape: "trapezoid", lane: 2, x: 550, y: 640, w: 150, h: 65, desc: "Send entries via email for review.", pain: "Approvals stall in inboxes." },
+  { id: "b21", label: "Upload JEs\nto ERP",            shape: "trapezoid", lane: 2, x: 720, y: 640, w: 150, h: 65, desc: "Manually enter approved JEs into ERP one at a time.", pain: "Upload format errors require rework." },
+  { id: "b22", label: "IC elim &\nconsolidation",      shape: "rectangle", lane: 2, x: 890, y: 640, w: 150, h: 65, desc: "Match IC balances, draft eliminations, run consolidation.", pain: "FX translation and cutoff differences break consolidation." },
+  { id: "b23", label: "Assemble close\nbinder",        shape: "document",  lane: 2, x: 1060, y: 640, w: 150, h: 65, desc: "Organize workpapers, schedules, approvals, sign-offs.", pain: "Version control chaos if late entries post." },
 
   // ── CONTROLLER / CFO lane (lane 3) — Day 8-15 review ──
-  { id: "b24", label: "Controller\nreview",            shape: "rectangle", lane: 3, x: 40,  y: 780, w: 150, h: 65, time: "3-5 hrs", desc: "Review every workpaper, JE, and reconciliation.", pain: "Time pressure forces spot-checks instead of full review." },
+  { id: "b24", label: "Controller\nreview",            shape: "rectangle", lane: 3, x: 40,  y: 780, w: 150, h: 65, desc: "Review every workpaper, JE, and reconciliation.", pain: "Time pressure forces spot-checks instead of full review." },
   { id: "b25", label: "Issues\nfound?",                shape: "diamond",   lane: 3, x: 210, y: 775, w: 170, h: 90, desc: "Controller identifies errors or missing support." },
-  { id: "b26", label: "Draft financial\nstatements",   shape: "document",  lane: 3, x: 400, y: 780, w: 150, h: 65, time: "3-4 hrs", desc: "Format BS, IS, CF statements and footnotes.", pain: "Manual cross-referencing and tie-outs." },
-  { id: "b27", label: "Build mgmt\nreporting pkg",     shape: "document",  lane: 3, x: 570, y: 780, w: 150, h: 65, time: "3-5 hrs", desc: "KPI dashboard, department P&Ls, trend analysis.", pain: "Copy-paste from Excel into slides." },
-  { id: "b28", label: "Build board\ndeck",             shape: "document",  lane: 3, x: 740, y: 780, w: 150, h: 65, time: "2-4 hrs", desc: "Investor and board presentation.", pain: "One late adjustment ripples through every slide." },
-  { id: "b29", label: "CFO review\n& sign-off",        shape: "rectangle", lane: 3, x: 910, y: 780, w: 150, h: 65, time: "2-3 hrs", desc: "Final executive review and approval.", pain: "Requires meetings and walkthroughs." },
-  { id: "b30", label: "CLOSE\nCOMPLETE",               shape: "pill",      lane: 3, x: 1080, y: 785, w: 150, h: 55, time: "Day 12-18", desc: "Books closed. Next close starts in ~10 business days." }
+  { id: "b26", label: "Draft financial\nstatements",   shape: "document",  lane: 3, x: 400, y: 780, w: 150, h: 65, desc: "Format BS, IS, CF statements and footnotes.", pain: "Manual cross-referencing and tie-outs." },
+  { id: "b27", label: "Build mgmt\nreporting pkg",     shape: "document",  lane: 3, x: 570, y: 780, w: 150, h: 65, desc: "KPI dashboard, department P&Ls, trend analysis.", pain: "Copy-paste from Excel into slides." },
+  { id: "b28", label: "Build board\ndeck",             shape: "document",  lane: 3, x: 740, y: 780, w: 150, h: 65, desc: "Investor and board presentation.", pain: "One late adjustment ripples through every slide." },
+  { id: "b29", label: "CFO review\n& sign-off",        shape: "rectangle", lane: 3, x: 910, y: 780, w: 150, h: 65, desc: "Final executive review and approval.", pain: "Requires meetings and walkthroughs." },
+  { id: "b30", label: "CLOSE\nCOMPLETE",               shape: "pill",      lane: 3, x: 1080, y: 785, w: 150, h: 55, desc: "Books closed. Next close starts in ~10 business days." }
 ];
 
 var BEFORE_EDGES = [
@@ -100,24 +100,24 @@ var AFTER_NODES = [
   { id: "a_close",   label: "Close Mgmt\nPlatform",    shape: "cylinder", lane: -1, x: 870,  y: 20, w: 150, h: 70, badge: "API", desc: "Your existing close management platform.", auto: "Output written into the tool your team already uses." },
 
   // ── AI ENGINE LANE (lane 0) — 5 engines + decision gate ──
-  { id: "a1", label: "Data Integration", shape: "hex", lane: 0, x: 60,  y: 145, w: 290, h: 90, time: "continuous", badge: "AI", desc: "Pulls and validates data from every connected source. Normalizes formats, runs data quality checks, and prepares clean datasets for downstream engines.", auto: "Runs throughout the period, not only at close." },
+  { id: "a1", label: "Data Integration", shape: "hex", lane: 0, x: 60,  y: 145, w: 290, h: 90, badge: "AI", desc: "Pulls and validates data from every connected source. Normalizes formats, runs data quality checks, and prepares clean datasets for downstream engines.", auto: "Runs throughout the period, not only at close." },
 
-  { id: "a2", label: "Reconciliation Engine", shape: "hex", lane: 0, x: 380, y: 145, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Reconciles balance sheet accounts — cash, AR, AP, sub-ledgers, accruals, prepaids. Matches transactions across systems, categorizes timing differences, and surfaces exceptions with proposed resolutions.", auto: "In-scope accounts reconciled in parallel." },
+  { id: "a2", label: "Reconciliation Engine", shape: "hex", lane: 0, x: 380, y: 145, w: 290, h: 90, badge: "AI", desc: "Reconciles balance sheet accounts — cash, AR, AP, sub-ledgers, accruals, prepaids. Matches transactions across systems, categorizes timing differences, and surfaces exceptions with proposed resolutions.", auto: "In-scope accounts reconciled in parallel." },
 
-  { id: "a3", label: "Adjustment Engine", shape: "hex", lane: 0, x: 700, y: 145, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Drafts journal entries — accruals, deferrals, reclasses, standard adjustments — using source data and historical context. Each entry includes calculation logic, supporting evidence, and a full audit trail.", auto: "Routed to the appropriate approver by entry type." },
+  { id: "a3", label: "Adjustment Engine", shape: "hex", lane: 0, x: 700, y: 145, w: 290, h: 90, badge: "AI", desc: "Drafts journal entries — accruals, deferrals, reclasses, standard adjustments — using source data and historical context. Each entry includes calculation logic, supporting evidence, and a full audit trail.", auto: "Routed to the appropriate approver by entry type." },
 
-  { id: "a4", label: "Consolidation & Close", shape: "hex", lane: 0, x: 60,  y: 275, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Matches intercompany balances across entities, generates elimination entries, applies FX translation, and completes consolidation with full supporting documentation.", auto: "Mismatches surfaced in advance of close." },
+  { id: "a4", label: "Consolidation & Close", shape: "hex", lane: 0, x: 60,  y: 275, w: 290, h: 90, badge: "AI", desc: "Matches intercompany balances across entities, generates elimination entries, applies FX translation, and completes consolidation with full supporting documentation.", auto: "Mismatches surfaced in advance of close." },
 
-  { id: "a5", label: "Reporting & Evidence", shape: "hex", lane: 0, x: 380, y: 275, w: 290, h: 90, time: "minutes", badge: "AI", desc: "Generates variance commentary, financial statements, management reporting, and audit-ready evidence. Every figure traced to source. Outputs are data-linked and update together.", auto: "Financials, commentary, and audit support produced together." },
+  { id: "a5", label: "Reporting & Evidence", shape: "hex", lane: 0, x: 380, y: 275, w: 290, h: 90, badge: "AI", desc: "Generates variance commentary, financial statements, management reporting, and audit-ready evidence. Every figure traced to source. Outputs are data-linked and update together.", auto: "Financials, commentary, and audit support produced together." },
 
   { id: "a6", label: "Exceptions for\nreview?", shape: "diamond", lane: 0, x: 735, y: 275, w: 220, h: 95, badge: "AI", desc: "Isolates items that call for human judgment — unusual transactions, materiality edge cases, policy exceptions, and flagged anomalies.", auto: "Routed by materiality and confidence." },
 
   // ── CONTROLLER LANE (lane 1) — review and approve ──
-  { id: "a7", label: "Review & approve\nAI output", shape: "rectangle", lane: 1, x: 100, y: 460, w: 300, h: 80, time: "hours", badge: "HUMAN", desc: "Controller reviews AI-generated reconciliations, journal entries, and commentary. Preparation is complete — the focus is on exceptions, judgment calls, and refinement.", auto: "Review instead of prepare." },
+  { id: "a7", label: "Review & approve\nAI output", shape: "rectangle", lane: 1, x: 100, y: 460, w: 300, h: 80, badge: "HUMAN", desc: "Controller reviews AI-generated reconciliations, journal entries, and commentary. Preparation is complete — the focus is on exceptions, judgment calls, and refinement.", auto: "Review instead of prepare." },
 
-  { id: "a8", label: "Final sign-off", shape: "rectangle", lane: 1, x: 460, y: 460, w: 260, h: 80, time: "hours", badge: "HUMAN", desc: "Controller signs off on the close package — financial statements, reporting, and supporting workpapers.", auto: "Focused review. No last-minute surprises." },
+  { id: "a8", label: "Final sign-off", shape: "rectangle", lane: 1, x: 460, y: 460, w: 260, h: 80, badge: "HUMAN", desc: "Controller signs off on the close package — financial statements, reporting, and supporting workpapers.", auto: "Focused review. No last-minute surprises." },
 
-  { id: "a9", label: "CLOSE\nCOMPLETE", shape: "pill", lane: 1, x: 760, y: 470, w: 180, h: 60, time: "Day 2-3", desc: "Close is complete, reviewed, and documented." }
+  { id: "a9", label: "CLOSE\nCOMPLETE", shape: "pill", lane: 1, x: 760, y: 470, w: 180, h: 60, desc: "Close is complete, reviewed, and documented." }
 ];
 
 var AFTER_EDGES = [
