@@ -2,15 +2,9 @@ import { useState, useEffect, useRef } from "react";
 
 var STEPS = [
   { n: "01", t: "Analyze", d: "We map your systems end to end — ERP, close tools, payment platforms, reporting stack — and identify where AI creates the highest-impact change. You receive a specific proposal: what we’d build, how it integrates with what you already use, and the fixed fee." },
-  { n: "02", t: "Build", d: "Powered by Anthropic’s Claude, built against your real data, your actual chart of accounts, your specific workflows. We integrate into your existing platforms — not a separate tool your team has to learn. Testing happens in your environment with your data." },
-  { n: "03", t: "Deploy", d: "The system goes live alongside your team for at least one full cycle — a close, a reconciliation period, a reporting deadline. You validate the output against your current process. We work on-site or remote depending on what the engagement needs. Payment is due only after it’s working." },
+  { n: "02", t: "Build", d: "Powered by Anthropic’s Claude, built against your real data, your chart of accounts, your workflows. We integrate into your existing platforms — not a separate tool your team has to learn. Testing happens in your environment with your data." },
+  { n: "03", t: "Deploy", d: "The system goes live alongside your team for at least one full cycle — a close, a reconciliation period, a reporting deadline. You validate the output against your current process. We work on-site or remote. Payment is due only after it’s working." },
   { n: "04", t: "Own It", d: "Once live, the system is yours. Full documentation, prompt libraries, configuration guides — your team adjusts workflows and adapts to business changes without reengaging us. Model upgrades apply automatically." }
-];
-
-var SCOPES = [
-  { name: "Per Process", price: "$5K – $15K", desc: "Any single workflow — a reconciliation, AP coding, flux analysis, lease analysis, any individual process.", icon: "\u25C7" },
-  { name: "Full Close Cycle", price: "$25K – $60K", desc: "End-to-end: reconciliations, commentary, reporting, IC eliminations, close orchestration.", icon: "\u25C6" },
-  { name: "Full Department", price: "$75K – $200K", desc: "Accounting and finance redesigned around AI from the ground up.", icon: "\u2B21" }
 ];
 
 var AUTOS = [
@@ -198,9 +192,7 @@ export default function KnightLedger() {
         <div className="gridbg" />
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px", position: "relative", zIndex: 1 }}>
           <FadeIn><div className="mono" style={{ fontSize: 13, color: "#00e5a0", marginBottom: 24, letterSpacing: "0.5px", opacity: 0.8 }}>AI IMPLEMENTATION FOR ACCOUNTING & FINANCE</div></FadeIn>
-          <FadeIn delay={0.1}><h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px", color: "#fff", marginBottom: 28, maxWidth: 800 }}>AI can now run most of your accounting function. <span style={{ color: "#555" }}>Most companies haven’t let it.</span></h1></FadeIn>
-          <FadeIn delay={0.2}><p style={{ fontSize: "clamp(16px,2.2vw,20px)", color: "#888", lineHeight: 1.65, maxWidth: 620, marginBottom: 16 }}>We redesign accounting and finance processes around AI — not wrapped around processes built for humans.</p></FadeIn>
-          <FadeIn delay={0.3}>
+          <FadeIn delay={0.1}><h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 700, lineHeight: 1.08, letterSpacing: "-2px", color: "#fff", marginBottom: 28, maxWidth: 800 }}>AI can now run most of your accounting function. <span style={{ color: "#555" }}>Most companies haven’t let it.</span></h1></FadeIn>          <FadeIn delay={0.3}>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <button className="bp" onClick={function() { scrollTo("contact"); }}>Talk to Us</button>
               <button className="bgh" onClick={function() { scrollTo("automations"); }}>See What We Build</button>
@@ -228,7 +220,7 @@ export default function KnightLedger() {
         </FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 24 }}>
           {[
-            { t: "The capability exists", d: "Current AI handles the full range of accounting and finance processes — including those that require interpretation, judgment, and technical conclusions. Not just data entry and pattern matching. The complex work." },
+            { t: "The capability exists", d: "Current AI handles accounting and finance processes — including those that require interpretation, judgment, and technical conclusions. Not just data entry and pattern matching. The complex work." },
             { t: "Companies aren’t seeing results", d: "Most report no meaningful productivity gains from AI. Not because the technology is lacking — because they’re bolting AI onto processes designed for humans." },
             { t: "Advisory firms aren’t pushing it", d: "Traditional consulting firms should be driving AI implementation for their clients. Most aren’t. AI implementation directly impacts the hourly billing model that funds their operations." }
           ].map(function(c, i) {
@@ -254,8 +246,7 @@ export default function KnightLedger() {
       <section id="practice" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IN PRACTICE</div>
-          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 16, maxWidth: 760 }}>What a KnightLedger implementation actually looks like.</h2>
-          <p style={{ fontSize: 16, color: "#888", marginBottom: 40, maxWidth: 640, lineHeight: 1.6 }}>The architecture that replaces the preparer layer. The controller's dashboard once it's running. And two engagements built against live operations.</p>
+          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 16, maxWidth: 760 }}>What a KnightLedger implementation looks like.</h2>
         </FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 }}>
           <FadeIn delay={0.08}>
@@ -315,24 +306,15 @@ export default function KnightLedger() {
       <section id="pricing" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>PRICING</div>
-          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 12 }}>Fixed fee. Stated upfront. Pay only if it works.</h2>
-          <p style={{ fontSize: 16, color: "#888", marginBottom: 48, maxWidth: 600, lineHeight: 1.6 }}>70–90% less than traditional advisory. We’re AI-native — engagements close in days or hours, not weeks or months.</p>
+          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20, maxWidth: 760 }}>Scoped to your situation. Priced upfront. Paid on delivery.</h2>
         </FadeIn>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 16 }}>
-          {SCOPES.map(function(s, i) {
-            return (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div className="card" style={{ padding: 32, display: "flex", flexDirection: "column", height: "100%" }}>
-                  <div style={{ fontSize: 24, marginBottom: 12 }}>{s.icon}</div>
-                  <div className="mono accent" style={{ fontSize: 22, fontWeight: 600, marginBottom: 4 }}>{s.price}</div>
-                  <h3 style={{ fontSize: 17, fontWeight: 600, color: "#fff", marginBottom: 10 }}>{s.name}</h3>
-                  <p style={{ fontSize: 14, color: "#777", lineHeight: 1.6, flex: 1 }}>{s.desc}</p>
-                </div>
-              </FadeIn>
-            );
-          })}
-        </div>
-        <FadeIn delay={0.35}><p style={{ marginTop: 24, fontSize: 14, color: "#555" }}>Estimated ranges only. Final fee varies significantly based on engagement complexity, data quality, and systems environment. Scoped per engagement. No recurring charges, no hourly billing.</p></FadeIn>
+        <FadeIn delay={0.1}>
+          <div style={{ maxWidth: 720 }}>
+            <p style={{ fontSize: 16, color: "#aaa", lineHeight: 1.75, marginBottom: 20 }}>Every engagement is shaped to what you actually need — a single workflow rebuild, an end-to-end close redesign, or a full finance function rearchitected around AI. Scope and fee are agreed before any work begins. You pay when it's working, not before.</p>
+            <p style={{ fontSize: 16, color: "#aaa", lineHeight: 1.75, marginBottom: 32 }}>Discrete process redesigns typically start around <span className="mono accent" style={{ fontWeight: 600 }}>$5K</span>. Full-function engagements scale from there based on systems, entities, and complexity. We'll quote a fixed number after a brief scoping call.</p>
+            <button className="bp" onClick={function() { scrollTo("contact"); }}>Talk to Us</button>
+          </div>
+        </FadeIn>
       </section>
       {/* SECURITY */}
       <section id="security" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
@@ -362,7 +344,7 @@ export default function KnightLedger() {
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>WHAT WE BUILD</div>
           <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 12 }}>Name the process.</h2>
-          <p style={{ fontSize: 15, color: "#666", marginBottom: 32, maxWidth: 600 }}>This is a sample — not a comprehensive list. Every engagement is scoped to your specific systems, workflows, and pain points.</p>
+          <p style={{ fontSize: 15, color: "#666", marginBottom: 32, maxWidth: 600 }}>This is a sample — not a comprehensive list. Every engagement is scoped to your systems, workflows, and pain points.</p>
         </FadeIn>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, alignItems: "center" }}>
           {ALL_CATS.map(function(c) {
@@ -374,7 +356,7 @@ export default function KnightLedger() {
         {!activeCat && (
           <div style={{ padding: "56px 32px", textAlign: "center", border: "1px dashed #1a1c1e", borderRadius: 12, background: "rgba(255,255,255,.01)" }}>
             <div className="mono" style={{ fontSize: 11, color: "#444", letterSpacing: ".1em", marginBottom: 10 }}>SELECT A CATEGORY ABOVE</div>
-            <div style={{ fontSize: 14, color: "#666", maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>Choose a functional area to view automations we've built for it. Every engagement is scoped to the client's specific systems and pain points.</div>
+            <div style={{ fontSize: 14, color: "#666", maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>Choose a functional area to view automations we've built for it. Every engagement is scoped to the client's systems and pain points.</div>
           </div>
         )}
         {activeCat && (
@@ -412,7 +394,7 @@ export default function KnightLedger() {
         <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>THE STACK</div><h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 32 }}>What runs under the hood</h2></FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 }}>
           {[
-            { t: "Anthropic Claude (Opus 4.6 / Sonnet)", d: "Document extraction, analysis, narrative generation, account mapping, contract parsing, variance commentary. The reasoning layer." },
+            { t: "Anthropic Claude", d: "The reasoning layer. Runs every judgment and decision in the stack." },
             { t: "Python + API Integrations", d: "Data processing, matching logic, system integration, report generation. Connects to any ERP, billing system, payroll provider, banking platform." },
             { t: "Browser & Desktop Automation", d: "Scheduled automations for portal downloads, balance pulls, report generation, settlement retrieval. Any web-based system." },
             { t: "Your ongoing cost: $50–$150/mo", d: "API usage. No per-seat licensing, no platform fees, no additional headcount." }
@@ -430,9 +412,9 @@ export default function KnightLedger() {
           <FadeIn>
             <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>ABOUT</div>
             <div style={{ maxWidth: 700 }}>
-              <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester, CPA</h2>
+              <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester</h2>
               <div className="mono" style={{ fontSize: 13, color: "#00e5a0", marginBottom: 20, letterSpacing: "0.5px" }}>Implementation & Design Lead</div>
-              <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 20 }}>CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and advisory consulting at the senior manager level. Since the emergence of generative AI, focused exclusively on deploying it across accounting and finance — close optimization, automated workpaper and evidence generation, controls testing, analytics, ERP implementations, and workflow design.</p>
+              <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 20 }}>CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and senior manager-level advisory consulting. Since the emergence of generative AI, focused exclusively on deploying it across accounting and finance.</p>
               <a href="https://www.linkedin.com/in/jasonforrester1/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: "#00e5a0", textDecoration: "none", borderBottom: "1px solid rgba(0,229,160,0.3)", paddingBottom: 2 }}>LinkedIn</a>
             </div>
           </FadeIn>
