@@ -148,7 +148,7 @@ export default function KnightLedger() {
   var grouped = {};
   filtered.forEach(function(a) { if (!grouped[a.cat]) grouped[a.cat] = []; grouped[a.cat].push(a); });
   var scrollTo = function(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth" }); setMobileMenu(false); };
-  var navItems = [["Thesis", "thesis"], ["In Practice", "practice"], ["Pricing", "pricing"], ["Automations", "automations"]];
+  var navItems = [["Thesis", "thesis"], ["What You Get", "practice"], ["Pricing", "pricing"], ["Automations", "automations"]];
   return (
     <div style={{ fontFamily: "'DM Sans','Helvetica Neue',sans-serif", background: "#08090b", color: "#e0e0e0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -234,7 +234,7 @@ export default function KnightLedger() {
       {/* IN PRACTICE */}
       <section id="practice" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
-          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IN PRACTICE</div>
+          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>WHAT YOU GET</div>
         </FadeIn>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 }}>
           <FadeIn delay={0.08}>
@@ -252,7 +252,7 @@ export default function KnightLedger() {
               <div className="card" style={{ padding: 28, height: "100%", cursor: "pointer", display: "flex", flexDirection: "column" }}>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 14 }}>02 / END STATE</div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>Close OS</h3>
-                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>A live, interactive view of the close — reconciliations, variances, exceptions, approvals. Built into your close platform, or delivered as part of the engagement and deployed on your cloud.</p>
+                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>Your close, run as a system. Operational, not informational — the work itself moves through the platform.</p>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>OPEN →</div>
               </div>
             </a>
@@ -366,7 +366,7 @@ export default function KnightLedger() {
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IMPLEMENTATION LEAD</div>
           <div style={{ maxWidth: 760 }}>
-            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and senior-manager-level accounting advisory (leading technical accounting implementations and process redesign engagements). Since the emergence of generative AI, he has focused exclusively on deploying it across accounting and finance.</p>
+            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across External Audit at EY (Fortune 50 clients and Department of Defense rotations), SOX Internal Audit at Comcast NBCUniversal, and Accounting Advisory at CFGI (transaction services for acquisition accounting and IPO readiness, ERP and internal control implementations, audit readiness, and close process optimization). Since the emergence of generative AI, he has focused exclusively on deploying it across accounting and finance.</p>
           </div>
         </FadeIn>
       </section>
