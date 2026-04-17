@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-var STEPS = [
-  { n: "01", t: "Analyze", d: "We map your systems end to end — ERP, close tools, payment platforms, reporting stack — and identify where AI creates the highest-impact change. You receive a specific proposal: what we’d build, how it integrates with what you already use, and the fixed fee." },
-  { n: "02", t: "Build", d: "Powered by Anthropic’s Claude, built against your real data, your chart of accounts, your workflows. We integrate into your existing platforms — not a separate tool your team has to learn. Testing happens in your environment with your data." },
-  { n: "03", t: "Deploy", d: "The system goes live alongside your team for at least one full cycle — a close, a reconciliation period, a reporting deadline. You validate the output against your current process. We work on-site or remote. Payment is due only after it’s working." },
-  { n: "04", t: "Own It", d: "Once live, the system is yours. Full documentation, prompt libraries, configuration guides — your team adjusts workflows and adapts to business changes without reengaging us. Model upgrades apply automatically." }
-];
-
 var AUTOS = [
   { cat: "Close & Reporting", name: "Close Compression", desc: "Reconciliations across every balance sheet account, variance commentary, reporting packages, close checklist orchestration. 15-day closes compressed to under 5." },
   { cat: "Close & Reporting", name: "Multi-Entity Consolidation", desc: "IC elimination, currency translation, subsidiary validation, management fee allocations. Mismatches flagged before close, elimination entries generated with full documentation." },
@@ -150,15 +143,12 @@ function FadeIn(props) {
 export default function KnightLedger() {
   var _cat = useState(null); var activeCat = _cat[0]; var setActiveCat = _cat[1];
   var _exp = useState(null); var expandedAuto = _exp[0]; var setExpandedAuto = _exp[1];
-    var _step = useState(null);
-    var expandedStep = _step[0];
-    var setExpandedStep = _step[1];
   var _menu = useState(false); var mobileMenu = _menu[0]; var setMobileMenu = _menu[1];
   var filtered = activeCat ? AUTOS.filter(function(a) { return a.cat === activeCat; }) : [];
   var grouped = {};
   filtered.forEach(function(a) { if (!grouped[a.cat]) grouped[a.cat] = []; grouped[a.cat].push(a); });
   var scrollTo = function(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth" }); setMobileMenu(false); };
-  var navItems = [["Thesis", "thesis"], ["In Practice", "practice"], ["Process", "process"], ["Pricing", "pricing"], ["Automations", "automations"]];
+  var navItems = [["Thesis", "thesis"], ["In Practice", "practice"], ["Pricing", "pricing"], ["Automations", "automations"], ["Lead", "founder"]];
   return (
     <div style={{ fontFamily: "'DM Sans','Helvetica Neue',sans-serif", background: "#08090b", color: "#e0e0e0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -269,38 +259,7 @@ export default function KnightLedger() {
               </div>
             </a>
           </FadeIn>
-          <FadeIn delay={0.20}>
-            <a href="/case-studies" style={{ display: "block", textDecoration: "none", height: "100%" }}>
-              <div className="card" style={{ padding: 28, height: "100%", cursor: "pointer", display: "flex", flexDirection: "column" }}>
-                <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 14 }}>03 / FIELD WORK</div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>Two Close Redesigns</h3>
-                <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22, flex: 1 }}>Multi-channel subscription revenue reconciliation. A thirteen-agent architecture for a multi-state healthcare platform. Both built against live operations.</p>
-                <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>READ →</div>
-              </div>
-            </a>
-          </FadeIn>
         </div>
-      </section>
-{/* PROCESS */}
-      <section id="process" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
-        <FadeIn><div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>HOW IT WORKS</div><h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 48 }}>Four phases.</h2></FadeIn>
-        {STEPS.map(function(s, i) {
-          var open = expandedStep === i;
-          return (
-            <FadeIn key={i} delay={i * 0.08}>
-              <div onClick={function() { setExpandedStep(open ? null : i); }} style={{ display: "grid", gridTemplateColumns: "64px 1fr 24px", borderBottom: i < 3 ? "1px solid #1a1c1e" : "none", padding: "28px 0", cursor: "pointer", alignItems: "center" }}>
-                <div className="mono" style={{ fontSize: 32, fontWeight: 700, color: "#00e5a0", opacity: 0.5 }}>{s.n}</div>
-                <div>
-                  <h3 style={{ fontSize: 20, fontWeight: 600, color: "#fff", marginBottom: open ? 12 : 0, transition: "margin .25s" }}>{s.t}</h3>
-                  {open && <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, maxWidth: 640 }}>{s.d}</p>}
-                </div>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform .25s", justifySelf: "end" }}>
-                  <path d="M4 6l4 4 4-4" stroke="#555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            </FadeIn>
-          );
-        })}
       </section>
             {/* PRICING */}
       <section id="pricing" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
@@ -323,10 +282,7 @@ export default function KnightLedger() {
           {[
             { t: "Zero data retention", d: "All AI processing runs through Anthropic’s API with zero data retention. Your financial data is not stored, logged, or used for model training." },
             { t: "Your environment", d: "Automations run within your existing infrastructure. We don’t host your data on third-party platforms." },
-            { t: "Scoped access", d: "Each automation receives only the minimum data required. Access defined per-process, not org-wide." },
             { t: "Full audit trail", d: "Every AI action logged — data accessed, output generated, decisions made. Full traceability for audit and regulatory review." },
-            { t: "Encryption", d: "All data transmitted via TLS 1.3. Locally cached data encrypted at rest, purged after processing." },
-            { t: "SOC 2 aligned", d: "Anthropic maintains SOC 2 Type II compliance. Deployment follows enterprise access control and incident response standards." }
           ].map(function(s, i) {
             return (
               <FadeIn key={i} delay={i * 0.06}>
@@ -408,17 +364,14 @@ export default function KnightLedger() {
         </div>
       </section>
         {/* ABOUT */}
-        <section id="founder" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
-          <FadeIn>
-            <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>ABOUT</div>
-            <div style={{ maxWidth: 700 }}>
-              <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 20 }}>Jason Forrester</h2>
-              <div className="mono" style={{ fontSize: 13, color: "#00e5a0", marginBottom: 20, letterSpacing: "0.5px" }}>Implementation & Design Lead</div>
-              <p style={{ fontSize: 15, color: "#888", lineHeight: 1.7, marginBottom: 20 }}>CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and senior manager-level advisory consulting. Since the emergence of generative AI, focused exclusively on deploying it across accounting and finance.</p>
-              <a href="https://www.linkedin.com/in/jasonforrester1/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, color: "#00e5a0", textDecoration: "none", borderBottom: "1px solid rgba(0,229,160,0.3)", paddingBottom: 2 }}>LinkedIn</a>
-            </div>
-          </FadeIn>
-        </section>
+      <section id="founder" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
+        <FadeIn>
+          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IMPLEMENTATION LEAD</div>
+          <div style={{ maxWidth: 760 }}>
+            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across Big 4 audit, internal audit at a Fortune 50 media conglomerate, and senior-manager-level accounting advisory (leading technical accounting implementations and process redesign engagements). Since the emergence of generative AI, focused exclusively on deploying it across accounting and finance.</p>
+          </div>
+        </FadeIn>
+      </section>
 
       {/* CTA */}
       <section id="contact" style={{ borderTop: "1px solid #1a1c1e" }}>
