@@ -319,7 +319,7 @@ export default function CloseDashboard() {
 
     // ─── TOP BAR ───
     React.createElement("div", { style: { borderBottom: "1px solid #1a1c1e", background: "#0a0b0d", padding: "16px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 } },
-      React.createElement("a", { href: "/", style: { display: "flex", alignItems: "center", gap: 14, textDecoration: "none", cursor: "pointer" } },
+      React.createElement("a", { href: "/", title: "Back to knightledger.com", style: { display: "flex", alignItems: "center", gap: 14, textDecoration: "none", cursor: "pointer" } },
         React.createElement("svg", { width: 26, height: 26, viewBox: "0 0 40 40", fill: "none" },
           React.createElement("path", { d: "M20 3L6 12v16l14 9 14-9V12L20 3z", stroke: "#00e5a0", strokeWidth: "1.5", fill: "none", opacity: ".6" }),
           React.createElement("path", { d: "M20 8L10 14v12l10 6 10-6V14L20 8z", stroke: "#00e5a0", strokeWidth: "1", fill: "rgba(0,229,160,0.05)" }),
