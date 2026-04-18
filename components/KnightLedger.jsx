@@ -369,7 +369,7 @@ export default function KnightLedger() {
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IMPLEMENTATION LEAD</div>
           <div style={{ maxWidth: 760 }}>
-            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across External Audit at EY (Fortune 50 clients and Department of Defense rotations), SOX Internal Audit at Comcast NBCUniversal, and Accounting Advisory at CFGI (transaction services for acquisition accounting and IPO readiness, ERP and internal control implementations, audit readiness, and close process optimization). Since the emergence of generative AI, has architected production AI systems — agentic workflows, API-integrated automations, and LLM-driven process engines — applied directly to the close, reporting, and controls work delivered through his CFGI engagements.</p>
+            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across External Audit at EY (Fortune 50 clients and Department of Defense rotations), SOX Internal Audit at Comcast NBCUniversal, and Accounting Advisory at CFGI (transaction services for acquisition accounting and IPO readiness, ERP and internal control implementations, audit readiness, and close process optimization). Since the emergence of generative AI, has built production systems that run finance and accounting work directly.</p>
           </div>
         </FadeIn>
       </section>
@@ -379,7 +379,7 @@ export default function KnightLedger() {
         <div className="section">
           <FadeIn>
             <div style={{ textAlign: "center", marginBottom: 48 }}>
-              <h2 style={{ fontSize: "clamp(24px,5vw,44px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1.5px", marginBottom: 16 }}>Tell us what you’d automate first.</h2>
+              <h2 style={{ fontSize: "clamp(24px,5vw,44px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1.5px", marginBottom: 16 }}>Request a proposal.</h2>
               <p style={{ fontSize: 17, color: "#888", maxWidth: 500, margin: "0 auto" }}>We’ll respond with a specific proposal — what we’d build, how it integrates, and the fixed fee.</p>
             </div>
           </FadeIn>
