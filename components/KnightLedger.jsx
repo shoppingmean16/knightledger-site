@@ -148,7 +148,7 @@ export default function KnightLedger() {
   var grouped = {};
   filtered.forEach(function(a) { if (!grouped[a.cat]) grouped[a.cat] = []; grouped[a.cat].push(a); });
   var scrollTo = function(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth" }); setMobileMenu(false); };
-  var navItems = [["Thesis", "thesis"], ["Redesign", "redesign"], ["Close OS", "close-os"], ["Pricing", "pricing"], ["Automations", "automations"]];
+  var navItems = [["Why", "thesis"], ["Redesign", "redesign"], ["Close OS", "close-os"], ["Pricing", "pricing"], ["Automations", "automations"]];
   return (
     <div style={{ fontFamily: "'DM Sans','Helvetica Neue',sans-serif", background: "#08090b", color: "#e0e0e0", minHeight: "100vh", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -226,7 +226,7 @@ export default function KnightLedger() {
         </div>
         <FadeIn delay={0.3}>
           <div style={{ marginTop: 40, padding: "28px 32px", borderRadius: 12, border: "1px solid rgba(0,229,160,0.13)", background: "rgba(0,229,160,0.02)" }}>
-            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, }}><strong style={{ color: "#00e5a0" }}>Where we come in:</strong> We take the manual, repetitive layer off accounting’s plate — reconciliations, evidence packaging, commentary, the work that drains teams and teaches them nothing. We’re aggressive about implementation because the technology is ready and waiting isn’t a strategy.</p>
+            <p style={{ fontSize: 17, color: "#ccc", lineHeight: 1.7, }}><strong style={{ color: "#00e5a0" }}>Where we come in:</strong> we take the manual, repetitive layer off accounting’s plate.</p>
           </div>
         </FadeIn>
       </section>
@@ -256,7 +256,7 @@ export default function KnightLedger() {
           <a href="/dashboard" style={{ display: "block", textDecoration: "none" }}>
             <div className="card" style={{ padding: 28, cursor: "pointer", display: "flex", flexDirection: "column" }}>
               <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>Close OS</h3>
-              <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22 }}>Your close, run as a system. Operational, not informational — the work itself moves through the platform.</p>
+              <p style={{ fontSize: 14, color: "#888", lineHeight: 1.65, marginBottom: 22 }}>An interactive view of the close as it runs — tasks, reconciliations, variances, exceptions, and approvals in one place.</p>
               <div className="mono accent" style={{ fontSize: 11, letterSpacing: ".05em", display: "inline-flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,229,160,.3)", paddingBottom: 4, alignSelf: "flex-start" }}>OPEN →</div>
             </div>
           </a>
@@ -313,7 +313,7 @@ export default function KnightLedger() {
         {!activeCat && (
           <div style={{ padding: "56px 32px", textAlign: "center", border: "1px dashed #1a1c1e", borderRadius: 12, background: "rgba(255,255,255,.01)" }}>
             <div className="mono" style={{ fontSize: 11, color: "#444", letterSpacing: ".1em", marginBottom: 10 }}>SELECT A CATEGORY ABOVE</div>
-            <div style={{ fontSize: 14, color: "#666", maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>Choose a functional area to view automations we've built for it. Every engagement is scoped to the client's systems and pain points.</div>
+            <div style={{ fontSize: 14, color: "#666", maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>Choose a functional area to view automations we've built for it.</div>
           </div>
         )}
         {activeCat && (
@@ -369,7 +369,7 @@ export default function KnightLedger() {
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IMPLEMENTATION LEAD</div>
           <div style={{ maxWidth: 760 }}>
-            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across External Audit at EY (Fortune 50 clients and Department of Defense rotations), SOX Internal Audit at Comcast NBCUniversal, and Accounting Advisory at CFGI (transaction services for acquisition accounting and IPO readiness, ERP and internal control implementations, audit readiness, and close process optimization). Since the emergence of generative AI, has built production systems that run finance and accounting work directly.</p>
+            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across External Audit at EY (Fortune 50 clients and Department of Defense rotations), SOX Internal Audit at Comcast NBCUniversal, and Accounting Advisory at CFGI covering transaction services for acquisition accounting and IPO readiness, ERP and internal control implementations, audit readiness, and close process optimization. Since the emergence of generative AI, has built production systems that run finance and accounting work directly.</p>
           </div>
         </FadeIn>
       </section>
@@ -387,7 +387,7 @@ export default function KnightLedger() {
             <FadeIn delay={0.05}>
               <a href="https://tally.so/r/PdYBp1" target="_blank" rel="noopener noreferrer" className="cm" style={{ padding: 28, display: "block", height: "100%" }}>
                 <div className="mono accent" style={{ fontSize: 11, letterSpacing: 1, marginBottom: 10 }}>START HERE</div>
-                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Tell us what you'd automate</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", marginBottom: 6 }}>Request a proposal</div>
                 <div style={{ fontSize: 13, color: "#666" }}>Quick assessment — email is the only required field</div>
               </a>
             </FadeIn>
