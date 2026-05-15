@@ -372,7 +372,7 @@ export default function KnightLedger() {
             Engineered by operators <span style={{ color: "#555" }}>who lived the manual version.</span>
           </h2>
           <p style={{ fontSize: 16, color: "#888", lineHeight: 1.7, maxWidth: 600 }}>
-            Built on a foundation of Big 4 external audit, Fortune 50 SOX internal audit, and Senior Manager-level accounting advisory — paired with deep AI engineering.
+            Our team brings backgrounds in Big 4 external audit, Fortune 50 SOX internal audit, and technical accounting advisory at top-tier professional services firms — combined with the AI engineering to automate what we used to do by hand.
           </p>
         </FadeIn>
       </section>
