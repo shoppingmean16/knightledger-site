@@ -369,10 +369,10 @@ export default function KnightLedger() {
         <FadeIn>
           <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>THE PRACTICE</div>
           <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 28, maxWidth: 720 }}>
-            Engineered by operators <span style={{ color: "#555" }}>who lived the manual version.</span>
+            An AI engineering firm <span style={{ color: "#555" }}>with an accounting backbone.</span>
           </h2>
           <p style={{ fontSize: 16, color: "#888", lineHeight: 1.7, maxWidth: 600 }}>
-            Our team brings backgrounds in Big 4 external audit, Fortune 50 SOX internal audit, and technical accounting advisory at top-tier professional services firms — combined with the AI engineering to automate what we used to do by hand.
+            The build runs on Claude Opus, agent architectures, and full-stack automation — engineered by AI specialists. The accounting rigor comes from CPAs out of Big 4 audit, Fortune 50 SOX, and technical advisory at top-tier firms.
           </p>
         </FadeIn>
       </section>
