@@ -364,13 +364,16 @@ export default function KnightLedger() {
           })}
         </div>
       </section>
-        {/* ABOUT */}
-      <section id="founder" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
+        {/* PRACTICE */}
+      <section id="practice" className="section" style={{ borderTop: "1px solid #1a1c1e" }}>
         <FadeIn>
-          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>IMPLEMENTATION LEAD</div>
-          <div style={{ maxWidth: 760 }}>
-            <p style={{ fontSize: 16, color: "#ccc", lineHeight: 1.75 }}>KnightLedger engagements are led by <strong style={{ color: "#fff", fontWeight: 600 }}>Jason Forrester</strong> — CPA with 10+ years across External Audit at EY (Fortune 50 clients and Department of Defense rotations), SOX Internal Audit at Comcast NBCUniversal, and Accounting Advisory at CFGI covering transaction services for acquisition accounting and IPO readiness, ERP and internal control implementations, audit readiness, and close process optimization. Since the emergence of generative AI, has built production systems that run finance and accounting work directly.</p>
-          </div>
+          <div className="mono accent" style={{ fontSize: 12, marginBottom: 16, letterSpacing: 1 }}>THE PRACTICE</div>
+          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 700, color: "#fff", lineHeight: 1.15, letterSpacing: "-1px", marginBottom: 28, maxWidth: 720 }}>
+            Engineered by operators <span style={{ color: "#555" }}>who lived the manual version.</span>
+          </h2>
+          <p style={{ fontSize: 16, color: "#888", lineHeight: 1.7, maxWidth: 600 }}>
+            Built on a foundation of Big 4 external audit, Fortune 50 SOX internal audit, and Senior Manager-level accounting advisory — paired with deep AI engineering.
+          </p>
         </FadeIn>
       </section>
 
