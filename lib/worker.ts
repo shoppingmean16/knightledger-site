@@ -3,14 +3,15 @@ import { z } from 'zod';
 import { change, load } from './store.ts';
 import { id, iso, acceptProof, induct, eligible, capacity, publish, type Job } from './domain.ts';
 import { research, objectCall, publicError, model } from './research.ts';
+import { verifyLocality } from './localities.ts';
 const MINUTE=60000;
 const proofSchema=z.object({decision:z.enum(['Accepted','More evidence needed','Declined']),reason:z.string().min(25).max(700)});
 const proclamationSchema=z.object({title:z.string().min(5).max(100),text:z.string().min(700).max(2200),factRefs:z.array(z.string()).min(3)});
-export const phases=['research03','research09','research15','research21','pack10','pack22','publish00','publish12','induction','retention','refresh','prompt-evaluate'] as const;
+export const phases=['research03','research09','research15','research21','pack10','pack22','publish00','publish12','induction','retention','refresh','prompt-evaluate','health'] as const;
 export async function workJob(job:Job,leaseId:string){
  const {state:s}=await load();const p=s.petitions.find(p=>p.id===job.petitionId);if(!p)throw new Error('Petition was withdrawn.');
  if(job.kind==='local'){
-  const locality=s.localities.find(l=>l.id===p.localityId)!;const prompt=s.prompts.find(p=>p.id===s.meta[0].promptId)!;
+  const locality=await verifyLocality(p.localityId);const prompt=s.prompts.find(p=>p.id===s.meta[0].promptId)!;
   const cache=s.jobs.filter(j=>j.id!==job.id&&j.sources?.length&&s.petitions.find(p=>p.id===j.petitionId)?.localityId===locality.id).flatMap(j=>j.sources||[]);
   const {draft,sources}=await research(locality.name,p.text,prompt.text,s.quests.filter(q=>q.localityId===locality.id&&q.status!=='removed').map(q=>q.title),cache);
   await change(s=>{const j=s.jobs.find(j=>j.id===job.id),p=s.petitions.find(p=>p.id===job.petitionId);if(!j||j.leaseId!==leaseId||!p)return;
@@ -65,7 +66,8 @@ export async function worker(phase:string,force=false){
  if(!acquired)return {idempotent:true,count:0};
  try{
   let count=0;
-  if(phase.startsWith('publish'))count=await change(s=>publish(s));
+  if(phase==='health')count=0;
+  else if(phase.startsWith('publish'))count=await change(s=>publish(s));
   else if(phase==='induction')count=await induction();
   else if(phase==='retention')count=await retention();
   else if(phase==='prompt-evaluate'){const {evaluatePrompt}=await import('./prompt.ts');count=await evaluatePrompt();}

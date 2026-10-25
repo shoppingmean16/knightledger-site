@@ -3,16 +3,20 @@ import { z } from 'zod';
 import sharp from 'sharp';
 import { put, get } from '@vercel/blob';
 import { createHmac } from 'node:crypto';
+import { getVercelOidcTokenSync } from '@vercel/oidc';
+import { generateText } from 'ai';
+import { gateway } from '@ai-sdk/gateway';
 import { load, change, databaseConfigured } from '@/lib/store';
 import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
-import { safeUrl, publicError } from '@/lib/research';
+import { safeUrl, publicError, reserveCall, model } from '@/lib/research';
 export const runtime='nodejs';export const maxDuration=300;export const dynamic='force-dynamic';
 const response=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'no-store'}});
 const str=(max:number)=>z.string().trim().max(max);
 const sourceUrl=z.union([z.literal(''),z.string().url().max(1500)]).optional();
-function mutationOrigin(req:NextRequest){if(req.headers.get('origin')!==new URL(req.url).origin)throw new Error('This action must be submitted from KnightLedger.');}
+function aiConfigured(){try{return !!(process.env.AI_GATEWAY_API_KEY||getVercelOidcTokenSync());}catch{return false;}}
+function mutationOrigin(req:NextRequest){const origin=req.headers.get('origin');const host=req.headers.get('host');if(!origin||!host)throw new Error('This action must be submitted from KnightLedger.');const u=new URL(origin);if(u.host!==host||!['http:','https:'].includes(u.protocol)||u.username||u.password)throw new Error('This action must be submitted from KnightLedger.');}
 function rate(s:State,key:string,max=12){const today=iso().slice(0,10);if(s.audits.filter(a=>a.action==='rate'&&a.recordId===key&&a.at.startsWith(today)).length>=max)throw new Error('The daily submission limit was reached. Please return tomorrow.');s.audits.push({id:id(),at:iso(),action:'rate',recordId:key,note:''});s.audits=s.audits.filter(a=>a.action!=='rate'||Date.now()-new Date(a.at).getTime()<2*86400_000);}
 function resolveLocality(s:State,input:string):Locality{
  const normalized=input.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();if(normalized.length<2||normalized.length>130)throw new Error('Enter a town and region, or a recognized city neighborhood.');
@@ -25,7 +29,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{path:string[
  const path=(await params).path.join('/');
  try{
   if(path.startsWith('cron/')){if(!process.env.CRON_SECRET||!equal(req.headers.get('authorization')||'',`Bearer ${process.env.CRON_SECRET}`))return response({error:'Unauthorized'},401);return response(await worker(path.split('/')[1]));}
-  if(path==='status')return response({database:databaseConfigured(),privateStorage:!!process.env.BLOB_READ_WRITE_TOKEN,aiAuth:!!(process.env.VERCEL_OIDC_TOKEN||process.env.AI_GATEWAY_API_KEY),temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null});
+  if(path==='status')return response({database:databaseConfigured(),privateStorage:!!process.env.BLOB_READ_WRITE_TOKEN,aiAuth:aiConfigured(),temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null});
   const {state}=await load();
   if(path==='public')return response(sanitizePublic(state));
   const member=await currentMember(state);
@@ -39,7 +43,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{path:string[
   return response({error:'Not found'},404);
  }catch(e){return response({error:publicError(e)},503);}
 }
-function operatorView(s:State){return {authorized:true,quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:!!(process.env.VERCEL_OIDC_TOKEN||process.env.AI_GATEWAY_API_KEY),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
+function operatorView(s:State){return {authorized:true,quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
 export async function POST(req:NextRequest,{params}:{params:Promise<{path:string[]}>}){
  const path=(await params).path.join('/');
  try{
@@ -84,6 +88,16 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path.startsWith('operator/')){
    if(!await isOperator())return response({error:'Operator access required.'},401);
    const action=path.slice(9);
+   if(action==='claim-database'){
+    if(!process.env.NEON_PROJECT_ID||!process.env.NEON_CLAIM_ASSERTION)throw new Error('No temporary database claim is configured.');
+    const tokenResponse=await fetch('https://claimable.neon.tech/v1/oauth2/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'urn:ietf:params:oauth:grant-type:jwt-bearer',assertion:process.env.NEON_CLAIM_ASSERTION,resource:'https://claimable.neon.tech/'}),signal:AbortSignal.timeout(15000)});
+    if(!tokenResponse.ok)throw new Error('Neon could not authorize the claim. The database may already have been claimed.');const token=await tokenResponse.json();
+    const claim=await fetch(`https://claimable.neon.tech/v1/projects/${encodeURIComponent(process.env.NEON_PROJECT_ID)}/claim`,{method:'POST',headers:{Authorization:`Bearer ${token.access_token}`},signal:AbortSignal.timeout(15000)});if(!claim.ok)throw new Error('Neon could not prepare the claim.');const data=await claim.json();
+    const url=new URL(data.verification_uri_complete);if(url.protocol!=='https:'||!(url.hostname==='neon.com'||url.hostname.endsWith('.neon.tech')))throw new Error('Unexpected claim destination.');return response({url:url.href,expiresIn:data.expires_in});
+   }
+   if(action==='check-ai'){
+    await reserveCall();try{const r=await generateText({model:gateway(model()),prompt:'Reply with the word ready.',maxOutputTokens:40,maxRetries:0,abortSignal:AbortSignal.timeout(30000)});return response({ok:true,model:model(),text:r.text});}catch(e){const error=e as {name?:string;message?:string;statusCode?:number;cause?:{message?:string;statusCode?:number;responseBody?:string}};let providerMessage='';try{const parsed=JSON.parse(error.cause?.responseBody||'{}');providerMessage=parsed.error?.message||parsed.message||'';}catch{}return response({ok:false,name:error.name,statusCode:error.statusCode||error.cause?.statusCode,message:(providerMessage||error.message||'Unavailable').replace(/Bearer\s+\S+|postgres(?:ql)?:\/\/\S+/gi,'[redacted]').slice(0,1300)});}
+   }
    if(action==='phase'){
     const {phase}=z.object({phase:z.enum(['refresh','publish00','publish12','induction','retention','prompt-evaluate'])}).parse(body);
     // Manual publication is useful in staging; induction still respects the weekly ceremony.
@@ -128,7 +142,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
     const pid=id(),now=iso(),targetAt=windowFor(now);s.petitions.push({id:pid,memberId,kind:'local',status:'Received',createdAt:now,updatedAt:now,localityId:loc.id,text:data.text+(data.source?'\n'+data.source:''),targetAt,publicConsent:data.publicConsent});s.jobs.push({id:id(),petitionId:pid,kind:'local',status:'pending',attempts:0,createdAt:now,targetAt});return {receipt:pid,targetAt};});kick();return response(result);
   }
   if(path==='petition/proof'){
-   const data=z.object({questId:z.string(),completionDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),text:str(3500).min(40),evidenceLink:sourceUrl,files:z.array(z.string()).max(3).default([])}).parse(body);if(data.evidenceLink)safeUrl(data.evidenceLink);if(new Date(data.completionDate).getTime()>Date.now())throw new Error('Completion date cannot be in the future.');
+   const data=z.object({questId:z.string(),completionDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),text:str(3500).min(40),evidenceLink:sourceUrl,files:z.array(z.string()).max(3).default([])}).parse(body);if(data.evidenceLink)safeUrl(data.evidenceLink);if(!Number.isFinite(new Date(data.completionDate).getTime())||new Date(data.completionDate).getTime()>Date.now())throw new Error('Choose a valid completion date that is not in the future.');
    const result=await change(s=>{rate(s,memberId,12);const q=s.quests.find(q=>q.id===data.questId&&q.status==='published');if(!q)throw new Error('Select a published quest.');if(data.files.some(fid=>!s.evidence.some(e=>e.id===fid&&e.memberId===memberId&&!e.petitionId)))throw new Error('An image is unavailable or belongs to another petition.');if(s.completions.some(c=>c.memberId===memberId&&c.templateId===q.templateId))throw new Error('This template already received qualification credit.');if(s.petitions.some(p=>p.memberId===memberId&&p.kind==='proof'&&p.questId===q.id&&!p.finalAt&&p.status!=='More evidence needed'))throw new Error('Proof for this quest is already awaiting review.');
     const pid=id(),now=iso();s.petitions.push({id:pid,memberId,kind:'proof',status:'Received',createdAt:now,updatedAt:now,localityId:member!.localityId,text:data.text,questId:q.id,completionDate:data.completionDate,evidenceLink:data.evidenceLink,files:data.files,publicConsent:false});for(const e of s.evidence.filter(e=>data.files.includes(e.id))){e.petitionId=pid;e.deleteAfter=new Date(Date.now()+60*86400_000).toISOString();}s.jobs.push({id:id(),petitionId:pid,kind:'proof',status:'pending',attempts:0,createdAt:now});return {receipt:pid};});kick();return response(result);
   }
