@@ -11,7 +11,9 @@ import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, appr
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
 import { applyProofReview, ownerNote, approveKnighthood, proclamationHash } from '@/lib/review';
-import { safeUrl, publicError, reserveCall, model, fetchSource } from '@/lib/research';
+import { requestEditorialRevision } from '@/lib/editorial';
+import { releaseReadiness } from '@/lib/readiness';
+import { safeUrl, publicError, reserveCall, model, fetchSource, withAIStatus } from '@/lib/research';
 export const runtime='nodejs';export const maxDuration=300;export const dynamic='force-dynamic';
 const response=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'no-store'}});
 const str=(max:number)=>z.string().trim().max(max);
@@ -44,7 +46,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{path:string[
   return response({error:'Not found'},404);
  }catch(e){return response({error:publicError(e)},503);}
 }
-function operatorView(s:State){return {authorized:true,proofs:s.petitions.filter(p=>p.kind==='proof'&&p.status==='Ready for owner review'&&p.proofReview),knighthoods:s.petitions.filter(p=>p.kind==='knighthood'&&!p.finalAt&&p.proclamationDraft?.verified).map(p=>({...p,reviewHash:proclamationHash(p),acceptedDeeds:s.completions.filter(c=>c.memberId===p.memberId).map(c=>({id:c.id,account:c.account,standard:c.standard,completedOn:c.completedOn}))})),notes:s.audits.filter(a=>a.action==='owner-note'&&!a.resolvedAt),quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
+function operatorView(s:State){return {authorized:true,readiness:releaseReadiness(s),proofs:s.petitions.filter(p=>p.kind==='proof'&&p.status==='Ready for owner review'&&p.proofReview),knighthoods:s.petitions.filter(p=>p.kind==='knighthood'&&!p.finalAt&&p.proclamationDraft?.verified).map(p=>({...p,reviewHash:proclamationHash(p),acceptedDeeds:s.completions.filter(c=>c.memberId===p.memberId).map(c=>({id:c.id,account:c.account,standard:c.standard,completedOn:c.completedOn}))})),notes:s.audits.filter(a=>a.action==='owner-note'&&!a.resolvedAt),quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
 export async function POST(req:NextRequest,{params}:{params:Promise<{path:string[]}>}){
  const path=(await params).path.join('/');
  try{
@@ -69,6 +71,9 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   const body=await req.json();
   if(path==='operator/login'){
    const {password}=z.object({password:str(250)}).parse(body);
+   const key=createHmac('sha256',process.env.SESSION_SECRET||'not-configured').update(iso().slice(0,10)+':operator:'+(req.headers.get('x-forwarded-for')||'local')).digest('hex');
+   // Commit attempts before checking credentials so rejected attempts cannot roll them back.
+   await change(s=>rate(s,key,30));
    if(!process.env.OPERATOR_SECRET||!equal(password,process.env.OPERATOR_SECRET))return response({error:'The Steward key was not recognized.'},401);
    const res=response({ok:true});res.cookies.set(OPERATOR,operatorToken(),{...cookieOptions,maxAge:8*3600});return res;
   }
@@ -81,7 +86,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
     await change(s=>{rate(s,networkKey,8);const loc=resolveLocality(s,data.locality);const alias=data.alias||`Squire ${mid.slice(0,6).toUpperCase()}`;s.members.push({id:mid,alias,localityId:loc.id,visibility:data.visibility,hideLocality:data.hideLocality,recoveryDigest:digest(recoveryCode!),createdAt:iso(),rank:'Squire',undertaken:[]});s.sessions.push({id:sid,memberId:mid,expiresAt:new Date(Date.now()+30*86400_000).toISOString()});});
    }else{
     const {code}=z.object({code:str(100).min(30)}).parse(body);
-    mid=await change(s=>{rate(s,networkKey,30);const m=s.members.find(m=>equal(m.recoveryDigest,digest(code))&&!m.withdrawn);if(!m)throw new Error('Recovery code not recognized.');s.sessions.push({id:sid,memberId:m.id,expiresAt:new Date(Date.now()+30*86400_000).toISOString()});return m.id;});
+    await change(s=>rate(s,networkKey,30));
+    mid=await change(s=>{const m=s.members.find(m=>equal(m.recoveryDigest,digest(code))&&!m.withdrawn);if(!m)throw new Error('Recovery code not recognized.');s.sessions.push({id:sid,memberId:m.id,expiresAt:new Date(Date.now()+30*86400_000).toISOString()});return m.id;});
    }
    const res=response({ok:true,recoveryCode});res.cookies.set(SESSION,token,{...cookieOptions,maxAge:30*86400});return res;
   }
@@ -98,7 +104,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
     const url=new URL(data.verification_uri_complete);if(url.protocol!=='https:'||!(url.hostname==='neon.com'||url.hostname.endsWith('.neon.tech')))throw new Error('Unexpected claim destination.');return response({url:url.href,expiresIn:data.expires_in});
    }
    if(action==='check-ai'){
-    await reserveCall();try{const r=await generateText({model:gateway(model()),prompt:'Reply with the word ready.',maxOutputTokens:40,maxRetries:0,abortSignal:AbortSignal.timeout(30000)});return response({ok:true,model:model(),text:r.text});}catch(e){const error=e as {name?:string;message?:string;statusCode?:number;cause?:{message?:string;statusCode?:number;responseBody?:string}};let providerMessage='';try{const parsed=JSON.parse(error.cause?.responseBody||'{}');providerMessage=parsed.error?.message||parsed.message||'';}catch{}return response({ok:false,name:error.name,statusCode:error.statusCode||error.cause?.statusCode,message:(providerMessage||error.message||'Unavailable').replace(/Bearer\s+\S+|postgres(?:ql)?:\/\/\S+/gi,'[redacted]').slice(0,1300)});}
+    await reserveCall();try{const r=await withAIStatus(()=>generateText({model:gateway(model()),prompt:'Reply with the word ready.',maxOutputTokens:40,maxRetries:0,abortSignal:AbortSignal.timeout(30000)}));return response({ok:true,model:model(),text:r.text});}catch(e){const error=e as {statusCode?:number;cause?:{statusCode?:number}};return response({ok:false,statusCode:error.statusCode||error.cause?.statusCode,message:publicError(e)});}
    }
    if(action==='phase'){
     const {phase}=z.object({phase:z.enum(['refresh','publish00','publish12','induction','retention','prompt-evaluate'])}).parse(body);
@@ -126,17 +132,17 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
    if(action==='note-done'){await change(s=>{const note=s.audits.find(a=>a.id===body.id&&a.action==='owner-note');if(!note)throw new Error('Note not found.');note.resolvedAt=iso();});return response({ok:true});}
    if(action==='edit'){
     const data=z.object({id:z.string(),version:z.number().int(),title:str(100).min(8),summary:str(280).min(30),standard:str(700).min(50),benefit:str(500).min(30).optional(),effort:str(70).optional(),cost:str(150).optional(),mode:z.enum(['Digital','In person']).optional(),category:z.enum(['People','Other species','Shared places','Science']).optional(),steps:z.array(str(600).min(15)).min(3).max(6).optional(),evidence:str(600).min(40).optional(),constraints:str(700).min(30).optional()}).parse(body);
-    await change(s=>{const q=s.quests.find(q=>q.id===data.id);if(!q||q.version!==data.version||q.status==='published')throw new Error('Draft changed. Reload.');if(q.replacesId){const published=s.quests.find(x=>x.id===q.replacesId);if(!published||!sameTask(published,{...q,...data}))throw new Error('A source-only refresh preserves the published task and evidence standard.');}const previous={...q};delete previous.revisions;q.revisions=[...(q.revisions||[]),previous];for(const [key,value] of Object.entries(data)){if(key!=='id'&&key!=='version'&&value!==undefined)(q as unknown as Record<string,unknown>)[key]=value;}q.version++;q.status='draft';q.approvedHash=undefined;q.approvedAt=undefined;s.audits.push({id:id(),at:iso(),action:'edit',recordId:q.id,note:'Owner edited draft fields: '+Object.keys(data).filter(k=>!['id','version'].includes(k)).join(', ')});const p=s.petitions.find(p=>p.id===q.requestId);if(p)p.status='Ready for approval';});return response({ok:true});
+    await change(s=>{const q=s.quests.find(q=>q.id===data.id);if(!q||q.version!==data.version||q.status==='published')throw new Error('Draft changed. Reload.');if(q.replacesId){const published=s.quests.find(x=>x.id===q.replacesId);if(!published||!sameTask(published,{...q,...data}))throw new Error('A source-only refresh preserves the published task and evidence standard.');}const previous={...q};delete previous.revisions;q.revisions=[...(q.revisions||[]),previous];for(const [key,value] of Object.entries(data)){if(key!=='id'&&key!=='version'&&value!==undefined)(q as unknown as Record<string,unknown>)[key]=value;}for(const j of s.jobs.filter(j=>j.kind==='editorial'&&j.questId===q.id&&j.status!=='done')){j.status='done';j.leaseId=undefined;j.leaseUntil=undefined;j.reason='Resolved by the owner’s direct edit.';}q.version++;q.status='draft';q.approvedHash=undefined;q.approvedAt=undefined;s.audits.push({id:id(),at:iso(),action:'edit',recordId:q.id,note:'Owner edited draft fields: '+Object.keys(data).filter(k=>!['id','version'].includes(k)).join(', ')});const p=s.petitions.find(p=>p.id===q.requestId);if(p)p.status='Ready for approval';});return response({ok:true});
    }
    if(['return','decline','remove'].includes(action)){
     const {id:qid,reason}=z.object({id:z.string(),reason:str(500).min(10)}).parse(body);
-    await change(s=>{const q=s.quests.find(q=>q.id===qid);if(!q)throw new Error('Quest not found.');q.status='removed';q.approvedHash=undefined;const p=s.petitions.find(p=>p.id===q.requestId);if(p){p.status=action==='return'?'Researching':'Declined';p.response=reason;p.updatedAt=iso();if(action==='return'){const j=s.jobs.find(j=>j.petitionId===p.id)!;j.status='pending';j.retryAt=undefined;j.reason=reason;p.draftId=undefined;}else p.finalAt=iso();}s.audits.push({id:id(),at:iso(),action,recordId:q.id,note:reason});});if(action==='return')kick();return response({ok:true});
+    await change(s=>{const q=s.quests.find(q=>q.id===qid);if(!q)throw new Error('Quest not found.');if(action==='return'&&!q.requestId){requestEditorialRevision(s,q,reason);return;}q.status='removed';q.approvedHash=undefined;for(const j of s.jobs.filter(j=>j.kind==='editorial'&&j.questId===q.id&&j.status!=='done')){j.status='done';j.leaseId=undefined;j.leaseUntil=undefined;j.reason='Removed by the owner.';}const p=s.petitions.find(p=>p.id===q.requestId);if(p){p.status=action==='return'?'Researching':'Declined';p.response=reason;p.updatedAt=iso();if(action==='return'){const j=s.jobs.find(j=>j.petitionId===p.id)!;j.status='pending';j.attempts=0;j.retryAt=undefined;j.leaseId=undefined;j.leaseUntil=undefined;j.sources=[];j.reason=reason;p.draftId=undefined;}else p.finalAt=iso();}s.audits.push({id:id(),at:iso(),action,recordId:q.id,note:reason});});if(action==='return')kick();return response({ok:true});
    }
    if(action==='prompt-rollback'){
     const pid=z.string().parse(body.id);await change(s=>{const p=s.prompts.find(p=>p.id===pid);if(!p)throw new Error('Prompt not found.');if(pid!=='quest-v1'&&!s.audits.some(a=>a.action==='prompt-validation'&&a.recordId===pid))throw new Error('This candidate has not passed independent validation.');for(const x of s.prompts)x.active=x.id===pid;s.meta[0].promptId=pid;s.audits.push({id:id(),at:iso(),action:'prompt-rollback',recordId:pid,note:'Owner selected a previously validated version.'});});return response({ok:true});
    }
    if(action==='retry'){
-    await change(s=>{const j=s.jobs.find(j=>j.id===body.id);if(!j||j.status==='done')throw new Error('Pending job not found.');j.status='pending';j.attempts=0;j.retryAt=undefined;j.leaseUntil=undefined;});kick();return response({ok:true});
+    await change(s=>{const j=s.jobs.find(j=>j.id===body.id);if(!j||j.status==='done')throw new Error('Pending job not found.');j.status='pending';j.attempts=0;j.retryAt=undefined;j.leaseId=undefined;j.leaseUntil=undefined;});kick();return response({ok:true});
    }
    return response({error:'Unknown operator action.'},404);
   }
@@ -150,7 +156,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   }
   if(path==='withdraw'||path==='delete'){
    if(body.confirm!=='DELETE'&&path==='delete')throw new Error('Type DELETE to confirm deletion.');
-   await change(s=>{const pids=new Set(s.petitions.filter(p=>p.memberId===memberId).map(p=>p.id));const completionIds=new Set(s.completions.filter(c=>c.memberId===memberId).map(c=>c.id));s.members=s.members.filter(m=>m.id!==memberId);s.sessions=s.sessions.filter(x=>x.memberId!==memberId);s.jobs=s.jobs.filter(j=>!pids.has(j.petitionId));s.petitions=s.petitions.filter(p=>p.memberId!==memberId);s.completions=s.completions.filter(c=>c.memberId!==memberId);s.chronicles=s.chronicles.filter(c=>c.memberId!==memberId);s.audits=s.audits.filter(a=>!pids.has(a.recordId)&&!completionIds.has(a.recordId));for(const e of s.evidence.filter(e=>e.memberId===memberId)){e.memberId='deleted';e.deleteAfter=iso();}for(const q of s.quests)if(q.requestId&&pids.has(q.requestId))q.requestId=undefined;});after(async()=>{try{await retention();}catch{}});const res=response({ok:true});res.cookies.delete(SESSION);return res;
+   await change(s=>{const pids=new Set(s.petitions.filter(p=>p.memberId===memberId).map(p=>p.id));const completionIds=new Set(s.completions.filter(c=>c.memberId===memberId).map(c=>c.id));s.members=s.members.filter(m=>m.id!==memberId);s.sessions=s.sessions.filter(x=>x.memberId!==memberId);s.jobs=s.jobs.filter(j=>!pids.has(j.petitionId||''));s.petitions=s.petitions.filter(p=>p.memberId!==memberId);s.completions=s.completions.filter(c=>c.memberId!==memberId);s.chronicles=s.chronicles.filter(c=>c.memberId!==memberId);s.audits=s.audits.filter(a=>!pids.has(a.recordId)&&!completionIds.has(a.recordId));for(const e of s.evidence.filter(e=>e.memberId===memberId)){e.memberId='deleted';e.deleteAfter=iso();}for(const q of s.quests)if(q.requestId&&pids.has(q.requestId))q.requestId=undefined;});after(async()=>{try{await retention();}catch{}});const res=response({ok:true});res.cookies.delete(SESSION);return res;
   }
   if(path==='petition/local'){
    const data=z.object({locality:str(130).min(2),text:str(1200).default(''),source:sourceUrl,publicConsent:z.boolean().default(false)}).parse(body);if(data.source)safeUrl(data.source);
