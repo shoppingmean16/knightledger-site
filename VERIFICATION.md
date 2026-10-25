@@ -2,7 +2,7 @@
 
 Working isolated staging: https://knightledger-quests-preview.vercel.app
 
-Source branch: `feat/knightledger-quests`. Application deployment `eb4d91f9308526d88ec7a5cc79b0ee277bc07d78` is READY; later documentation/screenshot commits do not change the application. Original `main`, production project and custom domain are preserved. The staging project has its own production-target deployment for native Vercel Cron; Vercel SSO remains enabled.
+Source branch: `feat/knightledger-quests`. Latest astronomy application deployment `cdb4b4ad45c771e1c2b01f891fa34c5546c63d29` is READY. The baseline owner-review deployment was `eb4d91f9308526d88ec7a5cc79b0ee277bc07d78`; later documentation/screenshot commits do not change the deployed application. Original `main`, production project and custom domain are preserved. The staging project has its own production-target deployment for native Vercel Cron; Vercel SSO remains enabled.
 
 ## Observed results
 
@@ -53,3 +53,5 @@ The initial persistence adapter uses short atomic whole-state commits across typ
 ## Astronomy extension — October 25
 
 Six researched astronomy proposals were inserted durably as drafts, idempotently. Eight previously published quests, membership, accepted work and titles were preserved. A staging-only preview setting exposes marked editorial astronomy proposals for review; private/local research drafts remain hidden. New tests cover draft-only preparation, private-preview scoping, explicit publication approval, and the exclusion of closed SETI/ESA batches from completion quests. The extended SQL/HTTP suite checks that an astronomy detail can be reviewed while unauthorized undertaking/proof is rejected. See docs/ASTRONOMY.md for receiving projects, current-source checks and deliberate exclusions.
+
+The astronomy deployment was verified in the browser: six proposals in beginner-first order, complete telescope instructions, and mobile science filtering from six to four digital proposals. At a 390px iframe width, inner viewport/content widths were both 373px; no horizontal overflow. No application-origin console errors/warnings were observed. The deployed public API still returns only the eight published quests and zero fabricated Knights. Screenshot: docs/astronomy-preview.jpg. Original domain was rechecked on its unchanged main deployment.
