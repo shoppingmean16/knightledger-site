@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { neon } from '@neondatabase/serverless';
+import { worker } from '../lib/worker.ts';
 import { migrate, change, load } from '../lib/store.ts';
 import { collections, acceptProof, publish, induct, iso, id } from '../lib/domain.ts';
 process.env.KL_NAMESPACE='qa-'+id();
@@ -38,6 +39,7 @@ try{
  const text=Array(160).fill('Ceremony').join(' ');const outcomes=await Promise.allSettled([change(s=>induct(s,'induction-fixture',text,'ISOLATED TEST TITLE',s.completions.filter(c=>c.memberId===mid).map(c=>c.id))),change(s=>induct(s,'induction-fixture',text,'ISOLATED TEST TITLE',s.completions.filter(c=>c.memberId===mid).map(c=>c.id)))]);assert.equal(outcomes.filter(o=>o.status==='fulfilled').length,1);assert.equal((await load()).state.chronicles.length,1);report.push('Concurrent induction writes confer one title only; isolated fixture uses full three-deed qualification and is deleted after the test.');
  await call('logout',{},cookieA);assert.equal((await call('ledger',undefined,cookieA)).json.member,null);r=await call('recover',{code:codeA});assert.equal(r.r.status,200);cookieA=r.cookie;assert.equal((await call('ledger',undefined,cookieA)).json.member.alias,'ISOLATED QA A');report.push('Logout invalidates the session; recovery restores the same membership without exposing the recovery digest.');
  assert.equal((await call('delete',{confirm:'DELETE'},cookieA)).r.status,200);assert.equal((await call('recover',{code:codeA})).r.status,400);report.push('Deletion removes membership, private decisions and chronicle, and makes recovery unavailable.');
+ await change(s=>{s.runs.push({id:'health:'+iso().slice(0,10),phase:'health',startedAt:iso(),leaseUntil:'2020-01-01T00:00:00.000Z',status:'running',count:0});});await worker('health');assert.equal((await worker('health')).idempotent,true);await change(s=>{s.meta[0].aiLeaseId='expired-fixture';s.meta[0].aiLeaseUntil='2020-01-01T00:00:00.000Z';});await worker('refresh',true);assert.equal((await load()).state.meta[0].aiLeaseId,undefined);report.push('Expired run and AI leases recover; duplicate scheduled phase keys do not execute twice.');
  console.log(JSON.stringify({namespace:'isolated QA namespace; cleaned',checks:report},null,2));
 }catch(e){console.error(e instanceof Error?e.message:'Integration failure');console.error(serverLog.slice(-3500).replace(/postgres(?:ql)?:\/\/\S+/g,'[redacted]'));process.exitCode=1;}
 finally{child.kill('SIGTERM');const q=neon(process.env.DATABASE_URL!);for(const table of collections)await q.query(`DELETE FROM kl_${table} WHERE namespace=$1`,[process.env.KL_NAMESPACE]);await q.query('DELETE FROM kl_revision WHERE namespace=$1',[process.env.KL_NAMESPACE]);}

@@ -10,7 +10,7 @@ import { load, change, databaseConfigured } from '@/lib/store';
 import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
-import { safeUrl, publicError, reserveCall, model } from '@/lib/research';
+import { safeUrl, publicError, reserveCall, model, fetchSource } from '@/lib/research';
 export const runtime='nodejs';export const maxDuration=300;export const dynamic='force-dynamic';
 const response=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'no-store'}});
 const str=(max:number)=>z.string().trim().max(max);
@@ -88,6 +88,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path.startsWith('operator/')){
    if(!await isOperator())return response({error:'Operator access required.'},401);
    const action=path.slice(9);
+   if(action==='check-source'){const url=z.enum(['https://www.amherstma.gov/','https://www.nyc.gov/site/planning/data-maps/open-data.page']).parse(body.url);const text=await fetchSource(url);return response({ok:true,url,characters:text.length,excerpt:text.slice(0,350)});}
    if(action==='claim-database'){
     if(!process.env.NEON_PROJECT_ID||!process.env.NEON_CLAIM_ASSERTION)throw new Error('No temporary database claim is configured.');
     const tokenResponse=await fetch('https://claimable.neon.tech/v1/oauth2/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'urn:ietf:params:oauth:grant-type:jwt-bearer',assertion:process.env.NEON_CLAIM_ASSERTION,resource:'https://claimable.neon.tech/'}),signal:AbortSignal.timeout(15000)});
@@ -109,8 +110,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
     await change(s=>{for(const item of items)approve(s,item.id,item.version);});return response({ok:true});
    }
    if(action==='edit'){
-    const data=z.object({id:z.string(),version:z.number().int(),title:str(100).min(8),summary:str(280).min(30),standard:str(700).min(50)}).parse(body);
-    await change(s=>{const q=s.quests.find(q=>q.id===data.id);if(!q||q.version!==data.version||q.status==='published')throw new Error('Draft changed. Reload.');q.title=data.title;q.summary=data.summary;q.standard=data.standard;q.version++;q.status='draft';q.approvedHash=undefined;q.approvedAt=undefined;s.audits.push({id:id(),at:iso(),action:'edit',recordId:q.id,note:'Owner amended title, summary or completion standard.'});const p=s.petitions.find(p=>p.id===q.requestId);if(p)p.status='Ready for approval';});return response({ok:true});
+    const data=z.object({id:z.string(),version:z.number().int(),title:str(100).min(8),summary:str(280).min(30),standard:str(700).min(50),benefit:str(500).min(30).optional(),effort:str(70).optional(),cost:str(150).optional(),mode:z.enum(['Digital','In person']).optional(),category:z.enum(['People','Other species','Shared places']).optional(),steps:z.array(str(600).min(15)).min(3).max(6).optional(),evidence:str(600).min(40).optional(),constraints:str(700).min(30).optional()}).parse(body);
+    await change(s=>{const q=s.quests.find(q=>q.id===data.id);if(!q||q.version!==data.version||q.status==='published')throw new Error('Draft changed. Reload.');for(const [key,value] of Object.entries(data)){if(key!=='id'&&key!=='version'&&value!==undefined)(q as unknown as Record<string,unknown>)[key]=value;}q.version++;q.status='draft';q.approvedHash=undefined;q.approvedAt=undefined;s.audits.push({id:id(),at:iso(),action:'edit',recordId:q.id,note:'Owner edited draft fields: '+Object.keys(data).filter(k=>!['id','version'].includes(k)).join(', ')});const p=s.petitions.find(p=>p.id===q.requestId);if(p)p.status='Ready for approval';});return response({ok:true});
    }
    if(['return','decline','remove'].includes(action)){
     const {id:qid,reason}=z.object({id:z.string(),reason:str(500).min(10)}).parse(body);
@@ -120,7 +121,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
     const pid=z.string().parse(body.id);await change(s=>{const p=s.prompts.find(p=>p.id===pid);if(!p)throw new Error('Prompt not found.');if(pid!=='quest-v1'&&!s.audits.some(a=>a.action==='prompt-validation'&&a.recordId===pid))throw new Error('This candidate has not passed independent validation.');for(const x of s.prompts)x.active=x.id===pid;s.meta[0].promptId=pid;s.audits.push({id:id(),at:iso(),action:'prompt-rollback',recordId:pid,note:'Owner selected a previously validated version.'});});return response({ok:true});
    }
    if(action==='retry'){
-    await change(s=>{const j=s.jobs.find(j=>j.id===body.id);if(!j||j.status==='done')throw new Error('Pending job not found.');j.status='pending';j.retryAt=undefined;j.leaseUntil=undefined;});kick();return response({ok:true});
+    await change(s=>{const j=s.jobs.find(j=>j.id===body.id);if(!j||j.status==='done')throw new Error('Pending job not found.');j.status='pending';j.attempts=0;j.retryAt=undefined;j.leaseUntil=undefined;});kick();return response({ok:true});
    }
    return response({error:'Unknown operator action.'},404);
   }
