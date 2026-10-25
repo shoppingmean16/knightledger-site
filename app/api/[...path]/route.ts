@@ -7,7 +7,7 @@ import { getVercelOidcTokenSync } from '@vercel/oidc';
 import { generateText } from 'ai';
 import { gateway } from '@ai-sdk/gateway';
 import { load, change, databaseConfigured } from '@/lib/store';
-import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, sameTask, type State, type Locality } from '@/lib/domain';
+import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, sameTask, freshProof, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
 import { safeUrl, publicError, reserveCall, model, fetchSource } from '@/lib/research';
@@ -144,8 +144,10 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   }
   if(path==='petition/proof'){
    const data=z.object({questId:z.string(),completionDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),text:str(3500).min(40),evidenceLink:sourceUrl,files:z.array(z.string()).max(3).default([])}).parse(body);if(data.evidenceLink)safeUrl(data.evidenceLink);if(!Number.isFinite(new Date(data.completionDate).getTime())||new Date(data.completionDate).getTime()>Date.now())throw new Error('Choose a valid completion date that is not in the future.');
-   const result=await change(s=>{rate(s,memberId,12);const q=s.quests.find(q=>q.id===data.questId&&q.status==='published');if(!q)throw new Error('Select a published quest.');if(data.files.some(fid=>!s.evidence.some(e=>e.id===fid&&e.memberId===memberId&&!e.petitionId)))throw new Error('An image is unavailable or belongs to another petition.');if(s.completions.some(c=>c.memberId===memberId&&c.templateId===q.templateId))throw new Error('This template already received qualification credit.');if(s.petitions.some(p=>p.memberId===memberId&&p.kind==='proof'&&p.questId===q.id&&!p.finalAt&&p.status!=='More evidence needed'))throw new Error('Proof for this quest is already awaiting review.');
-    const pid=id(),now=iso();s.petitions.push({id:pid,memberId,kind:'proof',status:'Received',createdAt:now,updatedAt:now,localityId:member!.localityId,text:data.text,questId:q.id,completionDate:data.completionDate,evidenceLink:data.evidenceLink,files:data.files,publicConsent:false});for(const e of s.evidence.filter(e=>data.files.includes(e.id))){e.petitionId=pid;e.deleteAfter=new Date(Date.now()+60*86400_000).toISOString();}s.jobs.push({id:id(),petitionId:pid,kind:'proof',status:'pending',attempts:0,createdAt:now});return {receipt:pid};});kick();return response(result);
+   const result=await change(s=>{const q=s.quests.find(q=>q.id===data.questId&&q.status==='published');if(!q)throw new Error('Select a published quest.');
+    const duplicate=s.petitions.find(p=>p.memberId===memberId&&p.kind==='proof'&&p.questId===q.id&&p.completionDate===data.completionDate&&p.text===data.text&&(p.evidenceLink||'')===(data.evidenceLink||'')&&JSON.stringify([...(p.files||[])].sort())===JSON.stringify([...data.files].sort())&&!p.finalAt);if(duplicate)return {receipt:duplicate.id,duplicate:true};
+    rate(s,memberId,12);if(data.files.some(fid=>!s.evidence.some(e=>e.id===fid&&e.memberId===memberId&&!e.petitionId)))throw new Error('An image is unavailable or belongs to another petition.');
+    const pid=id(),now=iso(),petition={id:pid,memberId,kind:'proof' as const,status:'Received',createdAt:now,updatedAt:now,localityId:member!.localityId,text:data.text,questId:q.id,completionDate:data.completionDate,evidenceLink:data.evidenceLink,files:data.files,publicConsent:false};freshProof(s,petition);s.petitions.push(petition);for(const e of s.evidence.filter(e=>data.files.includes(e.id))){e.petitionId=pid;e.deleteAfter=new Date(Date.now()+60*86400_000).toISOString();}s.jobs.push({id:id(),petitionId:pid,kind:'proof',status:'pending',attempts:0,createdAt:now});return {receipt:pid};});kick();return response(result);
   }
   if(path==='petition/knighthood'){
    const data=z.object({text:str(700).default(''),publicName:str(45).optional(),visibility:z.enum(['public','masked']),chronicleConsent:z.boolean()}).parse(body);if(!data.chronicleConsent)throw new Error('A public chronicle under your chosen or masked name needs your consent.');

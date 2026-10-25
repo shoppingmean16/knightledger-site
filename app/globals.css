@@ -5,3 +5,5 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 @media(max-width:540px){.hero h1{font-size:48px;letter-spacing:-1.5px}.hero-art{display:none}.hero{padding-bottom:30px}.hero-footnote{font-size:9px}input:not([type=checkbox]),select,textarea{font-size:16px;min-height:44px}label{font-size:12px}label small{font-size:10px}.reading-grid p,.reading-grid li,.policy section p{font-size:13px}.petition-form-panel form>fieldset>p{font-size:12px}.button{font-size:12px}}
+
+.funding-note{font-size:11px;line-height:1.8;max-width:455px;color:#4b5148;margin:22px 0 0;border-left:2px solid var(--gold);padding-left:14px}.funding-note strong{display:block;color:var(--green);font-size:11px;font-weight:600;margin-bottom:3px}@media(max-width:540px){.funding-note{font-size:11px;margin-top:20px;max-width:340px}.topline{font-size:6.5px;letter-spacing:1.1px}}

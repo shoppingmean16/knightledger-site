@@ -23,7 +23,11 @@ export async function migrate(){
  await q.query('CREATE TABLE IF NOT EXISTS kl_revision(namespace text PRIMARY KEY, revision bigint NOT NULL DEFAULT 0)');
  for(const c of collections)await q.query(`CREATE TABLE IF NOT EXISTS kl_${c}(namespace text NOT NULL,id text NOT NULL,data jsonb NOT NULL,PRIMARY KEY(namespace,id))`);
  await q.query(`CREATE UNIQUE INDEX IF NOT EXISTS kl_member_recovery ON kl_members(namespace,(data->>'recoveryDigest'))`);
- await q.query(`CREATE UNIQUE INDEX IF NOT EXISTS kl_credit ON kl_completions(namespace,(data->>'memberId'),(data->>'templateId'))`);
+ await q.query(`CREATE UNIQUE INDEX IF NOT EXISTS kl_credit_receipt ON kl_completions(namespace,(data->>'petitionId'))`);
+ await q.query(`CREATE UNIQUE INDEX IF NOT EXISTS kl_credit_evidence ON kl_completions(namespace,(data->>'evidenceFingerprint'))`);
+ await q.query(`CREATE UNIQUE INDEX IF NOT EXISTS kl_credit_deed ON kl_completions(namespace,(data->>'deedFingerprint'))`);
+ // Owner-approved repeat-deed policy: a template is not a once-only credit limit.
+ await q.query('DROP INDEX IF EXISTS kl_credit');
  await q.query(`CREATE UNIQUE INDEX IF NOT EXISTS kl_title ON kl_chronicles(namespace,(data->>'memberId'))`);
  const body=collections.map(c=>`DELETE FROM kl_${c} WHERE namespace=ns AND id NOT IN (SELECT value->>'id' FROM jsonb_array_elements(payload->'${c}')); INSERT INTO kl_${c}(namespace,id,data) SELECT ns,value->>'id',value FROM jsonb_array_elements(payload->'${c}') ON CONFLICT(namespace,id) DO UPDATE SET data=EXCLUDED.data;`).join('\n');
  await q.query(`CREATE OR REPLACE FUNCTION kl_commit(ns text, expected bigint, payload jsonb) RETURNS boolean LANGUAGE plpgsql AS $$ BEGIN PERFORM 1 FROM kl_revision WHERE namespace=ns AND revision=expected FOR UPDATE; IF NOT FOUND THEN RETURN false; END IF; ${body} UPDATE kl_revision SET revision=revision+1 WHERE namespace=ns; RETURN true; END; $$`);
