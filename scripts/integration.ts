@@ -4,23 +4,26 @@ import { neon } from '@neondatabase/serverless';
 import { worker } from '../lib/worker.ts';
 import { migrate, change, load } from '../lib/store.ts';
 import { collections, acceptProof, publish, iso, id } from '../lib/domain.ts';
+import { prepareAstronomy } from '../lib/astronomy.ts';
 import { saveProofReview, conferReviewedKnighthood, proclamationHash } from '../lib/review.ts';
 process.env.KL_NAMESPACE='qa-'+id();
 console.log('Preparing isolated database namespace.');
 await migrate();
 console.log('Starting production server for HTTP integration checks.');
-const child=spawn(process.execPath,['node_modules/next/dist/bin/next','start','-p','3101','-H','127.0.0.1'],{env:{...process.env,NODE_ENV:'production'},stdio:['ignore','pipe','pipe']});
+const child=spawn(process.execPath,['node_modules/next/dist/bin/next','start','-p','3101','-H','127.0.0.1'],{env:{...process.env,NODE_ENV:'production',KNIGHTLEDGER_PRIVATE_PREVIEW:'true'},stdio:['ignore','pipe','pipe']});
 let serverLog='';child.stdout.on('data',b=>serverLog+=b);child.stderr.on('data',b=>serverLog+=b);
 const base='http://127.0.0.1:3101';
 let cookieA='',cookieB='',operator='';let codeA='';const report:string[]=[];
 async function call(path:string,body?:unknown,cookie='',origin=base){console.log('Checking',path);const r=await fetch(base+'/api/'+path,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{'Content-Type':'application/json',Origin:origin}),...(cookie?{Cookie:cookie}:{})},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(25000)});let json;try{json=await r.json();}catch{throw new Error(`Non-JSON response from ${path}: ${r.status}`);}return {r,json,cookie:r.headers.get('set-cookie')?.split(';')[0]||''};}
 try{
  let ready=false;for(let n=0;n<15;n++){try{if((await fetch(base+'/api/status',{signal:AbortSignal.timeout(1000)})).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,200));}assert.ok(ready,'Production test server did not become ready.');
+ await change(s=>prepareAstronomy(s));const publicCatalog=(await call('public')).json;assert.equal(publicCatalog.quests.length,8);const previewResponse=await fetch(base+'/quests/dark-energy-real-signals',{signal:AbortSignal.timeout(25000)});const previewHtml=await previewResponse.text();assert.equal(previewResponse.status,200);assert.ok(previewHtml.includes('PROPOSED'));assert.ok(!previewHtml.includes('Undertake this quest'));report.push('Six persistent astronomy drafts are readable only through the explicit private-preview presentation; published API still contains eight quests, with no automatic approval or credit.');
  let r=await call('enroll',{alias:'ISOLATED QA A',locality:'Amherst, Massachusetts, United States',visibility:'masked',hideLocality:true});assert.equal(r.r.status,200,JSON.stringify(r.json));assert.ok(r.cookie);cookieA=r.cookie;codeA=r.json.recoveryCode;assert.equal(codeA.length,43);assert.match(r.r.headers.get('set-cookie')||'',/HttpOnly/);assert.match(r.r.headers.get('set-cookie')||'',/Secure/);report.push('Passport creation: real Postgres write, secure HttpOnly session, one-time random recovery code.');
  r=await call('enroll',{alias:'ISOLATED QA B',locality:'PRIVATE-PLACE-FIXTURE, Example Region',visibility:'masked',hideLocality:true});assert.equal(r.r.status,200);cookieB=r.cookie;
  assert.ok(!JSON.stringify((await call('public')).json).includes('PRIVATE-PLACE-FIXTURE'));assert.ok(!(await (await fetch(base+'/petitions',{signal:AbortSignal.timeout(25000)})).text()).includes('PRIVATE-PLACE-FIXTURE'));report.push('Public API and anonymous rendered petition HTML omit another passport’s unresolved locality input.');
  let a=(await call('ledger',undefined,cookieA)).json;assert.equal(a.member.alias,'ISOLATED QA A');assert.ok(!('recoveryDigest' in a.member));assert.equal((await call('ledger')).json.member,null);
  assert.equal((await call('undertake',{questId:'bench-not-bin'},cookieA,'https://evil.example')).r.status,400);assert.equal((await call('operator')).r.status,401);assert.equal((await call('cron/research03')).r.status,401);report.push('Ownership, anonymous private API, operator authorization, cron authentication and cross-origin mutation denial.');
+ assert.equal((await call('undertake',{questId:'dark-energy-real-signals'},cookieA)).r.status,400);assert.equal((await call('petition/proof',{questId:'dark-energy-real-signals',completionDate:'2026-10-24',text:'An isolated attempt to submit proof for an unapproved science proposal must be denied.',files:[]},cookieA)).r.status,400);
  assert.equal((await call('undertake',{questId:'bench-not-bin'},cookieA)).r.status,200);assert.equal((await call('ledger',undefined,cookieB)).json.quests.length,0);
  const local=await call('petition/local',{locality:'Amherst, Massachusetts, United States',text:'',publicConsent:false},cookieA);assert.equal(local.r.status,200);assert.ok(local.json.receipt);assert.ok(local.json.targetAt);const dup=await call('petition/local',{locality:'Amherst, Massachusetts, United States',text:'',publicConsent:false},cookieA);assert.equal(dup.json.receipt,local.json.receipt);const nyc=await call('petition/local',{locality:'Greenpoint, Brooklyn, New York City',text:'',publicConsent:false},cookieB);assert.equal(nyc.r.status,200);report.push('Locality-only town and NYC neighborhood intake: durable job, correct target, duplicate receipt reuse. Runtime AI remains separately verified on Vercel.');
  assert.equal((await call('evidence/not-owned',undefined,cookieB)).r.status,404);
