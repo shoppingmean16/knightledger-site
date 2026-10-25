@@ -1,15 +1,39 @@
 {
-    "name": "knightledger-site",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-          "dev": "next dev",
-          "build": "next build",
-          "start": "next start"
-    },
-    "dependencies": {
-          "next": "^14.2.0",
-          "react": "^18.3.0",
-          "react-dom": "^18.3.0"
-    }
+  "name": "knightledger-quests",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "db:migrate": "node --experimental-strip-types --env-file=.env.local scripts/migrate.ts",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@ai-sdk/gateway": "4.0.126",
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "@fontsource/inter": "5.3.0",
+    "@neondatabase/serverless": "1.2.0",
+    "@vercel/blob": "2.8.2",
+    "ai": "7.0.153",
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "sharp": "0.35.5",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "10.13.0",
+    "eslint-config-next": "16.4.3",
+    "typescript": "6.0.3"
+  },
+  "type": "module"
 }
