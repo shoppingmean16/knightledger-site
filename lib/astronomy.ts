@@ -41,5 +41,5 @@ export const astronomyWatchlist=[
 ];
 export function prepareAstronomy(s:State){let count=0;for(const quest of astronomyQuests){if(s.quests.some(q=>q.id===quest.id))continue;s.quests.push(structuredClone(quest));s.audits.push({id:id(),at:iso(),action:'prepare-editorial-quest',recordId:quest.id,note:'Sourced astronomy proposal; exact owner approval remains required.'});count++;}return count;}
 export const previewEnabled=()=>process.env.KNIGHTLEDGER_PRIVATE_PREVIEW==='true';
-export function previewAstronomy(s:State,enabled=previewEnabled()){return enabled?s.quests.filter(q=>q.promptVersion===astronomyEdition&&['draft','approved'].includes(q.status)).map(publicQuest):[];}
+export function previewAstronomy(s:State,enabled=previewEnabled()){return enabled?astronomyQuests.flatMap(seed=>{const q=s.quests.find(q=>q.id===seed.id&&q.promptVersion===astronomyEdition&&['draft','approved'].includes(q.status));return q?[publicQuest(q)]:[];}):[];}
 export function isPreviewAstronomy(q:Quest|undefined,enabled=previewEnabled()){return !!q&&enabled&&q.promptVersion===astronomyEdition&&['draft','approved'].includes(q.status);}
