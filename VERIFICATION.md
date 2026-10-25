@@ -1,3 +1,48 @@
-# Verification record
+# KnightLedger verification — October 25, 2026
 
-Implementation checks are in progress. This file will be updated with observed deployed results. Unit fixtures do not populate real Knights or lower deployed qualification rules.
+Working isolated staging: https://knightledger-quests-preview.vercel.app
+
+Source branch: `feat/knightledger-quests`. Original `main`, production project and custom domain are preserved. The staging project has its own production-target deployment for native Vercel Cron; Vercel SSO remains enabled.
+
+## Observed results
+
+| Flow | Result | Evidence / boundary |
+| --- | --- | --- |
+| Production build, types and lint | Pass | Next 16.4.3 / React 19.3.1 / TypeScript 6.0.3 / Node 24; committed npm lockfile; ESLint passes. |
+| Focused unit tests | 20 pass | Cutoff equality/midnight; exact approval hash; edited/stale/unapproved publication; distinct and duplicate evidence credit; frozen 3/5/7 targets; capacity and deterministic queue; one title; public privacy; leases/retries; prompt promotion guards; malformed budgets; source-only editions; expired source withholding. |
+| Real SQL + HTTP integration | Pass | Production server against the real Neon DB in a disposable `qa-*` namespace. Creation, session ownership, origin rejection, saved quests, recovery, logout, deletion, locality-only requests for Amherst and Greenpoint, owner approval/edit/reapproval and stale-version rejection. All QA rows are removed. |
+| Atomic credit and title grants | Pass with isolated full-rule fixtures | Five concurrent credit attempts produce one completion; concurrent publication publishes once; concurrent induction writes produce one title after three distinct accepted fixture deeds. No qualification thresholds were lowered. These fixtures never appear in staging's real Hall/counts. |
+| Real deployed persistence | Pass | Created a staging passport and two locality-only requests. Both immediately received durable receipts, target windows and persistent jobs. Requests remained tracked with the real provider failure. Disposable passport and requests were deleted after checks. |
+| Real runtime AI authentication | Identity works; service blocked | Deployed OIDC identity is present. Gateway returns HTTP 403: “AI Gateway requires a valid credit card on file to service requests.” No credit purchase or plan upgrade was performed. |
+| Actual local research / generated local quests | Not verified | Both locality-only jobs reached the real configured Gateway and were blocked before search/model execution. No fabricated proposal or citations were substituted. |
+| Public source fetch | Transport verified | Deployed SSRF-constrained fetch read Amherst's official website (4,351 text characters). The NYC planning legacy URL returned a short page-moved stub; that is not evidence that its datasets were read. |
+| Private Blob storage | Pass on staging | A disposable synthetic JPEG was uploaded privately; authenticated delivery returned JPEG with EXIF stripped; another anonymous session got 404; a spoofed GIF-as-JPEG was rejected. |
+| Evidence deletion / retention | Deletion verified; timed policy inspected | Deleting the test passport removed private evidence records/files through the real Blob SDK. Final-decision 30-day / unresolved 60-day policies are implemented; no claim of waiting 30 or 60 days is made. |
+| AI evidence decisions | Not verified live | Bounded reviewer, private image delivery, source fetch, reasons, minimal summaries and duplicate controls are implemented. The provider account gate prevents real AI acceptance testing. Code-level acceptance/idempotency is verified separately. |
+| AI proclamations / weekly induction | Not verified live | Draft checkpoints, independent grounding/privacy check, 150–250 words, accepted-record references, capacity and atomic grants are implemented. No apparently real Knights were manufactured. |
+| Prompt improvement | Deterministic guards verified; live evaluations unverified | Feedback threshold, immutable append-only boundary, four frozen synthetic cases, resumable output generation, deterministic checks, blinded comparison, nonregression gate, automatic promotion and validated rollback are implemented. Actual model evaluations await provider access. |
+| Protected manual phases | Pass | Refresh, approved publication (zero pending approvals), and retention ran on staging. No unapproved draft was published. |
+| Native unattended schedule | Observed | Staging's real `health:2026-10-25` run completed 2026-10-25 13:50:40 UTC. No manual staging health invocation was made; CLI health tests used disposable QA namespaces. Other scheduled phase configurations are deployed, but their complete unattended AI outcomes are not claimed verified. |
+| Public empty states and map | Pass | Eight substantive Anywhere quests; zero invented members/Knights/impact; empty Hall and aggregate atlas/list fallback. Geography and map component load lazily. |
+| Browser | Desktop verified; mobile checked in 390px iframe | Main navigation, responsive rendering, public forms, and empty states inspected. Browser extension metadata warnings are unrelated to application code. Screenshots are in `docs/` when included in the final review commit. |
+
+## Exact owner-only steps
+
+1. In the authorized Vercel team's AI Gateway, add a valid payment method to unlock eligible free credits. Do not enable auto-top-up or buy credits without a chosen budget. Use **Check live AI connection** in `/steward`, then retry retained jobs. If a chosen model is not free-tier eligible, select an eligible model or explicitly authorize purchased credits.
+2. Claim the preview Neon database before **October 28, 2026 at 12:47 UTC**. At `/steward`, choose **Prepare database claim link** only when ready. Sign in to Neon and accept the transfer. Continuing rotates DATABASE_URL: update the staging environment and redeploy. Remove obsolete claim credentials afterward. The unclaimed database is real but temporary (100 MB storage / 1 GB transfer).
+3. Use the staging project's **OPERATOR_SECRET** from its private Vercel environment settings to open the Steward desk. Four editorial source refreshes are prepared as drafts. Approving the exact list permits their next publication; the current eight quests remain live until then. Source refresh publication archives the old edition, preserves the task/evidence standard, and does not double the quest supply.
+4. Before public production promotion, verify live AI research (town and NYC neighborhood), AI evidence review, a grounded weekly ceremony, and prompt evaluation/rollback with provider access. Confirm account-level spend limits and the actual Vercel plan. The connected team's normalized API response did not expose its subscription plan; schedules deliberately use once-daily entries compatible with Hobby. No plan upgrade is required by this configuration.
+
+## Required configuration (names only)
+
+Configured: `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `SESSION_SECRET`, `OPERATOR_SECRET`, `CRON_SECRET`, `AI_GATEWAY_MODEL`. Deployed Gateway authentication uses Vercel OIDC; no separate model key was required to reach the account-verification gate. Local development may set `AI_GATEWAY_API_KEY`.
+
+Limits: `MAX_AI_TASKS_PER_DAY=12`, `MAX_CYCLE_ITEMS=3`; optional `AI_PAUSED`, `KL_NAMESPACE`. Temporary claim metadata: `NEON_PROJECT_ID`, `NEON_DATABASE_EXPIRES_AT`, `NEON_CLAIM_ASSERTION`.
+
+No secrets, private evidence, user submissions, recovery codes, or private LEGION brain content are committed. The app has no access to the builder's personal connected accounts.
+
+## Operating limits
+
+No model calls happen on page views. Daily call reservations and per-cycle batches are bounded in code, including malformed-config fallbacks. This is not a dollar-denominated billing cap. README gives current model/search rates and a $2.25/30-day illustrative AI estimate at the specified assumptions. Hosting/storage may incur plan-dependent usage, and quota exhaustion can stop service. No paid resources, credits or upgrades were purchased.
+
+The initial persistence adapter uses short atomic whole-state commits across typed JSONB tables. It is suitable for this small preview; indexed record-level queries and write paths should replace full-state loads before a large public launch. PostgreSQL enforces unique credit/title constraints, and AI calls do not hold SQL transactions open.

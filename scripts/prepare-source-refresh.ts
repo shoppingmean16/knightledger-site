@@ -1,0 +1,6 @@
+import { change } from '../lib/store.ts';
+import { id, iso } from '../lib/domain.ts';
+import { quests as refined } from '../lib/seed.ts';
+// Prepare drafts ONLY. Exact owner approval and a publication worker remain mandatory.
+const count=await change(s=>{let count=0;for(const seed of refined){const current=s.quests.find(q=>q.id===seed.id&&q.status==='published');if(!current||current.sources[0]?.url===seed.sources[0]?.url||s.quests.some(q=>q.replacesId===current.id&&q.status!=='removed'))continue;const draft={...structuredClone(current),id:id(),version:current.version+1,status:'draft' as const,replacesId:current.id,sources:seed.sources,approvedHash:undefined,approvedAt:undefined,publishedAt:undefined,requestId:undefined,promptVersion:'editorial-source-qa-2026-10-25',uncertainty:'Editorial source refresh prepared during implementation. Each source was checked on October 25, 2026. The live edition remains unchanged until exact-version owner approval and publication.'};s.quests.push(draft);s.audits.push({id:id(),at:iso(),action:'prepare-source-refresh',recordId:draft.id,note:'Prepared a source-only draft; did not modify or publish the current quest.'});count++;}return count;});
+console.log(`Prepared ${count} source-refresh drafts. No published quest was changed.`);

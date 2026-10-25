@@ -8,7 +8,7 @@ export type Source = { title: string; url: string; checkedAt: string; fact?: str
 export type Locality = { id: string; name: string; parentId?: string; type: string; source: string; lat?: number; lon?: number; verified: boolean; aliases?: string[] };
 export type Member = { id: string; alias: string; recoveryDigest: string; createdAt: string; localityId: string; visibility: 'masked'|'public'; hideLocality: boolean; rank: 'Squire'|'Knight'; target?: number; title?: string; undertaken: string[]; withdrawn?: boolean };
 export type Session = { id: string; memberId: string; expiresAt: string };
-export type Quest = { id: string; templateId: string; version: number; title: string; summary: string; benefit: string; effort: string; cost: string; localityId: string; mode: 'Digital'|'In person'; category: 'People'|'Other species'|'Shared places'; steps: string[]; standard: string; evidence: string; constraints: string; sources: Source[]; recheckAt: string; status: 'draft'|'approved'|'published'|'removed'; approvedHash?: string; approvedAt?: string; publishedAt?: string; requestId?: string; promptVersion?: string; uncertainty?: string };
+export type Quest = { id: string; templateId: string; version: number; title: string; summary: string; benefit: string; effort: string; cost: string; localityId: string; mode: 'Digital'|'In person'; category: 'People'|'Other species'|'Shared places'; steps: string[]; standard: string; evidence: string; constraints: string; sources: Source[]; recheckAt: string; status: 'draft'|'approved'|'published'|'removed'; approvedHash?: string; approvedAt?: string; publishedAt?: string; requestId?: string; promptVersion?: string; uncertainty?: string; replacesId?:string; replacedById?:string; revisions?:Omit<Quest,'revisions'>[] };
 export type Petition = { id: string; memberId: string; kind: 'local'|'proof'|'knighthood'; status: string; createdAt: string; updatedAt: string; localityId: string; text: string; targetAt?: string; questId?: string; completionDate?: string; evidenceLink?: string; files?: string[]; publicConsent: boolean; chronicleConsent?: boolean; response?: string; draftId?: string; finalAt?: string; publicName?: string; visibility?: 'masked'|'public'; overdue?: boolean; proclamationDraft?:{title:string;text:string;factRefs:string[];verified?:boolean;model:string} };
 export type Job = { id: string; petitionId: string; kind: 'local'|'proof'|'knighthood'; status: 'pending'|'running'|'done'|'blocked'; attempts: number; createdAt: string; targetAt?: string; leaseUntil?: string; leaseId?: string; retryAt?: string; reason?: string; sources?: Source[]; promptVersion?: string };
 export type Completion = { id: string; memberId: string; questId: string; templateId: string; petitionId: string; acceptedAt: string; account: string; standard: string; evidenceFingerprint: string; reason: string; model: string; promptVersion: string };
@@ -20,7 +20,8 @@ export type Evidence = { id: string; memberId: string; petitionId?: string; url:
 export type Meta = { id: string; paused: boolean; lastPublication?: string; lastInduction?: string; promptId: string; lastError?: string; geocodeAt?:string; aiLeaseId?:string; aiLeaseUntil?:string; aiCalls: Record<string, number> };
 export type State = { localities: Locality[]; members: Member[]; sessions: Session[]; quests: Quest[]; petitions: Petition[]; jobs: Job[]; completions: Completion[]; chronicles: Chronicle[]; prompts: Prompt[]; runs: Run[]; audits: Audit[]; evidence: Evidence[]; meta: Meta[] };
 export const collections = ['localities','members','sessions','quests','petitions','jobs','completions','chronicles','prompts','runs','audits','evidence','meta'] as const;
-export const questHash = (q: Quest) => digest(JSON.stringify({ ...q, status: undefined, approvedHash: undefined, approvedAt: undefined, publishedAt: undefined }));
+export const questHash = (q: Quest) => digest(JSON.stringify({ ...q, revisions:undefined, status: undefined, approvedHash: undefined, approvedAt: undefined, publishedAt: undefined }));
+export function sameTask(a:Quest,b:Quest){return ['title','summary','benefit','effort','cost','localityId','mode','category','steps','standard','evidence','constraints','templateId'].every(k=>JSON.stringify(a[k as keyof Quest])===JSON.stringify(b[k as keyof Quest]));}
 export function windowFor(received: string | Date) {
   const t = new Date(received).getTime();
   const next = new Date(t); next.setUTCHours(next.getUTCHours() < 12 ? 12 : 24, 0, 0, 0);
@@ -45,7 +46,8 @@ export function publish(s: State, now = iso()) {
   let n=0;
   for(const q of s.quests) {
     const p=s.petitions.find(p=>p.id===q.requestId);
-    if(q.status==='approved' && q.approvedHash===questHash(q) && (!p?.targetAt || p.targetAt<=now)) {
+    if(q.status==='approved' && q.approvedHash===questHash(q) && Date.parse(q.recheckAt)>Date.parse(now) && (!p?.targetAt || p.targetAt<=now)) {
+      if(q.replacesId){const previous=s.quests.find(x=>x.id===q.replacesId);if(!previous||previous.status!=='published'||q.version!==previous.version+1||!sameTask(previous,q))continue;previous.status='removed';previous.replacedById=q.id;for(const m of s.members)m.undertaken=m.undertaken.map(id=>id===previous.id?q.id:id);}
       q.status='published';q.publishedAt=now;n++;
       if(p){p.status='Published';p.updatedAt=now;p.response=`A researched quest is on the board: ${q.title}.`;p.finalAt=now;}
     }
@@ -54,7 +56,7 @@ export function publish(s: State, now = iso()) {
 }
 export function acceptProof(s: State, p: Petition, reason: string, model: string, summary?:string) {
   const m=s.members.find(m=>m.id===p.memberId),q=s.quests.find(q=>q.id===p.questId);
-  if(!m||!q||q.status!=='published')throw new Error('Published quest or passport no longer available.');
+  if(!m||!q||q.status!=='published'&&!q.replacedById)throw new Error('Published quest or passport no longer available.');
   if(s.completions.some(c=>c.petitionId===p.id)){return false;}
   if(s.completions.some(c=>c.memberId===m.id&&c.templateId===q.templateId))throw new Error('This quest template already received qualification credit.');
   const files=s.evidence.filter(e=>p.files?.includes(e.id));
@@ -81,17 +83,18 @@ export function induct(s: State, petitionId: string, text: string, title: string
   s.chronicles.push({id:id(),memberId:m.id,title,text,factRefs,inductedAt:now,localityId:m.localityId,showLocality:!m.hideLocality,alias:p.publicName||m.alias,heraldry:digest(m.id).slice(0,12),rollId:now.slice(0,10)});
   p.status='Conferred';p.finalAt=now;p.updatedAt=now;s.meta[0].lastInduction=now;return true;
 }
+export const publicQuest=(q:Quest)=>({...q,revisions:undefined,requestId:undefined,approvedHash:undefined,approvedAt:undefined,promptVersion:undefined,uncertainty:undefined,sources:q.sources.map(source=>({title:source.title,url:source.url,checkedAt:source.checkedAt}))});
 export function sanitizePublic(s: State) {
   return {
-    quests:s.quests.filter(q=>q.status==='published').map(q=>({...q,requestId:undefined,approvedHash:undefined,approvedAt:undefined,promptVersion:undefined,uncertainty:undefined,sources:q.sources.map(source=>({title:source.title,url:source.url,checkedAt:source.checkedAt}))})),localities:s.localities,
-    coverage:s.localities.filter(l=>l.id!=='everywhere').map(l=>({localityId:l.id,squires:s.members.filter(m=>!m.withdrawn&&m.localityId===l.id&&m.rank==='Squire').length,knights:s.chronicles.filter(c=>c.localityId===l.id).length,quests:s.quests.filter(q=>q.status==='published'&&q.localityId===l.id).length})).filter(c=>c.squires+c.knights+c.quests>0),
+    quests:s.quests.filter(q=>q.status==='published').map(publicQuest),localities:s.localities.filter(l=>l.verified).map(l=>({...l,aliases:undefined})),
+    coverage:s.localities.filter(l=>l.id!=='everywhere'&&l.verified).map(l=>({localityId:l.id,squires:s.members.filter(m=>!m.withdrawn&&m.localityId===l.id&&m.rank==='Squire').length,knights:s.chronicles.filter(c=>c.localityId===l.id).length,quests:s.quests.filter(q=>q.status==='published'&&q.localityId===l.id).length})).filter(c=>c.squires+c.knights+c.quests>0),
     petitions:s.petitions.filter(p=>p.kind==='local'&&p.publicConsent&&['Ready for approval','Approved for publication','Published'].includes(p.status)).map(p=>({id:p.id,localityId:p.localityId,status:p.status,response:p.response||'The Steward has prepared a researched proposal.',questId:p.draftId,createdAt:p.createdAt})),
     chronicles:s.chronicles.map(c=>({...c,memberId:undefined,localityId:c.showLocality?c.localityId:undefined})),lastPublication:s.meta[0].lastPublication,nextPublication:windowFor(new Date(Date.now()-2*3600_000)),nextIntakeTarget:windowFor(new Date()),nextInduction:nextInduction(),paused:s.meta[0].paused,
   };
 }
 export function privateLedger(s: State, memberId: string) {
  const m=s.members.find(m=>m.id===memberId);if(!m)return null;
- return {member:{...m,recoveryDigest:undefined},petitions:s.petitions.filter(p=>p.memberId===m.id),completions:s.completions.filter(c=>c.memberId===m.id),quests:s.quests.filter(q=>q.status==='published'&&m.undertaken.includes(q.id)),progress:progress(s,m.id),capacity:capacity(s,m.localityId),qualified:qualified(s,m.localityId),knights:s.chronicles.filter(c=>c.localityId===m.localityId).length};
+ return {member:{...m,recoveryDigest:undefined},petitions:s.petitions.filter(p=>p.memberId===m.id),completions:s.completions.filter(c=>c.memberId===m.id),quests:s.quests.filter(q=>q.status==='published'&&m.undertaken.includes(q.id)).map(publicQuest),progress:progress(s,m.id),capacity:capacity(s,m.localityId),qualified:qualified(s,m.localityId),knights:s.chronicles.filter(c=>c.localityId===m.localityId).length};
 }
 export function leaseJob(s:State, now=iso()) {
  const j=s.jobs.filter(j=>j.kind!=='knighthood'&&j.status!=='done'&&j.attempts<5&&(!j.leaseUntil||j.leaseUntil<now)&&(!j.retryAt||j.retryAt<=now)).sort((a,b)=>(a.targetAt||a.createdAt).localeCompare(b.targetAt||b.createdAt))[0];
