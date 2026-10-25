@@ -2,7 +2,7 @@
 
 Working isolated staging: https://knightledger-quests-preview.vercel.app
 
-Source branch: `feat/knightledger-quests`. Original `main`, production project and custom domain are preserved. The staging project has its own production-target deployment for native Vercel Cron; Vercel SSO remains enabled.
+Source branch: `feat/knightledger-quests`. Application deployment `eb4d91f9308526d88ec7a5cc79b0ee277bc07d78` is READY; later documentation/screenshot commits do not change the application. Original `main`, production project and custom domain are preserved. The staging project has its own production-target deployment for native Vercel Cron; Vercel SSO remains enabled.
 
 ## Observed results
 
@@ -25,8 +25,9 @@ Source branch: `feat/knightledger-quests`. Original `main`, production project a
 | Prompt improvement | Deterministic guards verified; live evaluations unverified | Feedback threshold, immutable append-only boundary, four frozen synthetic cases, resumable output generation, deterministic checks, blinded comparison, nonregression gate, automatic promotion and validated rollback are implemented. Actual model evaluations await provider access. |
 | Protected manual phases | Pass | Refresh, approved publication (zero pending approvals), and retention ran on staging. No unapproved draft was published. |
 | Native unattended schedule | Observed | Staging's real `health:2026-10-25` run completed 2026-10-25 13:50:40 UTC. No manual staging health invocation was made; CLI health tests used disposable QA namespaces. Other scheduled phase configurations are deployed, but their complete unattended AI outcomes are not claimed verified. |
+| Latest deployed owner desk | Pass | Authenticated GET of the real operator API exposes the new evidence/proclamation queues and private reminder worklist. Both review modes resolve to owner approval; queues have no fabricated decisions. Four source drafts remain awaiting owner approval. |
 | Public empty states and map | Pass | Eight substantive Anywhere quests; zero invented members/Knights/impact; empty Hall and aggregate atlas/list fallback. Geography and map component load lazily. |
-| Browser | Desktop and mobile verified in 390px iframe | Main navigation, keyboard skip link, responsive rendering, live Digital filter (8 to 3 quests), public forms, lazy atlas and empty-state list fallback inspected. Narrow iframe content width equaled its viewport (373 px excluding its scrollbar); no horizontal overflow. Browser extension metadata warnings are unrelated to application code. Screenshots are saved in `docs/`. |
+| Browser | Desktop and mobile verified in 390px iframe | Main navigation, keyboard skip link, responsive rendering, live Digital filter (8 to 3 quests), public forms, lazy atlas and empty-state list fallback inspected. Narrow iframe content width equaled its viewport (373 px excluding its scrollbar); no horizontal overflow. Browser extension metadata warnings are unrelated to application code. Updated funding copy and the repeat-credit/owner-approval rules were verified on deployed pages. Updated 390px content width remains 373px without overflow. Screenshots are saved in `docs/`. |
 
 ## Exact owner-only steps
 
