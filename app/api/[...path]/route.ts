@@ -10,6 +10,7 @@ import { load, change, databaseConfigured } from '@/lib/store';
 import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, sameTask, freshProof, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
+import { applyProofReview, ownerNote, approveKnighthood, proclamationHash } from '@/lib/review';
 import { safeUrl, publicError, reserveCall, model, fetchSource } from '@/lib/research';
 export const runtime='nodejs';export const maxDuration=300;export const dynamic='force-dynamic';
 const response=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'no-store'}});
@@ -43,7 +44,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{path:string[
   return response({error:'Not found'},404);
  }catch(e){return response({error:publicError(e)},503);}
 }
-function operatorView(s:State){return {authorized:true,quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
+function operatorView(s:State){return {authorized:true,proofs:s.petitions.filter(p=>p.kind==='proof'&&p.status==='Ready for owner review'&&p.proofReview),knighthoods:s.petitions.filter(p=>p.kind==='knighthood'&&!p.finalAt&&p.proclamationDraft?.verified).map(p=>({...p,reviewHash:proclamationHash(p),acceptedDeeds:s.completions.filter(c=>c.memberId===p.memberId).map(c=>({id:c.id,account:c.account,standard:c.standard,completedOn:c.completedOn}))})),notes:s.audits.filter(a=>a.action==='owner-note'&&!a.resolvedAt),quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
 export async function POST(req:NextRequest,{params}:{params:Promise<{path:string[]}>}){
  const path=(await params).path.join('/');
  try{
@@ -106,9 +107,23 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
    }
    if(action==='pause'){await change(s=>{s.meta[0].paused=z.boolean().parse(body.paused);});return response({ok:true});}
    if(action==='approve'){
-    const {items}=z.object({items:z.array(z.object({id:z.string(),version:z.number().int()})).min(1).max(50)}).parse(body);
-    await change(s=>{for(const item of items)approve(s,item.id,item.version);});return response({ok:true});
+    const {items}=z.object({items:z.array(z.object({id:z.string(),version:z.number().int(),note:str(1000).optional()})).min(1).max(50)}).parse(body);
+    await change(s=>{for(const item of items){approve(s,item.id,item.version);ownerNote(s,item.id,item.note);}});return response({ok:true});
    }
+   if(action==='review-modes'){
+    const data=z.object({proof:z.enum(['owner','automatic']),induction:z.enum(['owner','automatic'])}).parse(body);await change(s=>{s.meta[0].proofReviewMode=data.proof;s.meta[0].inductionReviewMode=data.induction;s.audits.push({id:id(),at:iso(),action:'review-policy',recordId:'settings',note:JSON.stringify(data)});});return response({ok:true});
+   }
+   if(action==='proof-review'){
+    const data=z.object({id:z.string(),hash:z.string().length(64),decision:z.enum(['approve','return','more-evidence','decline']),note:str(1000).default('')}).parse(body);if(data.decision!=='approve'&&data.note.length<10)throw new Error('Please give a specific reason.');
+    await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='proof');if(!p||p.finalAt||p.proofReview?.hash!==data.hash)throw new Error('The prepared review changed. Reload.');if(data.decision==='return'){p.proofReview=undefined;p.status='Reviewing';p.response='The owner requested a more careful review.';s.audits.push({id:id(),at:iso(),action:'proof-return',recordId:p.id,note:data.note});const j=s.jobs.find(j=>j.petitionId===p.id);if(j){j.status='pending';j.attempts=0;j.retryAt=undefined;j.leaseUntil=undefined;}}else applyProofReview(s,p,data.hash,'owner',data.decision==='more-evidence'?'More evidence needed':data.decision==='decline'?'Declined':undefined,data.note);});if(data.decision==='return')kick();return response({ok:true});
+   }
+   if(action==='knight-review'){
+    const data=z.object({id:z.string(),hash:z.string().length(64),decision:z.enum(['approve','return']),note:str(1000).default('')}).parse(body);if(data.decision==='return'&&data.note.length<10)throw new Error('Please give a specific revision.');await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='knighthood');if(!p||p.finalAt||!p.proclamationDraft||proclamationHash(p)!==data.hash)throw new Error('The proclamation changed. Reload.');if(data.decision==='approve')approveKnighthood(s,p,data.hash,data.note);else{p.proclamationDraft=undefined;p.status='Eligible — proclamation revision requested';p.response='The owner requested a revision to your proclamation. Your accepted work remains eligible.';s.audits.push({id:id(),at:iso(),action:'proclamation-return',recordId:p.id,note:data.note});}});if(data.decision==='return')kick();return response({ok:true});
+   }
+   if(action==='note'){
+    const data=z.object({id:z.string(),note:str(1000).min(1)}).parse(body);await change(s=>{if(!s.quests.some(q=>q.id===data.id)&&!s.petitions.some(p=>p.id===data.id))throw new Error('Record not found.');ownerNote(s,data.id,data.note);});return response({ok:true});
+   }
+   if(action==='note-done'){await change(s=>{const note=s.audits.find(a=>a.id===body.id&&a.action==='owner-note');if(!note)throw new Error('Note not found.');note.resolvedAt=iso();});return response({ok:true});}
    if(action==='edit'){
     const data=z.object({id:z.string(),version:z.number().int(),title:str(100).min(8),summary:str(280).min(30),standard:str(700).min(50),benefit:str(500).min(30).optional(),effort:str(70).optional(),cost:str(150).optional(),mode:z.enum(['Digital','In person']).optional(),category:z.enum(['People','Other species','Shared places']).optional(),steps:z.array(str(600).min(15)).min(3).max(6).optional(),evidence:str(600).min(40).optional(),constraints:str(700).min(30).optional()}).parse(body);
     await change(s=>{const q=s.quests.find(q=>q.id===data.id);if(!q||q.version!==data.version||q.status==='published')throw new Error('Draft changed. Reload.');if(q.replacesId){const published=s.quests.find(x=>x.id===q.replacesId);if(!published||!sameTask(published,{...q,...data}))throw new Error('A source-only refresh preserves the published task and evidence standard.');}const previous={...q};delete previous.revisions;q.revisions=[...(q.revisions||[]),previous];for(const [key,value] of Object.entries(data)){if(key!=='id'&&key!=='version'&&value!==undefined)(q as unknown as Record<string,unknown>)[key]=value;}q.version++;q.status='draft';q.approvedHash=undefined;q.approvedAt=undefined;s.audits.push({id:id(),at:iso(),action:'edit',recordId:q.id,note:'Owner edited draft fields: '+Object.keys(data).filter(k=>!['id','version'].includes(k)).join(', ')});const p=s.petitions.find(p=>p.id===q.requestId);if(p)p.status='Ready for approval';});return response({ok:true});
