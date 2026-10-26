@@ -1,39 +1,21 @@
-# Readiness first; outreach second
+# Live operation without paid AI
 
-## Launch policy
+The owner authorized public replacement on October 26, 2026. Deploy through the original Vercel project and existing domain aliases; no Namecheap DNS change is required. Preserve the previous deployment and old SQL data for rollback.
 
-Privately funded, not-for-profit, free participation. Public funding copy describes the current arrangement and promises advance transparency about future voluntary support or purpose changes. It makes no registered-charity or tax-exemption claim. Keep private financial information out of the site, repository, pitches and analytics.
+## Operating workflow
 
-LEGION prepares research, quest proposals, evidence recommendations and personal proclamations. The owner initially approves exact quest versions, evidence decisions and proclamations in the private desk. Only an explicit owner setting can hand evidence or induction decisions to LEGION; publication remains owner-approved. Comments and reminders are a private durable worklist, with prepared next actions distinguished from completed work.
+Continuous petitions are saved immediately in a private Blob ledger. Guest local requests create no member; their private status belongs to a separate secure browser cookie. A Squire passport is created during first proof submission. Browsing and doing quests never require registration.
 
-## Before outreach or advertising
+The owner opens `/steward`, prepares a work pack, runs it in the existing LEGION chat, and imports the returned JSON. The server retrieves cited public pages, validates results, and binds them to exact inputs. No Gateway call or card is needed. Images are not in copied prompts; inspect or privately attach them before recommending a decision. Delete local downloads and AI-chat copies under the stated retention policy; do not export secrets or unrelated personal context.
 
-1. Claim durable database ownership, restore AI provider access, and set an explicit account spending limit.
-2. Verify real town/neighborhood research, exact owner approvals, evidence review and a grounded weekly induction. Continue using isolated fixtures for tests.
-3. Run a small voluntary pilot. Check whether the deeds help, whether proof is proportionate, whether repeat contributions remain useful, and whether the owner review workload is manageable.
-4. Replace the preview's whole-state persistence adapter with indexed per-record paths before a large campaign. Measure actual latency and cost before increasing intake.
-5. Obtain separate production-promotion approval. The old domain and production data remain preserved until then.
+The owner approves exact quest editions, evidence recommendations and grounded proclamations. Native cron publishes approved quests twice daily, confers approved weekly titles and deletes expired evidence. Research/model phases deliberately make no API calls in assisted mode. This handoff is real operator work, not unattended AI. See RUN_LEGION.md.
 
-## Charity outreach, after readiness
+## Limits and expenses
 
-Start with a few organizations whose public participation instructions already support the quests. Verify each organization's official contact and current needs. Ask whether the proposed contributions are useful, whether instructions/evidence need correction, and whether they would choose to share the board. Explain the free project, AI preparation, owner review and privacy model plainly. Do not imply endorsement, a partnership, guaranteed volunteers, or donations.
+No card, purchased credits, new plan or advertising spend is authorized. Vercel Hobby includes 1 GB Blob storage, 10,000 simple operations, 2,000 advanced operations and 10 GB transfer per month, shared with the account. Exhaustion can pause the service; it is not unlimited capacity. Verify the account’s actual plan/usage in its dashboard. The initial whole-ledger adapter is bounded to 2 MB and uses conditional ETag writes, not serverless disk. Use indexed persistence before a large campaign.
 
-LEGION can research recipients and prepare individualized messages for review. Sending requires explicit authorization for the recipients and messages. No outreach has been sent. Record replies and incorporate verified corrections into new owner-approved quest editions.
+Assisted public operation does not depend on the expiring temporary Neon database. Keep that old preview database untouched; do not treat it as the new live store. Paid AI and a larger data store need a concrete budget first. The complete upgrade prompt is ENABLE_FULL_AI.md.
 
-## Marketing experiments, after a useful pilot
+## Outreach comes later
 
-Prioritize permission-based sharing by participating organizations and relevant local communities. For Reddit, first inspect the actual community's promotion rules and ask moderators where appropriate. Paid tests require a separate proposed audience, current platform pricing, a small fixed budget and a stop condition before purchase. No advertising is currently authorized or configured.
-
-Test a short-deed invitation for people with a spare half-hour, including visitors or people on a break. Use existing coarse locality and effort choices; never infer vacation status or track individuals.
-
-Judge experiments by accepted useful contributions and repeat participation, not clicks alone. Compare operator time per decision and actual infrastructure cost per accepted deed. Use aggregate operational records, not advertising identifiers or cross-site tracking. Increase a budget only after the small test demonstrates useful work and manageable review demand.
-
-## Account setup before a deploy instruction can become a public release
-
-Observed October 25: a fresh deployed AI connection test still returned HTTP 403, explicitly requiring a valid card on file to unlock Gateway requests. Adding/confirming a payment method must be completed by the owner in Vercel; no card, credits, auto-top-up, spend limit or plan was changed. Configure an explicit account spend limit before reopening unrestricted intake. Re-run the protected AI check afterward, then verify actual local research (town and NYC neighborhood), evidence recommendation, grounded weekly proclamation and prompt evaluation/rollback with isolated records. Provider output must not be replaced by fixtures for this acceptance.
-
-The current Neon database is real but unclaimed and expires October 28, 2026 at 12:47 UTC (8:47 a.m. EDT). From the private desk, prepare its short-lived claim link when ready, sign in to Neon and complete the claim. Rotate DATABASE_URL in Vercel, remove obsolete claim assertion/expiry metadata, and redeploy staging. Claiming does not authorize buying a plan. Preserve the original site's separate resources and rollback target.
-
-The service preflight is visible at the top of the private desk and available as `npm run release:check`. Its result and the full AI acceptance record must both be assessed before promotion. Keep the current invited preview flag and protection while testing. The owner can then explicitly instruct “deploy”; that instruction authorizes the approved replacement, not advertising purchases or charity outreach.
-
-The two supplied quantum-foundations/consciousness notes are possible independent research directions. They do not identify receiving volunteer programs or an immediately verifiable public contribution. They are not site copy, new quests, evidence of scientific impact, or deploy requirements.
+Run a small voluntary pilot before outreach. Check useful accepted contributions, proof burden, repeat quality, review workload and actual infrastructure usage. No outreach, ads or donation collection is configured. Verify recipient contacts and obtain separate sending/budget authorization before contacting charities or buying advertising. Never imply endorsement or partnership. Keep personal finances and private notes out of public content.

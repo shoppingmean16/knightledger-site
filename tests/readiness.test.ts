@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { initialState } from '../lib/seed.ts';
 import { intakeDelay, recordServiceCheck, releaseReadiness } from '../lib/readiness.ts';
-const env={DATABASE_URL:'configured',BLOB_READ_WRITE_TOKEN:'configured',SESSION_SECRET:'a'.repeat(40),OPERATOR_SECRET:'b'.repeat(40),CRON_SECRET:'c'.repeat(40),AI_GATEWAY_MODEL:'provider/current'};
+const env={DATABASE_URL:'configured',BLOB_READ_WRITE_TOKEN:'configured',SESSION_SECRET:'a'.repeat(40),OPERATOR_SECRET:'b'.repeat(40),CRON_SECRET:'c'.repeat(40),AI_GATEWAY_MODEL:'provider/current',KNIGHTLEDGER_AI_MODE:'automatic'};
 test('configured AI identity and a working temporary database cannot make a release ready',()=>{
   const s=initialState(),report=releaseReadiness(s,{...env,NEON_DATABASE_EXPIRES_AT:'2026-10-28T12:47:00Z',KNIGHTLEDGER_PRIVATE_PREVIEW:'true'});
   assert.equal(report.ready,false);
