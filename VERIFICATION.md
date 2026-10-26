@@ -32,3 +32,11 @@ The whole-ledger pilot adapter is bounded to 2 MB and the account’s included h
 Required live variable names: BLOB_READ_WRITE_TOKEN, SESSION_SECRET, OPERATOR_SECRET, CRON_SECRET, KNIGHTLEDGER_STORAGE, KNIGHTLEDGER_AI_MODE, KL_NAMESPACE, KNIGHTLEDGER_PRIVATE_PREVIEW, KNIGHTLEDGER_PUBLIC_SITE, AI_PAUSED. No paid AI credential or database claim is required by assisted Blob operation.
 
 Protected staging application verified READY: `dpl_86wGLDs1YFQtxAiSzPjkYPH7V9J8`, commit `37e0cb38c6399a47be4cf7170a2535f552139396`, https://knightledger-quests-preview-7s2cpanqr.vercel.app. Later verification-only documentation does not change application code.
+
+## Live-domain verification
+
+Original production project is READY at https://www.knightledger.com/ (apex redirects to www). Application commit e87fbc20ab87a5089fd8a9bf6bdbfc21d2167f4f; verified deployment dpl_D6aBDusKr3jcd1PhdtNser9kZxWa. A production environment quoting error was caught by the first domain check, corrected and redeployed; it was not treated as a successful launch. The fixed deployment returned the complete board and no error/fatal logs in the inspected window.
+
+Actual public-domain HTTP checks passed: 14 published quests, empty Hall/coverage; a guest locality petition persisted with its job, exact target and cookie-authorized private status; another session could not read it. The owner API confirmed Blob assisted mode and both owner review gates. Robots/sitemap exclude private paths, and the staging-only mobile route returns 404 publicly. The disposable live request and job were removed; the authoritative store again has 14 published quests, zero members and zero Knights. No model API calls were made. Desktop screenshot: docs/live-board.jpg.
+
+Native production scheduling is configured, but its first unattended run has not yet been observed. Manual controls remain available privately. No model-based evidence review, automatic proclamation or prompt evaluation is claimed tested in this assisted release.

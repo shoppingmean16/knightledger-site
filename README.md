@@ -74,3 +74,5 @@ Rollback points the domain back to the preserved prior deployment with its origi
 Actual checks and release identifiers are recorded in `VERIFICATION.md`. Private financial/journal material and unrelated attachments are not website content.
 
 Browsing and requesting local quests require no passport. The first proof flow creates a Squire passport for recognition; guest request cookies do not count as Squires.
+
+Live: https://www.knightledger.com/. No Namecheap DNS change was needed. The merged release and current limits are recorded in VERIFICATION.md.
