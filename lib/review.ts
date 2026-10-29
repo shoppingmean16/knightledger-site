@@ -28,7 +28,19 @@ export function approveKnighthood(s:State,p:Petition,hash:string,note?:string){
  s.audits.push({id:id(),at:iso(),action:'knighthood-approval',recordId:p.id,note:'Exact proclamation '+hash});
 }
 export function conferReviewedKnighthood(s:State,p:Petition){
+ if(p.finalAt&&p.status==='Conferred')return false;
  const d=p.proclamationDraft;if(!d?.verified)throw new Error('A grounded proclamation is required.');
- if(reviewMode(s,'induction')==='owner'&&d.approvedHash!==proclamationHash(p))throw new Error('Owner approval is required for this exact proclamation.');
+ if((reviewMode(s,'induction')==='owner'||d.origin==='assisted')&&d.approvedHash!==proclamationHash(p))throw new Error('Owner approval is required for this exact proclamation.');
  return induct(s,p.id,d.text,d.title,d.factRefs);
+}
+
+export function verifyAssistedProclamation(s:State,p:Petition,hash:string,note:string){
+ if(reviewMode(s,'induction')!=='automatic')throw new Error('Owner approval is required for knighthood.');
+ const d=p.proclamationDraft;
+ if(!eligible(s,p)||!d||d.origin!=='assisted'||proclamationHash(p)!==hash)throw new Error('The eligible record or proclamation changed. Reload the review.');
+ const words=d.text.trim().split(/\s+/).length;
+ if(words<150||words>250||!d.factRefs.length||new Set(d.factRefs).size!==d.factRefs.length||d.factRefs.some(ref=>!s.completions.some(c=>c.id===ref&&c.memberId===p.memberId)))throw new Error('A complete proclamation grounded in accepted deeds is required.');
+ if(d.verified&&d.approvedHash===hash)return false;
+ d.verified=true;d.approvedHash=proclamationHash(p);d.approvedAt=iso();p.status='Approved — awaiting weekly induction';p.response='LEGION verified your proclamation against your accepted deeds. Your title awaits the weekly ceremony.';p.updatedAt=iso();
+ s.audits.push({id:id(),at:iso(),action:'legion-grounding',recordId:p.id,note:'Exact proclamation '+d.approvedHash+'; '+note.slice(0,700)});return true;
 }

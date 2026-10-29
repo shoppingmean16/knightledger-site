@@ -10,8 +10,9 @@ import { load, change, databaseConfigured, storageMode } from '@/lib/store';
 import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, sameTask, freshProof, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
-import { applyProofReview, ownerNote, approveKnighthood, proclamationHash } from '@/lib/review';
+import { applyProofReview, ownerNote, approveKnighthood, proclamationHash, verifyAssistedProclamation } from '@/lib/review';
 import { assistedMode } from '@/lib/mode';
+import { beginAssistedRun, finishAssistedRun } from '@/lib/assisted-run';
 import { preparePack, assistedResultsSchema, retrieveAssistedSources, importAssistedResult } from '@/lib/assisted';
 import { verifyLocality } from '@/lib/localities';
 import { requestEditorialRevision } from '@/lib/editorial';
@@ -101,11 +102,16 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path.startsWith('operator/')){
    if(!await isOperator())return response({error:'Operator access required.'},401);
    const action=path.slice(9);
+   if(action==='begin-review-run')return response(await change(beginAssistedRun));
+   if(action==='finish-review-run'){
+    const data=z.object({runId:z.string().max(90),status:z.enum(['done','failed']),count:z.number().int().min(0).max(24),detail:str(700)}).strict().parse(body);
+    return response(await change(s=>finishAssistedRun(s,data.runId,data.status,data.count,data.detail)));
+   }
    if(action==='prepare-work'){
     if(!assistedMode())throw new Error('Assisted mode is not enabled.');
     const filter=z.enum(['all','local','editorial','proof','knighthood','note']).default('all').parse(body.kind);
     const {state:pending}=await load();const placeIds=[...new Set(pending.jobs.filter(j=>j.status!=='done'&&(filter==='all'||j.kind===filter)&&['local','proof'].includes(j.kind)).flatMap(j=>{const p=pending.petitions.find(p=>p.id===j.petitionId);const m=pending.members.find(m=>m.id===p?.memberId);return [j.kind==='local'?p?.localityId:m?.localityId].filter((x):x is string=>!!x&&pending.localities.some(l=>l.id===x&&!l.verified));}))].slice(0,6);
-    for(const placeId of placeIds){try{await verifyLocality(placeId);}catch(e){await change(s=>{for(const j of s.jobs.filter(j=>s.petitions.some(p=>p.id===j.petitionId&&p.localityId===placeId)&&j.status!=='done'))j.reason=publicError(e);});}}
+    for(const placeId of placeIds){try{await new Promise(resolve=>setTimeout(resolve,1250));await verifyLocality(placeId);}catch(e){await change(s=>{for(const j of s.jobs.filter(j=>s.petitions.some(p=>p.id===j.petitionId&&p.localityId===placeId)&&j.status!=='done'))j.reason=publicError(e);});}}
     return response(await change(s=>preparePack(s,filter)));
    }
    if(action==='import-work'){
@@ -136,11 +142,15 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
     await change(s=>{for(const item of items){approve(s,item.id,item.version);ownerNote(s,item.id,item.note);}});return response({ok:true});
    }
    if(action==='review-modes'){
-    const data=z.object({proof:z.enum(['owner','automatic']),induction:z.enum(['owner','automatic'])}).parse(body);if(assistedMode()&&(data.proof!=='owner'||data.induction!=='owner'))throw new Error('Assisted imports require owner review.');await change(s=>{s.meta[0].proofReviewMode=data.proof;s.meta[0].inductionReviewMode=data.induction;s.audits.push({id:id(),at:iso(),action:'review-policy',recordId:'settings',note:JSON.stringify(data)});});return response({ok:true});
+    const data=z.object({proof:z.enum(['owner','automatic']),induction:z.enum(['owner','automatic'])}).parse(body);await change(s=>{s.meta[0].proofReviewMode=data.proof;s.meta[0].inductionReviewMode=data.induction;s.audits.push({id:id(),at:iso(),action:'review-policy',recordId:'settings',note:JSON.stringify(data)});});return response({ok:true});
    }
    if(action==='proof-review'){
     const data=z.object({id:z.string(),hash:z.string().length(64),decision:z.enum(['approve','return','more-evidence','decline']),note:str(1000).default('')}).parse(body);if(data.decision!=='approve'&&data.note.length<10)throw new Error('Please give a specific reason.');
     await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='proof');if(!p||p.finalAt||p.proofReview?.hash!==data.hash)throw new Error('The prepared review changed. Reload.');if(data.decision==='return'){p.proofReview=undefined;p.status='Reviewing';p.response='The owner requested a more careful review.';s.audits.push({id:id(),at:iso(),action:'proof-return',recordId:p.id,note:data.note});const j=s.jobs.find(j=>j.petitionId===p.id);if(j){j.status='pending';j.attempts=0;j.retryAt=undefined;j.leaseUntil=undefined;}}else applyProofReview(s,p,data.hash,'owner',data.decision==='more-evidence'?'More evidence needed':data.decision==='decline'?'Declined':undefined,data.note);});if(data.decision==='return')kick();return response({ok:true});
+   }
+   if(action==='verify-proclamation'){
+    const data=z.object({id:z.string(),hash:z.string().length(64),groundingConfirmed:z.literal(true),note:str(700).min(25)}).strict().parse(body);
+    const changed=await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='knighthood'&&!p.finalAt);if(!p)throw new Error('Pending knighthood not found.');return verifyAssistedProclamation(s,p,data.hash,data.note);});return response({ok:true,changed});
    }
    if(action==='knight-review'){
     const data=z.object({id:z.string(),hash:z.string().length(64),decision:z.enum(['approve','return']),groundingConfirmed:z.boolean().default(false),note:str(1000).default('')}).parse(body);if(data.decision==='return'&&data.note.length<10)throw new Error('Please give a specific revision.');await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='knighthood');if(!p||p.finalAt||!p.proclamationDraft||proclamationHash(p)!==data.hash)throw new Error('The proclamation changed. Reload.');if(data.decision==='approve'){if(p.proclamationDraft.origin==='assisted'&&!p.proclamationDraft.verified){if(!data.groundingConfirmed)throw new Error('Verify the proclamation against accepted deeds before approving.');const words=p.proclamationDraft.text.trim().split(/\s+/).length;if(words<150||words>250)throw new Error('A proclamation needs 150–250 words.');p.proclamationDraft.verified=true;s.audits.push({id:id(),at:iso(),action:'owner-grounding',recordId:p.id,note:'Owner checked the exact assisted proclamation against accepted deeds.'});}approveKnighthood(s,p,proclamationHash(p),data.note);}else{p.proclamationDraft=undefined;p.status='Eligible — proclamation revision requested';p.response='The owner requested a revision to your proclamation. Your accepted work remains eligible.';s.audits.push({id:id(),at:iso(),action:'proclamation-return',recordId:p.id,note:data.note});}});if(data.decision==='return')kick();return response({ok:true});
