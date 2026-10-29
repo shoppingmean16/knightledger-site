@@ -10,7 +10,7 @@ import { load, change, databaseConfigured, storageMode } from '@/lib/store';
 import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, sameTask, freshProof, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
-import { applyProofReview, ownerNote, approveKnighthood, proclamationHash, verifyAssistedProclamation } from '@/lib/review';
+import { applyProofReview, ownerNote, approveKnighthood, proclamationHash, verifyAssistedProclamation, reopenProofReview } from '@/lib/review';
 import { assistedMode } from '@/lib/mode';
 import { beginAssistedRun, finishAssistedRun } from '@/lib/assisted-run';
 import { preparePack, assistedResultsSchema, retrieveAssistedSources, importAssistedResult } from '@/lib/assisted';
@@ -197,7 +197,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path==='petition/proof'){
    const data=z.object({questId:z.string(),completionDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),text:str(3500).min(40),evidenceLink:sourceUrl,files:z.array(z.string()).max(3).default([])}).parse(body);if(data.evidenceLink)safeUrl(data.evidenceLink);if(!Number.isFinite(new Date(data.completionDate).getTime())||new Date(data.completionDate).getTime()>Date.now())throw new Error('Choose a valid completion date that is not in the future.');
    const result=await change(s=>{const q=s.quests.find(q=>q.id===data.questId&&q.status==='published');if(!q)throw new Error('Select a published quest.');
-    const duplicate=s.petitions.find(p=>p.memberId===memberId&&p.kind==='proof'&&p.questId===q.id&&p.completionDate===data.completionDate&&p.text===data.text&&(p.evidenceLink||'')===(data.evidenceLink||'')&&JSON.stringify([...(p.files||[])].sort())===JSON.stringify([...data.files].sort())&&!p.finalAt);if(duplicate)return {receipt:duplicate.id,duplicate:true};
+    const duplicate=s.petitions.find(p=>p.memberId===memberId&&p.kind==='proof'&&p.questId===q.id&&p.completionDate===data.completionDate&&p.text===data.text&&(p.evidenceLink||'')===(data.evidenceLink||'')&&JSON.stringify([...(p.files||[])].sort())===JSON.stringify([...data.files].sort())&&!p.finalAt);if(duplicate){if(duplicate.status==='More evidence needed'){rate(s,memberId,12);reopenProofReview(s,duplicate);return {receipt:duplicate.id,reopened:true};}return {receipt:duplicate.id,duplicate:true};}
     rate(s,memberId,12);if(data.files.some(fid=>!s.evidence.some(e=>e.id===fid&&e.memberId===memberId&&!e.petitionId)))throw new Error('An image is unavailable or belongs to another petition.');
     const pid=id(),now=iso(),petition={id:pid,memberId,kind:'proof' as const,status:'Received',createdAt:now,updatedAt:now,localityId:member!.localityId,text:data.text,questId:q.id,completionDate:data.completionDate,evidenceLink:data.evidenceLink,files:data.files,publicConsent:false};freshProof(s,petition);s.petitions.push(petition);for(const e of s.evidence.filter(e=>data.files.includes(e.id))){e.petitionId=pid;e.deleteAfter=new Date(Date.now()+60*86400_000).toISOString();}s.jobs.push({id:id(),petitionId:pid,kind:'proof',status:'pending',attempts:0,createdAt:now});return {receipt:pid};});kick();return response(result);
   }

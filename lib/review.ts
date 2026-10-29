@@ -44,3 +44,10 @@ export function verifyAssistedProclamation(s:State,p:Petition,hash:string,note:s
  d.verified=true;d.approvedHash=proclamationHash(p);d.approvedAt=iso();p.status='Approved — awaiting weekly induction';p.response='LEGION verified your proclamation against your accepted deeds. Your title awaits the weekly ceremony.';p.updatedAt=iso();
  s.audits.push({id:id(),at:iso(),action:'legion-grounding',recordId:p.id,note:'Exact proclamation '+d.approvedHash+'; '+note.slice(0,700)});return true;
 }
+
+export function reopenProofReview(s:State,p:Petition){
+ if(p.kind!=='proof'||p.finalAt||p.status!=='More evidence needed')return false;
+ const job=s.jobs.find(j=>j.kind==='proof'&&j.petitionId===p.id);if(!job)throw new Error('Proof review job is unavailable.');
+ p.proofReview=undefined;p.status='Reviewing';p.response='Your evidence has been queued for another review.';p.updatedAt=iso();job.status='pending';job.attempts=0;job.reason=undefined;job.retryAt=undefined;job.leaseId=undefined;job.leaseUntil=undefined;
+ s.audits.push({id:id(),at:iso(),action:'proof-return',recordId:p.id,note:'Member resubmitted the evidence for review after a requested correction.'});return true;
+}
