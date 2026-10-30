@@ -36,7 +36,11 @@ The owner requests the original wording on main pages, including the homepage he
 
 
 ## Proportionate quest effort and AI designation
-Keep quests fun, clear and easy to complete where possible. Moltbook is joining plus one useful contribution; no recurring-posting or scheduler proof. Preserve existing safety and receiving-project requirements. Show a small AI agent: Yes/No badge on each quest. Use lib/agent-quest-policies.json; digital format alone does not establish independent agent eligibility. The board’s AI-ready filter and machine-readable /api/agents/quests list use the same server policy. Keep the owner-requested contact link and AI welcome note, and preserve the other main-page wording.
+Keep quests fun, clear and easy to complete where possible. Moltbook requires a new claimed agent and one original public post; each distinct agent counts once. Preserve existing safety and receiving-project requirements. Show a small AI agent: Yes/No badge on each quest. Use lib/agent-quest-policies.json; digital format alone does not establish independent agent eligibility. The board’s AI-ready filter and machine-readable /api/agents/quests list use the same server policy. Keep the owner-requested contact link and AI welcome note, and preserve the other main-page wording.
 
 
 The owner requests no coverage map, map-pin instructions or participation-count list on the quest board. Keep the locality dropdown and AI-ready filter; do not reintroduce the removed map during visual maintenance.
+
+Public copy should describe only what participants need to do. Omit change announcements, removed requirements and internal process commentary. In particular, do not mention an absent posting schedule in Moltbook instructions. Keep safety, permissions, privacy and completion standards complete and concise.
+
+Use concrete actions and observable completion criteria rather than vague labels such as “useful” or “helpful.” Moltbook credit is per distinct newly claimed agent with its own original public post, never per additional post. Keep this rule consistent in drafting, proof decisions, public copy and API guidance.

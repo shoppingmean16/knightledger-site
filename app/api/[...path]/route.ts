@@ -17,6 +17,7 @@ import { preparePack, assistedResultsSchema, retrieveAssistedSources, importAssi
 import { verifyLocality } from '@/lib/localities';
 import { requestEditorialRevision } from '@/lib/editorial';
 import { prepareMoltbook, simplifyMoltbook } from '@/lib/moltbook';
+import {trimQuestCopy} from '@/lib/quest-copy';
 import {proofAccount} from '@/lib/proof-input';
 import {assertAgentQuestAccess} from '@/lib/agent-quests';
 import { releaseReadiness } from '@/lib/readiness';
@@ -106,7 +107,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path.startsWith('operator/')){
    if(!await isOperator())return response({error:'Operator access required.'},401);
    const action=path.slice(9);
-   if(action==='simplify-moltbook')return response(await change(s=>simplifyMoltbook(s,z.literal(1).parse(body.expectedVersion))));
+   if(action==='trim-quest-copy')return response(await change(s=>trimQuestCopy(s,z.object({items:z.array(z.object({id:z.string(),version:z.number().int().positive()}).strict()).min(1).max(24)}).strict().parse(body).items)));
+   if(action==='simplify-moltbook')return response(await change(s=>simplifyMoltbook(s,z.union([z.literal(1),z.literal(2)]).parse(body.expectedVersion))));
    if(action==='prepare-moltbook')return response(await change(prepareMoltbook));
    if(action==='begin-review-run')return response(await change(beginAssistedRun));
    if(action==='finish-review-run'){

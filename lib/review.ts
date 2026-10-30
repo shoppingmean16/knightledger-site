@@ -4,21 +4,31 @@ import { acceptProof, digest, eligible, id, induct, iso, questHash, type Petitio
 export const reviewMode=(s:State,kind:'proof'|'induction')=>kind==='proof'?(s.meta[0].proofReviewMode||'owner'):(s.meta[0].inductionReviewMode||'owner');
 export function proofHash(s:State,p:Petition){
  const q=s.quests.find(q=>q.id===p.questId);if(!q)throw new Error('Quest unavailable.');
- return digest(JSON.stringify({quest:questHash(q),...(s.members.find(m=>m.id===p.memberId)?.actorType==='agent'?{participantType:'agent',agentPolicy:agentEligibility(q)}:{}),text:p.text,date:p.completionDate,link:p.evidenceLink||'',files:s.evidence.filter(e=>p.files?.includes(e.id)).map(e=>[e.id,e.digest]).sort()}));
+ return digest(JSON.stringify({quest:questHash(q),...(s.members.find(m=>m.id===p.memberId)?.actorType==='agent'?{participantType:'agent',agentPolicy:agentEligibility(q)}:{}),...(q.templateId==='moltbook-useful-agent'?{creditedAgents:s.completions.filter(c=>c.templateId===q.templateId).map(c=>c.moltbookAgentFingerprint||'legacy-unverified').sort()}:{}),text:p.text,date:p.completionDate,link:p.evidenceLink||'',files:s.evidence.filter(e=>p.files?.includes(e.id)).map(e=>[e.id,e.digest]).sort()}));
 }
 export function ownerNote(s:State,recordId:string,note?:string){if(note?.trim())s.audits.push({id:id(),at:iso(),action:'owner-note',recordId,note:note.trim()});}
 export function applyProofReview(s:State,p:Petition,hash:string,authority:'owner'|'automatic',override?:'More evidence needed'|'Declined',note?:string){
  if(authority==='automatic'&&reviewMode(s,'proof')!=='automatic')throw new Error('Owner approval is required for evidence decisions.');
- const r=p.proofReview;if(!r||r.hash!==hash||r.hash!==digest(JSON.stringify({inputHash:r.inputHash,decision:r.decision,reason:r.reason,summary:r.summary,model:r.model}))||proofHash(s,p)!==r.inputHash)throw new Error('The evidence or prepared decision changed. Request a fresh review.');
  if(p.finalAt)return false;
+ const r=p.proofReview;if(!r||r.hash!==hash||r.hash!==digest(JSON.stringify({inputHash:r.inputHash,decision:r.decision,reason:r.reason,summary:r.summary,model:r.model,...(r.moltbookAgentFingerprint?{moltbookAgentFingerprint:r.moltbookAgentFingerprint}:{})}))||proofHash(s,p)!==r.inputHash)throw new Error('The evidence or prepared decision changed. Request a fresh review.');
  const decision=override||r.decision,reason=override?note||r.reason:r.reason;
  if(decision==='Accepted')acceptProof(s,p,reason,r.model,r.summary);
  else {p.status=decision;p.response=reason;p.updatedAt=iso();if(decision==='Declined')p.finalAt=iso();}
  if(p.finalAt)for(const e of s.evidence.filter(e=>e.petitionId===p.id))e.deleteAfter=new Date(Date.now()+30*86400_000).toISOString();
  s.audits.push({id:id(),at:iso(),action:'proof-decision',recordId:p.id,note:authority+': '+decision+'; exact evidence '+hash});ownerNote(s,p.id,note);return true;
 }
-export function saveProofReview(s:State,p:Petition,result:{decision:'Accepted'|'More evidence needed'|'Declined';reason:string;summary:string},model:string,expectedInputHash?:string){
- const inputHash=proofHash(s,p);if(expectedInputHash&&inputHash!==expectedInputHash)throw new Error('The evidence changed while LEGION was reviewing it. A fresh review is required.');const hash=digest(JSON.stringify({inputHash,decision:result.decision,reason:result.reason,summary:result.summary,model}));p.proofReview={...result,model,preparedAt:iso(),inputHash,hash};
+export function saveProofReview(s:State,p:Petition,result:{decision:'Accepted'|'More evidence needed'|'Declined';reason:string;summary:string;moltbookAgentId?:string},model:string,expectedInputHash?:string){
+ const inputHash=proofHash(s,p);if(expectedInputHash&&inputHash!==expectedInputHash)throw new Error('The evidence changed while LEGION was reviewing it. A fresh review is required.');
+ const {moltbookAgentId,...fields}=result,q=s.quests.find(q=>q.id===p.questId);
+ let moltbookAgentFingerprint:string|undefined;
+ if(q?.templateId==='moltbook-useful-agent'&&result.decision==='Accepted'){
+  if(!moltbookAgentId||!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(moltbookAgentId))throw new Error('A verified public Moltbook author ID is required. Hold inaccessible evidence for review.');
+  moltbookAgentFingerprint=digest('moltbook-agent:'+moltbookAgentId.toLowerCase());
+  const prior=s.completions.filter(c=>c.templateId===q.templateId);
+  if(prior.some(c=>!c.moltbookAgentFingerprint))throw new Error('A prior Moltbook agent needs verification before repeat credit can be checked.');
+  if(prior.some(c=>c.moltbookAgentFingerprint===moltbookAgentFingerprint))throw new Error('This Moltbook agent already received credit. Each distinct agent counts once.');
+ }
+ const hash=digest(JSON.stringify({inputHash,...fields,model,...(moltbookAgentFingerprint?{moltbookAgentFingerprint}:{})}));p.proofReview={...fields,...(moltbookAgentFingerprint?{moltbookAgentFingerprint}:{}),model,preparedAt:iso(),inputHash,hash};
  p.status='Ready for owner review';p.response='LEGION has prepared the evidence decision. The owner reviews it before your progress changes.';p.updatedAt=iso();
  if(reviewMode(s,'proof')==='automatic')applyProofReview(s,p,p.proofReview.hash,'automatic');
 }

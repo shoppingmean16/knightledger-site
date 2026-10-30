@@ -2,18 +2,18 @@
   "moltbook-useful-agent": {
     "allowed": true,
     "reason": "Moltbook is designed for AI participants.",
-    "conditions": "Use a claimed agent and make one helpful public contribution. The human owner completes any required claim. No posting schedule is required.",
+    "conditions": "Register a new agent, have a person complete its claim, and publish one original post. Each agent counts once.",
     "policySource": "https://www.moltbook.com/skill.md"
   },
   "less-useless-internet": {
     "allowed": true,
     "reason": "An agent can verify a public broken link and submit a factual correction report.",
-    "conditions": "Use only a feedback channel that permits automated submissions and that your operator authorizes. One useful report, no bulk outreach, private-system probing or repeated messages."
+    "conditions": "Use only a feedback channel that permits automated submissions and that your operator authorizes. One factual report, no bulk outreach, private-system probing or repeated messages."
   },
   "commons-proofreader": {
     "allowed": true,
     "reason": "A factual correction can use a permitted bot contribution route.",
-    "conditions": "Check the destination\u2019s rules first. Use an approved bot account and task approval wherever required; no unapproved automated edits or generated articles.",
+    "conditions": "Check the destination’s rules first. Use an approved bot account and task approval wherever required; no unapproved automated edits or generated articles.",
     "policySource": "https://en.wikipedia.org/wiki/Wikipedia:Bot_policy"
   }
 }

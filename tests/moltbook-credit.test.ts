@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initialState} from '../lib/seed.ts';
+import {approve,publish,iso,digest,type Petition} from '../lib/domain.ts';
+import {moltbookQuest} from '../lib/moltbook.ts';
+import {saveProofReview,applyProofReview} from '../lib/review.ts';
+import {trimQuestCopy,leanQuestCopy} from '../lib/quest-copy.ts';
+const agentA='10000000-0000-4000-8000-000000000001',agentB='10000000-0000-4000-8000-000000000002';
+test('Moltbook credit follows distinct verified agents across posts and passports',()=>{
+ const s=initialState(),q=moltbookQuest();s.quests.push(q);approve(s,q.id,q.version);publish(s);s.meta[0].proofReviewMode='automatic';
+ for(const id of ['a','b'])s.members.push({id,alias:'Fixture',createdAt:iso(),localityId:'everywhere',recoveryDigest:'fixture',visibility:'masked',hideLocality:true,rank:'Squire',undertaken:[]});
+ const petition=(id:string,memberId='a'):Petition=>({id,memberId,kind:'proof',questId:q.id,status:'Reviewing',createdAt:iso(),updatedAt:iso(),localityId:'everywhere',completionDate:'2026-10-30',text:'Submitted a public Moltbook post for review.',evidenceLink:'https://www.moltbook.com/post/'+id,publicConsent:false});
+ const review={decision:'Accepted' as const,reason:'Verified the new claimed author and its original public post.',summary:'Registered and claimed an agent, then published its original post.'};
+ const first=petition('first');s.petitions.push(first);
+ assert.throws(()=>saveProofReview(s,first,review,'fixture'),/verified public Moltbook author ID/);
+ saveProofReview(s,first,{...review,moltbookAgentId:agentA},'fixture');assert.equal(s.completions.length,1);
+ assert.equal(s.completions[0].moltbookAgentFingerprint,digest('moltbook-agent:'+agentA));assert.ok(!JSON.stringify(first).includes(agentA));
+ assert.equal(applyProofReview(s,first,first.proofReview!.hash,'automatic'),false);
+ const repeat=petition('second','b');s.petitions.push(repeat);
+ assert.throws(()=>saveProofReview(s,repeat,{...review,moltbookAgentId:agentA},'fixture'),/already received credit/);assert.equal(s.completions.length,1);
+ const another=petition('third');s.petitions.push(another);saveProofReview(s,another,{...review,moltbookAgentId:agentB},'fixture');assert.equal(s.completions.length,2);
+});
+test('copy edit is scoped, versioned and leaves access, sources, quantities and evidence intact',()=>{
+ const s=initialState();s.runs.push({id:'fixture',phase:'chat-review',status:'running',startedAt:iso(),leaseUntil:new Date(Date.now()+60000).toISOString(),count:0});
+ const q=s.quests.find(q=>q.id==='less-useless-internet')!;q.standard=q.standard.replace('One broken-link','One useful broken-link');
+ const prior=structuredClone(q),others=JSON.stringify(s.quests.filter(x=>x.id!==q.id));
+ assert.throws(()=>trimQuestCopy(s,[{id:q.id,version:q.version+1}]),/changed/);
+ const result=trimQuestCopy(s,[{id:q.id,version:q.version}]);assert.equal(result.changed.length,1);assert.equal(q.version,prior.version+1);assert.deepEqual(q.sources,prior.sources);assert.equal(q.evidence,prior.evidence);assert.equal(q.constraints,prior.constraints);assert.deepEqual(q.steps,prior.steps);assert.equal(JSON.stringify(s.quests.filter(x=>x.id!==q.id)),others);assert.deepEqual(leanQuestCopy(q),q);
+ s.meta[0].paused=true;assert.throws(()=>trimQuestCopy(s,[{id:q.id,version:q.version}]),/paused/);
+});
