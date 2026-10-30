@@ -6,5 +6,13 @@
   "c623fc29-d03e-459d-a267-e83b00860da6": {
     "src": "/art/ridgewood-garden-knight-v1.webp",
     "alt": "An armored knight plants flowers beside a reservoir under a gardener’s direction; a smartphone rests nearby."
+  },
+  "bench-not-bin": {
+    "src": "/art/bench-cleanup-knight-v1.webp",
+    "alt": "An armored knight collects paper litter beside a wooden bench, with a smartphone resting on the seat."
+  },
+  "commons-proofreader": {
+    "src": "/art/commons-proofreader-knight-v1.webp",
+    "alt": "An armored knight compares manuscript pages and checks a correction beside an unbranded laptop."
   }
 }
