@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {approvalItems,publicationInput} from '../scripts/review-client-guards.mjs';
+const now=Date.parse('2026-10-30T08:00:00Z');
+const status=()=>({settings:{paused:false},runs:[{phase:'chat-review',status:'running',leaseUntil:'2026-10-30T08:30:00Z'}],quests:[{id:'quest-a',version:2,status:'draft',recheckAt:'2026-11-01T00:00:00Z',sources:[{url:'https://example.org/project',checkedAt:'2026-10-30T07:30:00Z'}]}],jobs:[]});
+const input=()=>({groundingConfirmed:true,items:[{id:'quest-a',version:2}]});
+test('approves only the independently checked current version',()=>{assert.deepEqual(approvalItems(input(),status(),now),[{id:'quest-a',version:2}]);const i=input();i.items[0].version=1;assert.throws(()=>approvalItems(i,status(),now));});
+test('pause and expired lease prevent delegated approval',()=>{const s=status();s.settings.paused=true;assert.throws(()=>approvalItems(input(),s,now));s.settings.paused=false;s.runs[0].leaseUntil='2026-10-30T07:59:00Z';assert.throws(()=>approvalItems(input(),s,now));});
+test('unconfirmed, duplicate, stale-source and unfinished quests are withheld',()=>{assert.throws(()=>approvalItems({...input(),groundingConfirmed:false},status(),now));const i=input();i.items.push(i.items[0]);assert.throws(()=>approvalItems(i,status(),now));const s=status();s.quests[0].recheckAt='2026-10-29T00:00:00Z';assert.throws(()=>approvalItems(input(),s,now));s.quests[0].recheckAt='2026-11-01T00:00:00Z';s.jobs=[{questId:'quest-a',kind:'editorial',status:'pending'}];assert.throws(()=>approvalItems(input(),s,now));});
+test('publication cannot override the worker phase or trigger induction',()=>{assert.deepEqual(publicationInput({},new Date(now)),{phase:'publish00'});assert.deepEqual(publicationInput({},new Date('2026-10-30T19:00:00Z')),{phase:'publish12'});assert.throws(()=>publicationInput({phase:'induction'}));});

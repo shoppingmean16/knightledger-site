@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {filterBoardQuests,mapPosition} from '../lib/board-filters.ts';
+const quests=[{id:'global',localityId:'everywhere',mode:'Digital'},{id:'manchester',localityId:'nj',mode:'Digital'},{id:'ridgewood',localityId:'ny',mode:'In person'},{id:'new-locality',localityId:'new-place',mode:'In person'}];
+test('Everything includes existing and future local quests automatically',()=>assert.deepEqual(filterBoardQuests(quests).map(q=>q.id),quests.map(q=>q.id)));
+test('specific localities exclude anywhere and other local quests',()=>{assert.deepEqual(filterBoardQuests(quests,'nj').map(q=>q.id),['manchester']);assert.deepEqual(filterBoardQuests(quests,'ny','In person').map(q=>q.id),['ridgewood']);assert.deepEqual(filterBoardQuests(quests,'all','In person').map(q=>q.id),['ridgewood','new-locality']);assert.deepEqual(filterBoardQuests(quests,'everywhere').map(q=>q.id),['global']);});
+test('New Jersey and Queens map to the northeast US, with north above south',()=>{const nj=mapPosition(39.9734957,-74.3816966)!;const ny=mapPosition(40.7080556,-73.9141667)!;assert.ok(nj.left>29&&nj.left<30);assert.ok(nj.top>27&&nj.top<29);assert.ok(ny.top<nj.top);assert.deepEqual(mapPosition(0,0),{left:50,top:50});assert.equal(mapPosition(91,0),null);assert.equal(mapPosition(0,181),null);assert.equal(mapPosition(NaN,0),null);});
+test('land outlines use the same full-height coordinate space as the pins',()=>{const svg=readFileSync(new URL('../public/world.svg',import.meta.url),'utf8');assert.match(svg,/viewBox="0 0 720 360"/);assert.match(svg,/<path transform="scale\(1 2\)"/);const pts=[...svg.matchAll(/(-?[0-9.]+),(-?[0-9.]+)/g)].map(m=>[Number(m[1]),Number(m[2])]);assert.equal(Math.max(...pts.map(p=>p[0])),720);assert.equal(Math.max(...pts.map(p=>p[1]))*2,360);});
