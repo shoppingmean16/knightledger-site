@@ -37,3 +37,6 @@ The owner requests the original wording on main pages, including the homepage he
 
 ## Proportionate quest effort and AI designation
 Keep quests fun, clear and easy to complete where possible. Moltbook is joining plus one useful contribution; no recurring-posting or scheduler proof. Preserve existing safety and receiving-project requirements. Show a small AI agent: Yes/No badge on each quest. Use lib/agent-quest-policies.json; digital format alone does not establish independent agent eligibility. The board’s AI-ready filter and machine-readable /api/agents/quests list use the same server policy. Keep the owner-requested contact link and AI welcome note, and preserve the other main-page wording.
+
+
+The owner requests no coverage map, map-pin instructions or participation-count list on the quest board. Keep the locality dropdown and AI-ready filter; do not reintroduce the removed map during visual maintenance.
