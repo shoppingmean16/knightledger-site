@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initialState} from '../lib/seed.ts';
+import {approve,publish} from '../lib/domain.ts';
+import {prepareMoltbook,moltbookId,setupPrompt,routinePrompt} from '../lib/moltbook.ts';
+import {questArt,cardSummary,stepLead} from '../lib/quest-presentation.ts';
+test('Moltbook setup is idempotent and cannot publish without separate approval',()=>{const s=initialState();assert.equal(prepareMoltbook(s).created,true);assert.equal(prepareMoltbook(s).created,false);assert.equal(s.quests.filter(q=>q.id===moltbookId).length,1);assert.equal(publish(s),0);const q=s.quests.find(q=>q.id===moltbookId)!;assert.equal(q.status,'draft');assert.equal(q.localityId,'everywhere');approve(s,q.id,q.version);assert.equal(publish(s),1);assert.equal(q.status,'published');});
+test('beginner guide distinguishes actual capability, human claim and saved scheduling',()=>{assert.match(setupPrompt,/stop before registration/);assert.match(setupPrompt,/complete them myself/);assert.match(routinePrompt,/do not claim an automation exists/);assert.match(routinePrompt,/Silence is better than filler/);});
+test('existing and new quests always have art without modifying completion standards',()=>{const s=initialState();for(const q of s.quests){const prior=q.standard;assert.ok(questArt(q).src.startsWith('/art/'));assert.ok(cardSummary(q).length<=125);assert.equal(q.standard,prior);}assert.equal(questArt({id:'future',templateId:'native-gardening',title:'Plant native flowers',summary:'',category:'Other species'}).position,'66.66666666666666% 100%');assert.equal(questArt({id:moltbookId,templateId:'',title:'',summary:'',category:'People'}).src,'/art/moltbook-knight.webp');});
+test('short steps retain complete original content for expanded details',()=>{const step='Submit a genuine report. Keep the confirmation private.';const lead=stepLead(step);assert.equal(lead,'Submit a genuine report.');assert.equal(lead+step.slice(lead.length),step);});

@@ -23,3 +23,7 @@ The linked task runs at 03:17 and 15:17 America/New_York. Staggered minutes avoi
 Never spend money, enable model API calls, contact organizations, access personal connected accounts, weaken review safeguards or change review policy, or confer titles outside the weekly worker. If service access fails, report the exact blocker; do not claim the run completed. Manual work-pack controls remain collapsed in the owner desk as a fallback.
 
 [ENABLE_FULL_AI.md](ENABLE_FULL_AI.md) is the future runtime upgrade procedure. Keep this scheduled bridge until its replacement is actually verified, then disable the duplicate task.
+
+## Illustrated quest maintenance
+
+Read docs/ART_DIRECTION.md on each run. Use the manuscript layout automatically for every new quest. Keep summaries short, first-sentence steps actionable, and full evidence/source/access rules available in expandable details. After queue work, add up to two original quest-specific illustrations with the built-in image tool and the data-only art override registry. Routine artwork/media deployment is authorized; no paid API calls or broader code/policy changes. Keep Everything/exact-locality/Anywhere semantics intact. The Moltbook beginner quest must continue to require real agent capabilities, human claim, useful public contribution and a confirmed recurring task; never accept an empty account or fake scheduling claim as completion.

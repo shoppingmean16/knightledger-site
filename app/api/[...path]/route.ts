@@ -16,6 +16,7 @@ import { beginAssistedRun, finishAssistedRun } from '@/lib/assisted-run';
 import { preparePack, assistedResultsSchema, retrieveAssistedSources, importAssistedResult } from '@/lib/assisted';
 import { verifyLocality } from '@/lib/localities';
 import { requestEditorialRevision } from '@/lib/editorial';
+import { prepareMoltbook } from '@/lib/moltbook';
 import { releaseReadiness } from '@/lib/readiness';
 import { safeUrl, publicError, reserveCall, model, fetchSource, withAIStatus } from '@/lib/research';
 const REQUEST_COOKIE='kl_requests';
@@ -102,6 +103,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path.startsWith('operator/')){
    if(!await isOperator())return response({error:'Operator access required.'},401);
    const action=path.slice(9);
+   if(action==='prepare-moltbook')return response(await change(prepareMoltbook));
    if(action==='begin-review-run')return response(await change(beginAssistedRun));
    if(action==='finish-review-run'){
     const data=z.object({runId:z.string().max(90),status:z.enum(['done','failed']),count:z.number().int().min(0).max(24),detail:str(700)}).strict().parse(body);

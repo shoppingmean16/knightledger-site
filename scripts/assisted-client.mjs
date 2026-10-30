@@ -2,7 +2,7 @@
 import { writeFile } from 'node:fs/promises';
 import { approvalItems, publicationInput } from './review-client-guards.mjs';
 const action=process.argv[2];
-const allowed=new Set(['status','begin-review-run','finish-review-run','prepare-work','import-work','verify-proclamation','evidence','approve-quests','publish']);
+const allowed=new Set(['status','begin-review-run','finish-review-run','prepare-work','import-work','verify-proclamation','evidence','approve-quests','publish','prepare-moltbook']);
 if(!allowed.has(action))throw new Error('Unsupported review action.');
 const base='https://www.knightledger.com';
 if(!process.env.OPERATOR_SECRET)throw new Error('OPERATOR_SECRET is required privately.');
