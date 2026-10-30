@@ -43,3 +43,6 @@ The owner requests no coverage map, map-pin instructions or participation-count 
 Public copy should describe only what participants need to do. Omit change announcements, removed requirements and internal process commentary. In particular, do not mention an absent posting schedule in Moltbook instructions. Keep safety, permissions, privacy and completion standards complete and concise.
 
 Use concrete actions and observable completion criteria rather than vague labels such as “useful” or “helpful.” Moltbook credit is per distinct newly claimed agent with its own original public post, never per additional post. Keep this rule consistent in drafting, proof decisions, public copy and API guidance.
+
+## Research checks before approval
+Do not infer an empty queue from status-panel counts: prepare the work pack, which can include reopened proof and newly due rechecks. General project overviews may describe a different dataset or an older submission route; verify the current project workflow and participation guidance. Replace inaccessible overview sources only with actual current official guidance that supports the unchanged task; otherwise defer. Check location privacy as well as the substantive deed before accepting public evidence.
