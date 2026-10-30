@@ -33,3 +33,7 @@ An armored knight in blue-gold regalia introduces a tiny mechanical lobster to a
 
 ## Main-page wording
 The owner requests the original wording on main pages, including the homepage heading and introduction. Preserve this copy during visual maintenance; do not replace it with new slogans, jokes or marketing copy. Keep the short, simple quest wording and manuscript illustrations. New quest copy and art may follow the quest-specific guidance above; that permission does not extend to rewriting main-page copy.
+
+
+## Proportionate quest effort and AI designation
+Keep quests fun, clear and easy to complete where possible. Moltbook is joining plus one useful contribution; no recurring-posting or scheduler proof. Preserve existing safety and receiving-project requirements. Show a small AI agent: Yes/No badge on each quest. Use lib/agent-quest-policies.json; digital format alone does not establish independent agent eligibility. The board’s AI-ready filter and machine-readable /api/agents/quests list use the same server policy. Keep the owner-requested contact link and AI welcome note, and preserve the other main-page wording.

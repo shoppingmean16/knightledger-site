@@ -16,7 +16,9 @@ import { beginAssistedRun, finishAssistedRun } from '@/lib/assisted-run';
 import { preparePack, assistedResultsSchema, retrieveAssistedSources, importAssistedResult } from '@/lib/assisted';
 import { verifyLocality } from '@/lib/localities';
 import { requestEditorialRevision } from '@/lib/editorial';
-import { prepareMoltbook } from '@/lib/moltbook';
+import { prepareMoltbook, simplifyMoltbook } from '@/lib/moltbook';
+import {proofAccount} from '@/lib/proof-input';
+import {assertAgentQuestAccess} from '@/lib/agent-quests';
 import { releaseReadiness } from '@/lib/readiness';
 import { safeUrl, publicError, reserveCall, model, fetchSource, withAIStatus } from '@/lib/research';
 const REQUEST_COOKIE='kl_requests';
@@ -41,6 +43,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{path:string[
   if(path.startsWith('cron/')){if(!process.env.CRON_SECRET||!equal(req.headers.get('authorization')||'',`Bearer ${process.env.CRON_SECRET}`))return response({error:'Unauthorized'},401);return response(await worker(path.split('/')[1]));}
   if(path==='status')return response({database:databaseConfigured(),privateStorage:!!process.env.BLOB_READ_WRITE_TOKEN,aiAuth:aiConfigured(),temporaryDatabaseExpiresAt:storageMode()==='blob'?null:process.env.NEON_DATABASE_EXPIRES_AT||null});
   const {state}=await load();
+  if(path==='agents'||path==='agents/quests')return response({version:1,guide:'https://www.knightledger.com/agents',contact:'jason@knightledger.com',rules:['Use an agent passport and keep its recovery code private.','Only AI agent: Yes quests qualify for independent completion.','Follow destination automation rules and required bot approvals.','Fresh, truthful contributions only; no bulk outreach or invented physical work.'],endpoints:{enroll:{method:'POST',path:'/api/enroll',body:{alias:'YourAgentName',actorType:'agent',locality:'everywhere',visibility:'masked',hideLocality:true}},proof:{method:'POST',path:'/api/petition/proof',body:{questId:'eligible-quest-id',completionDate:'YYYY-MM-DD',text:'Optional for Moltbook with a public contribution link; otherwise describe the completed deed in at least 40 characters.',evidenceLink:'https://public-contribution-url'}},ledger:{method:'GET',path:'/api/ledger'}},transport:{origin:'https://www.knightledger.com',authentication:'Retain the session cookie from enroll. Recover with POST /api/recover and {code:privateRecoveryCode}. Never share that code.',proofReview:'Proof returns a receipt; credit is applied only after review. Read /api/ledger for status.'},quests:sanitizePublic(state).quests.filter(q=>q.aiAgent.allowed&&Date.parse(q.recheckAt)>Date.now())});
   if(path==='public')return response(sanitizePublic(state));
   if(path==='requests'){const m=await currentMember(state),owner=requestOwner(req);return response({requests:state.petitions.filter(p=>p.kind==='local'&&(p.memberId===m?.id||p.memberId===owner)).map(p=>({id:p.id,locality:state.localities.find(l=>l.id===p.localityId)?.name,status:p.status,response:p.response,targetAt:p.targetAt,questId:p.status==='Published'?p.draftId:undefined,overdue:!!p.targetAt&&!p.finalAt&&p.targetAt<iso()}))});}
   const member=await currentMember(state);
@@ -54,7 +57,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{path:string[
   return response({error:'Not found'},404);
  }catch(e){return response({error:publicError(e)},503);}
 }
-function operatorView(s:State){return {authorized:true,assisted:assistedMode(),storage:storageMode(),readiness:releaseReadiness(s),proofs:s.petitions.filter(p=>p.kind==='proof'&&p.status==='Ready for owner review'&&p.proofReview),knighthoods:s.petitions.filter(p=>p.kind==='knighthood'&&!p.finalAt&&(p.proclamationDraft?.verified||p.proclamationDraft?.origin==='assisted')).map(p=>({...p,reviewHash:proclamationHash(p),acceptedDeeds:s.completions.filter(c=>c.memberId===p.memberId).map(c=>({id:c.id,account:c.account,standard:c.standard,completedOn:c.completedOn}))})),notes:s.audits.filter(a=>a.action==='owner-note'&&!a.resolvedAt),quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:storageMode()==='blob'?null:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
+function operatorView(s:State){return {authorized:true,assisted:assistedMode(),storage:storageMode(),readiness:releaseReadiness(s),proofs:s.petitions.filter(p=>p.kind==='proof'&&p.status==='Ready for owner review'&&p.proofReview),knighthoods:s.petitions.filter(p=>p.kind==='knighthood'&&!p.finalAt&&(p.proclamationDraft?.verified||p.proclamationDraft?.origin==='assisted')).map(p=>({...p,participantType:s.members.find(m=>m.id===p.memberId)?.actorType||'human',reviewHash:proclamationHash(p),acceptedDeeds:s.completions.filter(c=>c.memberId===p.memberId).map(c=>({id:c.id,account:c.account,standard:c.standard,completedOn:c.completedOn}))})),notes:s.audits.filter(a=>a.action==='owner-note'&&!a.resolvedAt),quests:s.quests.filter(q=>q.status!=='published'&&q.status!=='removed'),requests:s.petitions.filter(p=>p.kind==='local').map(p=>({...p,memberId:undefined})),jobs:s.jobs,localities:s.localities,runs:s.runs.slice(-35).reverse(),prompts:s.prompts,settings:s.meta[0],evidenceCount:s.evidence.length,temporaryDatabaseExpiresAt:storageMode()==='blob'?null:process.env.NEON_DATABASE_EXPIRES_AT||null,aiConfigured:aiConfigured(),blobConfigured:!!process.env.BLOB_READ_WRITE_TOKEN};}
 export async function POST(req:NextRequest,{params}:{params:Promise<{path:string[]}>}){
  const path=(await params).path.join('/');
  try{
@@ -90,8 +93,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
    const token=secret(),sid=digest(token);let recoveryCode:string|undefined;let mid:string;
    if(path==='enroll'){
     if(member)throw new Error('This passport is already enrolled.');
-    const data=z.object({alias:str(45).optional(),locality:str(130).min(2),visibility:z.enum(['public','masked']).default('masked'),hideLocality:z.boolean().default(true)}).parse(body);recoveryCode=secret();mid=id();
-    await change(s=>{rate(s,networkKey,8);const loc=resolveLocality(s,data.locality);const alias=data.alias||`Squire ${mid.slice(0,6).toUpperCase()}`;s.members.push({id:mid,alias,localityId:loc.id,visibility:data.visibility,hideLocality:data.hideLocality,recoveryDigest:digest(recoveryCode!),createdAt:iso(),rank:'Squire',undertaken:[]});s.sessions.push({id:sid,memberId:mid,expiresAt:new Date(Date.now()+30*86400_000).toISOString()});});
+    const data=z.object({actorType:z.enum(['human','agent']).default('human'),alias:str(45).optional(),locality:str(130).min(2),visibility:z.enum(['public','masked']).default('masked'),hideLocality:z.boolean().default(true)}).parse(body);recoveryCode=secret();mid=id();
+    await change(s=>{rate(s,networkKey,8);const loc=data.actorType==='agent'&&data.locality==='everywhere'?s.localities.find(l=>l.id==='everywhere')!:resolveLocality(s,data.locality);const alias=data.alias||`Squire ${mid.slice(0,6).toUpperCase()}`;s.members.push({actorType:data.actorType,id:mid,alias,localityId:loc.id,visibility:data.visibility,hideLocality:data.hideLocality,recoveryDigest:digest(recoveryCode!),createdAt:iso(),rank:'Squire',undertaken:[]});s.sessions.push({id:sid,memberId:mid,expiresAt:new Date(Date.now()+30*86400_000).toISOString()});});
    }else{
     const {code}=z.object({code:str(100).min(30)}).parse(body);
     await change(s=>rate(s,networkKey,30));
@@ -103,6 +106,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(path.startsWith('operator/')){
    if(!await isOperator())return response({error:'Operator access required.'},401);
    const action=path.slice(9);
+   if(action==='simplify-moltbook')return response(await change(s=>simplifyMoltbook(s,z.literal(1).parse(body.expectedVersion))));
    if(action==='prepare-moltbook')return response(await change(prepareMoltbook));
    if(action==='begin-review-run')return response(await change(beginAssistedRun));
    if(action==='finish-review-run'){
@@ -187,7 +191,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
   if(!member)return response({error:'A Squire passport is required to record proof.'},401);
   const memberId=member.id;
   if(path==='undertake'){
-   const questId=z.string().parse(body.questId);await change(s=>{const m=s.members.find(m=>m.id===memberId)!;if(!s.quests.some(q=>q.id===questId&&q.status==='published'))throw new Error('Published quest not found.');if(!m.undertaken.includes(questId))m.undertaken.push(questId);});return response({ok:true});
+   const questId=z.string().parse(body.questId);await change(s=>{const m=s.members.find(m=>m.id===memberId)!;const q=s.quests.find(q=>q.id===questId&&q.status==='published');if(!q)throw new Error('Published quest not found.');assertAgentQuestAccess(m,q);if(!m.undertaken.includes(questId))m.undertaken.push(questId);});return response({ok:true});
   }
   if(path==='preferences'){
    const data=z.object({alias:str(45).min(2),hideLocality:z.boolean(),visibility:z.enum(['masked','public'])}).parse(body);await change(s=>{const m=s.members.find(m=>m.id===memberId)!;Object.assign(m,data);for(const c of s.chronicles.filter(c=>c.memberId===memberId)){c.alias=data.alias;c.showLocality=!data.hideLocality;}});return response({ok:true});
@@ -197,8 +201,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
    await change(s=>{const pids=new Set(s.petitions.filter(p=>p.memberId===memberId).map(p=>p.id));const completionIds=new Set(s.completions.filter(c=>c.memberId===memberId).map(c=>c.id));s.members=s.members.filter(m=>m.id!==memberId);s.sessions=s.sessions.filter(x=>x.memberId!==memberId);s.jobs=s.jobs.filter(j=>!pids.has(j.petitionId||''));s.petitions=s.petitions.filter(p=>p.memberId!==memberId);s.completions=s.completions.filter(c=>c.memberId!==memberId);s.chronicles=s.chronicles.filter(c=>c.memberId!==memberId);s.audits=s.audits.filter(a=>!pids.has(a.recordId)&&!completionIds.has(a.recordId));for(const e of s.evidence.filter(e=>e.memberId===memberId)){e.memberId='deleted';e.deleteAfter=iso();}for(const q of s.quests)if(q.requestId&&pids.has(q.requestId))q.requestId=undefined;});after(async()=>{try{await retention();}catch{}});const res=response({ok:true});res.cookies.delete(SESSION);return res;
   }
   if(path==='petition/proof'){
-   const data=z.object({questId:z.string(),completionDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),text:str(3500).min(40),evidenceLink:sourceUrl,files:z.array(z.string()).max(3).default([])}).parse(body);if(data.evidenceLink)safeUrl(data.evidenceLink);if(!Number.isFinite(new Date(data.completionDate).getTime())||new Date(data.completionDate).getTime()>Date.now())throw new Error('Choose a valid completion date that is not in the future.');
-   const result=await change(s=>{const q=s.quests.find(q=>q.id===data.questId&&q.status==='published');if(!q)throw new Error('Select a published quest.');
+   const data=z.object({questId:z.string(),completionDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),text:str(3500).default(''),evidenceLink:sourceUrl,files:z.array(z.string()).max(3).default([])}).parse(body);if(data.evidenceLink)safeUrl(data.evidenceLink);if(!Number.isFinite(new Date(data.completionDate).getTime())||new Date(data.completionDate).getTime()>Date.now())throw new Error('Choose a valid completion date that is not in the future.');
+   const result=await change(s=>{const q=s.quests.find(q=>q.id===data.questId&&q.status==='published');if(!q)throw new Error('Select a published quest.');assertAgentQuestAccess(member!,q);data.text=proofAccount(q.id,data.text,data.evidenceLink);
     const duplicate=s.petitions.find(p=>p.memberId===memberId&&p.kind==='proof'&&p.questId===q.id&&p.completionDate===data.completionDate&&p.text===data.text&&(p.evidenceLink||'')===(data.evidenceLink||'')&&JSON.stringify([...(p.files||[])].sort())===JSON.stringify([...data.files].sort())&&!p.finalAt);if(duplicate){if(duplicate.status==='More evidence needed'){rate(s,memberId,12);reopenProofReview(s,duplicate);return {receipt:duplicate.id,reopened:true};}return {receipt:duplicate.id,duplicate:true};}
     rate(s,memberId,12);if(data.files.some(fid=>!s.evidence.some(e=>e.id===fid&&e.memberId===memberId&&!e.petitionId)))throw new Error('An image is unavailable or belongs to another petition.');
     const pid=id(),now=iso(),petition={id:pid,memberId,kind:'proof' as const,status:'Received',createdAt:now,updatedAt:now,localityId:member!.localityId,text:data.text,questId:q.id,completionDate:data.completionDate,evidenceLink:data.evidenceLink,files:data.files,publicConsent:false};freshProof(s,petition);s.petitions.push(petition);for(const e of s.evidence.filter(e=>data.files.includes(e.id))){e.petitionId=pid;e.deleteAfter=new Date(Date.now()+60*86400_000).toISOString();}s.jobs.push({id:id(),petitionId:pid,kind:'proof',status:'pending',attempts:0,createdAt:now});return {receipt:pid};});kick();return response(result);

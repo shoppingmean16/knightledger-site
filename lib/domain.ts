@@ -1,3 +1,4 @@
+import {agentEligibility,assertAgentQuestAccess} from './agent-quests.ts';
 import type { AssistedPack } from './assisted.ts';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 
@@ -7,7 +8,7 @@ export const digest = (s: string) => createHash('sha256').update(s).digest('hex'
 export const secret = () => randomBytes(32).toString('base64url');
 export type Source = { title: string; url: string; checkedAt: string; fact?: string };
 export type Locality = { id: string; name: string; parentId?: string; type: string; source: string; lat?: number; lon?: number; verified: boolean; aliases?: string[] };
-export type Member = { id: string; alias: string; recoveryDigest: string; createdAt: string; localityId: string; visibility: 'masked'|'public'; hideLocality: boolean; rank: 'Squire'|'Knight'; target?: number; title?: string; undertaken: string[]; withdrawn?: boolean };
+export type Member = { actorType?:'human'|'agent'; id: string; alias: string; recoveryDigest: string; createdAt: string; localityId: string; visibility: 'masked'|'public'; hideLocality: boolean; rank: 'Squire'|'Knight'; target?: number; title?: string; undertaken: string[]; withdrawn?: boolean };
 export type Session = { id: string; memberId: string; expiresAt: string };
 export type Quest = { id: string; templateId: string; version: number; title: string; summary: string; benefit: string; effort: string; cost: string; localityId: string; mode: 'Digital'|'In person'; category: 'People'|'Other species'|'Shared places'|'Science'; project?:{name:string;url:string;requirements:string;availability:string}; steps: string[]; standard: string; evidence: string; constraints: string; sources: Source[]; recheckAt: string; status: 'draft'|'approved'|'published'|'removed'; approvedHash?: string; approvedAt?: string; publishedAt?: string; requestId?: string; promptVersion?: string; uncertainty?: string; replacesId?:string; replacedById?:string; revisions?:Omit<Quest,'revisions'>[] };
 export type Petition = { id: string; memberId: string; kind: 'local'|'proof'|'knighthood'; status: string; createdAt: string; updatedAt: string; localityId: string; text: string; targetAt?: string; questId?: string; completionDate?: string; evidenceLink?: string; files?: string[]; publicConsent: boolean; chronicleConsent?: boolean; response?: string; draftId?: string; finalAt?: string; publicName?: string; visibility?: 'masked'|'public'; overdue?: boolean; proofReview?:{decision:'Accepted'|'More evidence needed'|'Declined';reason:string;summary:string;model:string;preparedAt:string;inputHash:string;hash:string}; proclamationDraft?:{title:string;text:string;factRefs:string[];verified?:boolean;model:string;approvedHash?:string;approvedAt?:string;origin?:'assisted'} };
@@ -73,6 +74,7 @@ export function freshProof(s:State,p:Petition){
 }
 export function acceptProof(s: State, p: Petition, reason: string, model: string, summary?:string) {
   const m=s.members.find(m=>m.id===p.memberId),q=s.quests.find(q=>q.id===p.questId);
+  if(m&&q)assertAgentQuestAccess(m,q);
   if(!m||!q||q.status!=='published'&&!q.replacedById&&!q.publishedAt)throw new Error('Published quest or passport no longer available.');
   if(s.completions.some(c=>c.petitionId===p.id)){return false;}
   const files=s.evidence.filter(e=>p.files?.includes(e.id));
@@ -93,7 +95,7 @@ export function induct(s: State, petitionId: string, text: string, title: string
   s.chronicles.push({id:id(),memberId:m.id,title,text,factRefs,inductedAt:now,localityId:m.localityId,showLocality:!m.hideLocality,alias:p.publicName||m.alias,heraldry:digest(m.id).slice(0,12),rollId:now.slice(0,10)});
   p.status='Conferred';p.finalAt=now;p.updatedAt=now;s.meta[0].lastInduction=now;return true;
 }
-export const publicQuest=(q:Quest)=>({...q,revisions:undefined,requestId:undefined,approvedHash:undefined,approvedAt:undefined,promptVersion:undefined,uncertainty:undefined,sources:q.sources.map(source=>({title:source.title,url:source.url,checkedAt:source.checkedAt}))});
+export const publicQuest=(q:Quest)=>({...q,aiAgent:agentEligibility(q),revisions:undefined,requestId:undefined,approvedHash:undefined,approvedAt:undefined,promptVersion:undefined,uncertainty:undefined,sources:q.sources.map(source=>({title:source.title,url:source.url,checkedAt:source.checkedAt}))});
 export function sanitizePublic(s: State) {
   return {
     quests:s.quests.filter(q=>q.status==='published').map(publicQuest),localities:s.localities.filter(l=>l.verified).map(l=>({...l,aliases:undefined})),

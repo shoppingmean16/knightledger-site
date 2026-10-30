@@ -1,9 +1,10 @@
+import {agentEligibility} from './agent-quests.ts';
 import { acceptProof, digest, eligible, id, induct, iso, questHash, type Petition, type State } from './domain.ts';
 
 export const reviewMode=(s:State,kind:'proof'|'induction')=>kind==='proof'?(s.meta[0].proofReviewMode||'owner'):(s.meta[0].inductionReviewMode||'owner');
 export function proofHash(s:State,p:Petition){
  const q=s.quests.find(q=>q.id===p.questId);if(!q)throw new Error('Quest unavailable.');
- return digest(JSON.stringify({quest:questHash(q),text:p.text,date:p.completionDate,link:p.evidenceLink||'',files:s.evidence.filter(e=>p.files?.includes(e.id)).map(e=>[e.id,e.digest]).sort()}));
+ return digest(JSON.stringify({quest:questHash(q),...(s.members.find(m=>m.id===p.memberId)?.actorType==='agent'?{participantType:'agent',agentPolicy:agentEligibility(q)}:{}),text:p.text,date:p.completionDate,link:p.evidenceLink||'',files:s.evidence.filter(e=>p.files?.includes(e.id)).map(e=>[e.id,e.digest]).sort()}));
 }
 export function ownerNote(s:State,recordId:string,note?:string){if(note?.trim())s.audits.push({id:id(),at:iso(),action:'owner-note',recordId,note:note.trim()});}
 export function applyProofReview(s:State,p:Petition,hash:string,authority:'owner'|'automatic',override?:'More evidence needed'|'Declined',note?:string){
