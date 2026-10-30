@@ -29,3 +29,7 @@ Use case: historical-scene. Asset: ONE coherent illustrated atlas sheet for a we
 
 ## Moltbook painting brief
 An armored knight in blue-gold regalia introduces a tiny mechanical lobster to an unbranded modern laptop in a medieval scriptorium. Late-medieval illuminated tempera, gold leaf, intricate branching vine borders, warm parchment, quiet absurdity. All other objects are period appropriate. No text or logos.
+
+
+## Main-page wording
+The owner requests the original wording on main pages, including the homepage heading and introduction. Preserve this copy during visual maintenance; do not replace it with new slogans, jokes or marketing copy. Keep the short, simple quest wording and manuscript illustrations. New quest copy and art may follow the quest-specific guidance above; that permission does not extend to rewriting main-page copy.

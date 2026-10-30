@@ -27,3 +27,7 @@ Never spend money, enable model API calls, contact organizations, access persona
 ## Illustrated quest maintenance
 
 Read docs/ART_DIRECTION.md on each run. Use the manuscript layout automatically for every new quest. Keep summaries short, first-sentence steps actionable, and full evidence/source/access rules available in expandable details. After queue work, add up to two original quest-specific illustrations with the built-in image tool and the data-only art override registry. Routine artwork/media deployment is authorized; no paid API calls or broader code/policy changes. Keep Everything/exact-locality/Anywhere semantics intact. The Moltbook beginner quest must continue to require real agent capabilities, human claim, useful public contribution and a confirmed recurring task; never accept an empty account or fake scheduling claim as completion.
+
+
+## Owner wording correction
+Preserve the original wording on main pages, including the homepage heading and introduction. Keep quests short and simple and retain the manuscript images. Visual maintenance must not rewrite main-page slogans or introductory copy without a separate owner request.
