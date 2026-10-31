@@ -32,5 +32,13 @@
   "teach-a-lobster-to-be-useful": {
     "src": "/art/moltbook-knight-v2.webp",
     "alt": "A closed-helmet knight introduces a mechanical lobster to a laptop in a medieval scriptorium."
+  },
+  "phantom-hours": {
+    "src": "/art/opening-hours-knight-v1.webp",
+    "alt": "A closed-helmet knight compares a public hours notice with a smartphone, wearing sundial-and-hourglass regalia."
+  },
+  "second-life": {
+    "src": "/art/tote-repair-knight-v1.webp",
+    "alt": "A closed-helmet knight mends a torn linen tote beside a laptop showing a sewing guide."
   }
 }
