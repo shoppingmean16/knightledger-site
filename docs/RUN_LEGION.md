@@ -46,3 +46,7 @@ Use concrete actions and observable completion criteria rather than vague labels
 
 ## Research checks before approval
 Do not infer an empty queue from status-panel counts: prepare the work pack, which can include reopened proof and newly due rechecks. General project overviews may describe a different dataset or an older submission route; verify the current project workflow and participation guidance. Replace inaccessible overview sources only with actual current official guidance that supports the unchanged task; otherwise defer. Check location privacy as well as the substantive deed before accepting public evidence.
+
+
+## Assisted human submissions
+An AI may prepare and submit proof for an authorized person using that person's existing human passport. Review the actual contributor and completed deed, not the identity of the assistant that filled the form. An alias does not make a human contribution an independent agent deed; retain agent eligibility checks, evidence-reuse controls, privacy and exact published standards. Missing passport access is a submission blocker, never permission to create duplicate credit or bypass authentication.
