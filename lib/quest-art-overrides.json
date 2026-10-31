@@ -14,5 +14,13 @@
   "commons-proofreader": {
     "src": "/art/commons-proofreader-knight-v1.webp",
     "alt": "An armored knight compares manuscript pages and checks a correction beside an unbranded laptop."
+  },
+  "small-beast-census": {
+    "src": "/art/wildlife-observer-knight-v1.webp",
+    "alt": "An armored knight photographs a butterfly on a meadow flower with a smartphone, without touching it."
+  },
+  "c86d38a6-30a4-4d23-9c74-8fa4f5dc2b41": {
+    "src": "/art/galaxy-classifier-knight-v1.webp",
+    "alt": "An armored knight compares galaxy shapes on a laptop beside a sheet of spiral and oval sketches."
   }
 }
