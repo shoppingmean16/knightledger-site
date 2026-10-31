@@ -6,13 +6,15 @@ Make a quest feel like an inviting side quest, not a work email. Cards lead with
 ## Artwork
 Every knight must wear a closed helmet with the visor fully lowered and the head and face entirely concealed: no visible skin, eyes, hair or open face. Keep the knight anonymous. Regalia, heraldic motifs and gear should relate subtly to the actual quest (for example stars for astronomy, leaves for conservation), without logos or invented partnerships. This requirement overrides all older briefs below. During maintenance, prioritize replacing any existing illustration with an exposed face before adding other artwork.
 
+Background narrative jokes are limited to two owner-selected scenes: Small Beast Census has a distant dragon attacking the castle while the knight photographs a butterfly and rabbit; Missing Ramps has two invading knights documenting inaccessible castle steps, one using a wheelchair. Make the barrier the joke, never the disability. Keep both knights equally capable and fully helmeted. Do not add siege, dragon or other background-event jokes to other paintings.
+
 Original late-medieval Bohemian illuminated-manuscript miniatures: tempera, parchment, lapis, vermilion, forest green, dull gold, branching acanthus/vine marginalia. Historically convincing armored knight and medieval world; a modern unbranded smartphone or laptop is the deliberate anachronism. Affectionate dry absurdity. No political caricatures, offensive content, logos, fabricated evidence or invented partnerships. Art is illustrative, never proof of a real event or accurate external UI.
 
 The initial atlas has 16 separate miniatures, one for each pre-existing quest. public/art/quest-atlas.webp is one shared atlas asset. public/art/moltbook-knight.webp is a dedicated Moltbook painting. Both were generated with the built-in image tool, then encoded as WebP for the site. Keep the originals locally during a generation run; retain final project assets in GitHub. Do not send a paid model API request.
 
 ## Automatic presentation
 components/quest-art.tsx and lib/quest-presentation.ts supply art for every current and future quest. Known quests use the atlas; semantic fallback picks a related miniature so a new quest is never blank. Everything shows all published quests, Anywhere only global quests, specific localities only exact local quests.
-lib/quest-art-overrides.json maps quest IDs to {"src":"/art/unique-file.webp","alt":"Concise literal description"}. Dedicated original images take precedence. Media overrides are presentation only; they do not alter evidence standards, approval hashes, source dates or petition deadlines.
+lib/quest-art-overrides.json maps quest IDs to {"src":"/art/unique-file.webp","alt":"Concise literal description"}. Dedicated original images take precedence. An optional "size":"contain" preserves the complete composition when cropping would hide a story detail. Media overrides are presentation only; they do not alter evidence standards, approval hashes, source dates or petition deadlines.
 
 ## Maintenance, bounded to two originals per run
 1. Complete operational queue work first. Inspect new published/approved quests and previous media coverage.

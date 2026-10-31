@@ -1,11 +1,11 @@
 {
   "5f4b5ae5-cb2b-432e-8cfa-7dfbf7708a9f": {
-    "src": "/art/manchester-council-knight-v1.webp",
-    "alt": "An armored knight uses a laptop beside a town map and garden model in a medieval council hall."
+    "src": "/art/manchester-council-knight-v2.webp",
+    "alt": "A closed-helmet knight uses a laptop beside a town map and garden model in a medieval council hall."
   },
   "c623fc29-d03e-459d-a267-e83b00860da6": {
-    "src": "/art/ridgewood-garden-knight-v1.webp",
-    "alt": "An armored knight plants flowers beside a reservoir under a gardener’s direction; a smartphone rests nearby."
+    "src": "/art/ridgewood-garden-knight-v2.webp",
+    "alt": "A closed-helmet knight plants flowers beside a reservoir under a gardener’s direction; a smartphone rests nearby."
   },
   "bench-not-bin": {
     "src": "/art/bench-cleanup-knight-v1.webp",
@@ -16,11 +16,21 @@
     "alt": "An armored knight compares manuscript pages and checks a correction beside an unbranded laptop."
   },
   "small-beast-census": {
-    "src": "/art/wildlife-observer-knight-v1.webp",
-    "alt": "An armored knight photographs a butterfly on a meadow flower with a smartphone, without touching it."
+    "src": "/art/wildlife-observer-knight-v2.webp",
+    "alt": "A closed-helmet knight photographs a butterfly beside a rabbit, oblivious to a dragon attacking the distant castle.",
+    "size": "contain"
   },
   "c86d38a6-30a4-4d23-9c74-8fa4f5dc2b41": {
     "src": "/art/galaxy-classifier-knight-v2.webp",
     "alt": "A knight with a closed helmet and star-and-spiral regalia compares galaxy shapes on a laptop."
+  },
+  "missing-ramps": {
+    "src": "/art/missing-ramps-knights-v1.webp",
+    "alt": "Two fully helmeted invading knights, one using a wheelchair, document castle steps with no ramp.",
+    "size": "contain"
+  },
+  "teach-a-lobster-to-be-useful": {
+    "src": "/art/moltbook-knight-v2.webp",
+    "alt": "A closed-helmet knight introduces a mechanical lobster to a laptop in a medieval scriptorium."
   }
 }
