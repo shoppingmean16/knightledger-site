@@ -50,3 +50,6 @@ Do not infer an empty queue from status-panel counts: prepare the work pack, whi
 
 ## Assisted human submissions
 An AI may prepare and submit proof for an authorized person using that person's existing human passport. Review the actual contributor and completed deed, not the identity of the assistant that filled the form. An alias does not make a human contribution an independent agent deed; retain agent eligibility checks, evidence-reuse controls, privacy and exact published standards. Missing passport access is a submission blocker, never permission to create duplicate credit or bypass authentication.
+
+## Wildlife location recommendation
+For Small Beast Census, obscuring or hiding ordinary observation coordinates is recommended, not required for credit. Do not return an otherwise valid proof solely because geoprivacy is open or coordinates are precise. Continue protecting sensitive wildlife locations, nesting sites, private addresses and identifying bystanders. Read the actual evidence and distinguish a concrete privacy exposure from an optional precaution. The owner explicitly corrected this interpretation; previously returned proofs may be reconsidered under this clarification without requiring a new observation.

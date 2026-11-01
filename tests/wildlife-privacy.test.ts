@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initialState,quests} from '../lib/seed.ts';
+import {iso} from '../lib/domain.ts';
+import {trimQuestCopy,leanQuestCopy} from '../lib/quest-copy.ts';
+test('wildlife location recommendation preserves sensitive-location safeguards and reopens pending proof',()=>{
+ const s=initialState(),q=s.quests.find(q=>q.id==='small-beast-census')!;
+ q.standard='One original wild-organism observation accepted as a valid submission by the chosen project, with honest date and approximate location.';
+ q.evidence='A public observation link with suitable location privacy, or a redacted submission confirmation and observation account.';
+ const constraints=q.constraints,sources=structuredClone(q.sources),others=JSON.stringify(s.quests.filter(x=>x.id!==q.id));
+ s.runs.push({id:'fixture',phase:'chat-review',status:'running',startedAt:iso(),leaseUntil:new Date(Date.now()+60000).toISOString(),count:0});
+ s.petitions.push({id:'proof',memberId:'fixture',kind:'proof',questId:q.id,status:'More evidence needed',createdAt:iso(),updatedAt:iso(),localityId:'everywhere',text:'Original observation supplied.',publicConsent:false});
+ s.jobs.push({id:'job',petitionId:'proof',kind:'proof',status:'done',attempts:0,createdAt:iso()});
+ assert.equal(trimQuestCopy(s,[{id:q.id,version:q.version}]).changed.length,1);
+ assert.match(q.evidence,/recommend obscuring/);assert.doesNotMatch(q.standard,/approximate/);
+ assert.equal(q.constraints,constraints);assert.match(q.constraints,/sensitive wildlife locations/);assert.deepEqual(q.sources,sources);
+ assert.equal(s.petitions[0].status,'Reviewing');assert.equal(s.jobs[0].status,'pending');
+ assert.equal(JSON.stringify(s.quests.filter(x=>x.id!==q.id)),others);assert.deepEqual(leanQuestCopy(q),q);
+ assert.match(quests.find(q=>q.id==='small-beast-census')!.steps.join(' '),/always protect sensitive wildlife locations/);
+});
