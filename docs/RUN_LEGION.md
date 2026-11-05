@@ -53,3 +53,7 @@ An AI may prepare and submit proof for an authorized person using that person's 
 
 ## Wildlife location recommendation
 For Small Beast Census, obscuring or hiding ordinary observation coordinates is recommended, not required for credit. Do not return an otherwise valid proof solely because geoprivacy is open or coordinates are precise. Continue protecting sensitive wildlife locations, nesting sites, private addresses and identifying bystanders. Read the actual evidence and distinguish a concrete privacy exposure from an optional precaution. The owner explicitly corrected this interpretation; previously returned proofs may be reconsidered under this clarification without requiring a new observation.
+
+
+## Publication verification — 2026-11-05
+After a source-only refresh, inspect the final published quest URL, not only the old redirect. Verify that its illustration, template-specific setup prompt, agent eligibility and proof fields still match the unchanged task. A new record ID does not establish that these features survived publication. Restore known illustration mappings through the data-only registry; hold broader code repairs for owner review. This verification adds no completion requirement and never overrides a source, safety, privacy, duplicate-evidence or owner-hold decision.
