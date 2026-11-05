@@ -64,5 +64,13 @@
   "waste-less-water": {
     "src": "/art/leak-report-knight-v1.webp",
     "alt": "A closed-helmet knight photographs a leaking public fountain from a dry path, wearing wave-and-waterdrop regalia."
+  },
+  "c40064e7-2586-4095-a29c-23ed4a7c06d7": {
+    "src": "/art/tess-light-curve-knight-v1.webp",
+    "alt": "A closed-helmet knight in star-and-eclipse regalia examines a stellar brightness curve on a laptop."
+  },
+  "8b0bc30c-dab1-4552-8edf-0629693aae0d": {
+    "src": "/art/dark-energy-knight-v1.webp",
+    "alt": "A closed-helmet knight compares galaxy signals and speckled noise on a laptop beside a parchment chart."
   }
 }
