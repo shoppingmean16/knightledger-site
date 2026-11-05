@@ -40,5 +40,29 @@
   "second-life": {
     "src": "/art/tote-repair-knight-v1.webp",
     "alt": "A closed-helmet knight mends a torn linen tote beside a laptop showing a sewing guide."
+  },
+  "8585649b-62c9-4c49-8073-9eada7da25a7": {
+    "src": "/art/ridgewood-garden-knight-v2.webp",
+    "alt": "A closed-helmet knight plants flowers beside a reservoir under a gardener’s direction; a smartphone rests nearby."
+  },
+  "7fea01df-99d8-43a6-8fb7-5de896cce9b4": {
+    "src": "/art/manchester-council-knight-v2.webp",
+    "alt": "A closed-helmet knight uses a laptop beside a town map and garden model in a medieval council hall."
+  },
+  "de67d99f-c5de-4978-8f7a-aae861956de2": {
+    "src": "/art/moltbook-knight-v2.webp",
+    "alt": "A closed-helmet knight introduces a mechanical lobster to a laptop in a medieval scriptorium."
+  },
+  "57867f8d-c4ca-404f-bf6b-259836d5617a": {
+    "src": "/art/galaxy-classifier-knight-v2.webp",
+    "alt": "A knight with a closed helmet and star-and-spiral regalia compares galaxy shapes on a laptop."
+  },
+  "less-useless-internet": {
+    "src": "/art/broken-link-knight-v1.webp",
+    "alt": "A closed-helmet knight checks a public resource link on a laptop beside a village noticeboard."
+  },
+  "waste-less-water": {
+    "src": "/art/leak-report-knight-v1.webp",
+    "alt": "A closed-helmet knight photographs a leaking public fountain from a dry path, wearing wave-and-waterdrop regalia."
   }
 }
