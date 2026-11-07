@@ -72,5 +72,13 @@
   "8b0bc30c-dab1-4552-8edf-0629693aae0d": {
     "src": "/art/dark-energy-knight-v1.webp",
     "alt": "A closed-helmet knight compares galaxy signals and speckled noise on a laptop beside a parchment chart."
+  },
+  "9273cdc5-4b7c-4bb4-8b4d-9b7f25b35e8c": {
+    "src": "/art/robotic-telescope-knight-v1.webp",
+    "alt": "A closed-helmet knight processes a telescope light curve on a laptop beside a parchment chart."
+  },
+  "f4f6f864-ebfa-4eb2-b5cc-a9efa17a01b3": {
+    "src": "/art/variable-star-knight-v1.webp",
+    "alt": "A closed-helmet knight compares stars with a parchment chart, with a smartphone resting on the parapet."
   }
 }
