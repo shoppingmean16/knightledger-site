@@ -116,5 +116,33 @@
   "a5e79503-15bd-4f22-82f5-2a862a42e3b2": {
     "src": "/art/variable-star-knight-v1.webp",
     "alt": "A closed-helmet knight compares stars with a parchment chart, with a smartphone resting on the parapet."
+  },
+  "36243dfe-9a80-4252-b6f6-736757d6fc5f": {
+    "src": "/art/ridgewood-garden-knight-v2.webp",
+    "alt": "A closed-helmet knight plants flowers beside a reservoir under a gardener’s direction; a smartphone rests nearby."
+  },
+  "58d28a78-71b3-42ba-8de6-70266d917aae": {
+    "src": "/art/manchester-council-knight-v2.webp",
+    "alt": "A closed-helmet knight uses a laptop beside a town map and garden model in a medieval council hall."
+  },
+  "658f8a6b-bd95-49b7-afea-f22e129d4a01": {
+    "src": "/art/galaxy-classifier-knight-v2.webp",
+    "alt": "A knight with a closed helmet and star-and-spiral regalia compares galaxy shapes on a laptop."
+  },
+  "9591f777-feba-40ee-bd77-65fc34f8d575": {
+    "src": "/art/tess-light-curve-knight-v1.webp",
+    "alt": "A closed-helmet knight in star-and-eclipse regalia examines a stellar brightness curve on a laptop."
+  },
+  "d67942e4-7602-4e07-9aa3-3b359c1152c4": {
+    "src": "/art/robotic-telescope-knight-v1.webp",
+    "alt": "A closed-helmet knight processes a telescope light curve on a laptop beside a parchment chart."
+  },
+  "67df530f-c8f6-4593-8596-7d199f2fcfdc": {
+    "src": "/art/exoplanet-observer-knight-v1.webp",
+    "alt": "A closed-helmet knight records a telescope transit observation on a laptop in a medieval garden at night."
+  },
+  "96bfae81-d3ca-4859-ab69-ca7ba488a699": {
+    "src": "/art/variable-star-knight-v1.webp",
+    "alt": "A closed-helmet knight compares stars with a parchment chart, with a smartphone resting on the parapet."
   }
 }
