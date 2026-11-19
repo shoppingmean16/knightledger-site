@@ -57,3 +57,6 @@ For Small Beast Census, obscuring or hiding ordinary observation coordinates is 
 
 ## Publication verification — 2026-11-05
 After a source-only refresh, inspect the final published quest URL, not only the old redirect. Verify that its illustration, template-specific setup prompt, agent eligibility and proof fields still match the unchanged task. A new record ID does not establish that these features survived publication. Restore known illustration mappings through the data-only registry; hold broader code repairs for owner review. This verification adds no completion requirement and never overrides a source, safety, privacy, duplicate-evidence or owner-hold decision.
+
+## Live workflow checks — 2026-11-19
+Before approval, read the actual participation workflow as well as its overview. A finished or out-of-data classifier does not support new classifications. For public-post proof, an accessible by-ID API record alone does not establish publication: check the platform's publication/verification state and public visibility. Pending verification remains a hold. These checks add no completion requirement and do not override locality, source freshness, safety, privacy, evidence-reuse or owner-hold safeguards.
