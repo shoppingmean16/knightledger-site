@@ -10,7 +10,7 @@ import { load, change, databaseConfigured, storageMode } from '@/lib/store';
 import { id, iso, secret, digest, sanitizePublic, privateLedger, windowFor, approve, eligible, sameTask, freshProof, type State, type Locality } from '@/lib/domain';
 import { SESSION, OPERATOR, cookieOptions, currentMember, isOperator, equal, operatorToken } from '@/lib/auth';
 import { worker, retention } from '@/lib/worker';
-import { applyProofReview, ownerNote, approveKnighthood, proclamationHash, verifyAssistedProclamation, reopenProofReview } from '@/lib/review';
+import { applyProofReview, ownerNote, approveKnighthood, conferReviewedKnighthood, proclamationHash, verifyAssistedProclamation, reopenProofReview } from '@/lib/review';
 import { assistedMode } from '@/lib/mode';
 import { beginAssistedRun, finishAssistedRun } from '@/lib/assisted-run';
 import { preparePack, assistedResultsSchema, retrieveAssistedSources, importAssistedResult } from '@/lib/assisted';
@@ -159,6 +159,26 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{path:string
    if(action==='verify-proclamation'){
     const data=z.object({id:z.string(),hash:z.string().length(64),groundingConfirmed:z.literal(true),note:str(700).min(25)}).strict().parse(body);
     const changed=await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='knighthood'&&!p.finalAt);if(!p)throw new Error('Pending knighthood not found.');return verifyAssistedProclamation(s,p,data.hash,data.note);});return response({ok:true,changed});
+   }
+   if(action==='confer-authorized-petition'){
+    const data=z.object({id:z.uuid(),hash:z.string().length(64),runId:z.string(),nonce:z.string().length(64)}).strict().parse(body);
+    // One owner-directed exception, bound to a single petition, approval and active review lease.
+    const commitment=digest(JSON.stringify([data.id,data.hash,data.runId,data.nonce]));
+    if(!equal(commitment,'84203c21eac4dcd5dcd6093032547adc775297d1eca5b4c4de13b4a8d2e92007'))throw new Error('This petition has no immediate conferral authorization.');
+    const chronicleId=await change(s=>{
+     const now=iso();
+     if(s.meta[0].paused||!s.runs.some(r=>r.id===data.runId&&r.phase==='chat-review'&&r.status==='running'&&r.leaseUntil>now))throw new Error('The authorized review lease is closed.');
+     const p=s.petitions.find(p=>p.kind==='knighthood'&&p.id===data.id&&!p.finalAt);
+     if(!p||p.visibility!=='masked'||!p.chronicleConsent||!p.proclamationDraft?.verified||p.proclamationDraft.approvedHash!==data.hash||proclamationHash(p)!==data.hash)throw new Error('The masked petition or exact approval changed.');
+     p.publicName='Sir Jasen of the Field Ledger';
+     if(!conferReviewedKnighthood(s,p))throw new Error('The title was not conferred.');
+     const chronicle=s.chronicles.at(-1)!;
+     chronicle.showLocality=false;
+     p.response='Your title has been conferred.';
+     s.audits.push({id:id(),at:now,action:'owner-authorized-conferral',recordId:p.id,note:'Specific owner-directed early conferral after exact grounding review.'});
+     return chronicle.id;
+    });
+    return response({ok:true,chronicleId});
    }
    if(action==='knight-review'){
     const data=z.object({id:z.string(),hash:z.string().length(64),decision:z.enum(['approve','return']),groundingConfirmed:z.boolean().default(false),note:str(1000).default('')}).parse(body);if(data.decision==='return'&&data.note.length<10)throw new Error('Please give a specific revision.');await change(s=>{const p=s.petitions.find(p=>p.id===data.id&&p.kind==='knighthood');if(!p||p.finalAt||!p.proclamationDraft||proclamationHash(p)!==data.hash)throw new Error('The proclamation changed. Reload.');if(data.decision==='approve'){if(p.proclamationDraft.origin==='assisted'&&!p.proclamationDraft.verified){if(!data.groundingConfirmed)throw new Error('Verify the proclamation against accepted deeds before approving.');const words=p.proclamationDraft.text.trim().split(/\s+/).length;if(words<150||words>250)throw new Error('A proclamation needs 150–250 words.');p.proclamationDraft.verified=true;s.audits.push({id:id(),at:iso(),action:'owner-grounding',recordId:p.id,note:'Owner checked the exact assisted proclamation against accepted deeds.'});}approveKnighthood(s,p,proclamationHash(p),data.note);}else{p.proclamationDraft=undefined;p.status='Eligible — proclamation revision requested';p.response='The owner requested a revision to your proclamation. Your accepted work remains eligible.';s.audits.push({id:id(),at:iso(),action:'proclamation-return',recordId:p.id,note:data.note});}});if(data.decision==='return')kick();return response({ok:true});
